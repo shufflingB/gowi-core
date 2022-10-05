@@ -7,13 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF1A944428EC873D008303B8 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944328EC873D008303B8 /* AppModel.swift */; };
+		FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */; };
+		FF1A944828EC8A9B008303B8 /* AppModel_Item_CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944728EC8A9B008303B8 /* AppModel_Item_CoreData.swift */; };
+		FF1A944A28EC927E008303B8 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944928EC927E008303B8 /* Item.swift */; };
+		FF1A944C28EC9598008303B8 /* Test_AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944B28EC9598008303B8 /* Test_AppModel.swift */; };
+		FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A946E28ED85A9008303B8 /* SideBar.swift */; };
+		FF1A947128ED85CC008303B8 /* SideBarItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947028ED85CC008303B8 /* SideBarItemList.swift */; };
 		FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8228EC7B8100868F77 /* GowiApp.swift */; };
-		FFA62B8528EC7B8100868F77 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8428EC7B8100868F77 /* ContentView.swift */; };
+		FFA62B8528EC7B8100868F77 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8428EC7B8100868F77 /* Main.swift */; };
 		FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFA62B8628EC7B8300868F77 /* Assets.xcassets */; };
 		FFA62B8A28EC7B8300868F77 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFA62B8928EC7B8300868F77 /* Preview Assets.xcassets */; };
-		FFA62B8C28EC7B8300868F77 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8B28EC7B8300868F77 /* Persistence.swift */; };
 		FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8D28EC7B8300868F77 /* Gowi.xcdatamodeld */; };
-		FFA62B9A28EC7B8300868F77 /* GowiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B9928EC7B8300868F77 /* GowiTests.swift */; };
 		FFA62BA428EC7B8300868F77 /* GowiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62BA328EC7B8300868F77 /* GowiUITests.swift */; };
 		FFA62BA628EC7B8300868F77 /* GowiUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62BA528EC7B8300868F77 /* GowiUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
@@ -36,16 +41,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF1A944328EC873D008303B8 /* AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_Testing.swift; sourceTree = "<group>"; };
+		FF1A944728EC8A9B008303B8 /* AppModel_Item_CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_Item_CoreData.swift; sourceTree = "<group>"; };
+		FF1A944928EC927E008303B8 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		FF1A944B28EC9598008303B8 /* Test_AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_AppModel.swift; sourceTree = "<group>"; };
+		FF1A946E28ED85A9008303B8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBar.swift; sourceTree = "<group>"; };
+		FF1A947028ED85CC008303B8 /* SideBarItemList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarItemList.swift; sourceTree = "<group>"; };
 		FFA62B7F28EC7B8100868F77 /* Gowi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gowi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFA62B8228EC7B8100868F77 /* GowiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiApp.swift; sourceTree = "<group>"; };
-		FFA62B8428EC7B8100868F77 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FFA62B8428EC7B8100868F77 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		FFA62B8628EC7B8300868F77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FFA62B8928EC7B8300868F77 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		FFA62B8B28EC7B8300868F77 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		FFA62B8E28EC7B8300868F77 /* Gowi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Gowi.xcdatamodel; sourceTree = "<group>"; };
 		FFA62B9028EC7B8300868F77 /* Gowi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gowi.entitlements; sourceTree = "<group>"; };
 		FFA62B9528EC7B8300868F77 /* GowiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GowiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FFA62B9928EC7B8300868F77 /* GowiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiTests.swift; sourceTree = "<group>"; };
 		FFA62B9F28EC7B8300868F77 /* GowiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GowiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFA62BA328EC7B8300868F77 /* GowiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiUITests.swift; sourceTree = "<group>"; };
 		FFA62BA528EC7B8300868F77 /* GowiUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -76,6 +86,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF1A944228EC7C1C008303B8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF1A944328EC873D008303B8 /* AppModel.swift */,
+				FF1A944728EC8A9B008303B8 /* AppModel_Item_CoreData.swift */,
+				FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */,
+				FF1A944928EC927E008303B8 /* Item.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FF1A946D28ED7B90008303B8 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				FFA62B8428EC7B8100868F77 /* Main.swift */,
+				FF1A946E28ED85A9008303B8 /* SideBar.swift */,
+				FF1A947028ED85CC008303B8 /* SideBarItemList.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		FFA62B7628EC7B8100868F77 = {
 			isa = PBXGroup;
 			children = (
@@ -100,9 +131,9 @@
 			isa = PBXGroup;
 			children = (
 				FFA62B8228EC7B8100868F77 /* GowiApp.swift */,
-				FFA62B8428EC7B8100868F77 /* ContentView.swift */,
+				FF1A944228EC7C1C008303B8 /* Models */,
+				FF1A946D28ED7B90008303B8 /* UI */,
 				FFA62B8628EC7B8300868F77 /* Assets.xcassets */,
-				FFA62B8B28EC7B8300868F77 /* Persistence.swift */,
 				FFA62B9028EC7B8300868F77 /* Gowi.entitlements */,
 				FFA62B8D28EC7B8300868F77 /* Gowi.xcdatamodeld */,
 				FFA62B8828EC7B8300868F77 /* Preview Content */,
@@ -121,7 +152,7 @@
 		FFA62B9828EC7B8300868F77 /* GowiTests */ = {
 			isa = PBXGroup;
 			children = (
-				FFA62B9928EC7B8300868F77 /* GowiTests.swift */,
+				FF1A944B28EC9598008303B8 /* Test_AppModel.swift */,
 			);
 			path = GowiTests;
 			sourceTree = "<group>";
@@ -265,9 +296,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFA62B8C28EC7B8300868F77 /* Persistence.swift in Sources */,
-				FFA62B8528EC7B8100868F77 /* ContentView.swift in Sources */,
+				FFA62B8528EC7B8100868F77 /* Main.swift in Sources */,
+				FF1A944828EC8A9B008303B8 /* AppModel_Item_CoreData.swift in Sources */,
+				FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */,
+				FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */,
 				FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */,
+				FF1A944A28EC927E008303B8 /* Item.swift in Sources */,
+				FF1A944428EC873D008303B8 /* AppModel.swift in Sources */,
+				FF1A947128ED85CC008303B8 /* SideBarItemList.swift in Sources */,
 				FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFA62B9A28EC7B8300868F77 /* GowiTests.swift in Sources */,
+				FF1A944C28EC9598008303B8 /* Test_AppModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

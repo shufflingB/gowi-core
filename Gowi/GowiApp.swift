@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct GowiApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject var appModel = AppModel.sharedInMemoryWithTestData
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            Main()
+                .environmentObject(appModel)
         }
     }
 }
