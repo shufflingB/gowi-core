@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct SideBarItemList: View {
     @Binding var selections: Set<UUID>
     let items: Array<Item>
@@ -29,8 +28,21 @@ struct SideBarItemList: View {
     }
 }
 
-// struct ItemList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SideBarItemList(selections: .constant(["Venus", "Earth"]), items: Array(Test_Data), onMovePerform: { _, _ in })
-//    }
-// }
+struct ItemList_Previews: PreviewProvider {
+    @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
+    @State static var selections: Set<UUID> = [AppModel.testingMode1ourIdPresent]
+
+    static var previews: some View {
+        SideBarItemList(
+            selections: $selections,
+            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            onMovePerform: { srcIdxs, tgtEdge in
+                Main.sideBarOnMoveOfWaitingItems(
+                    Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+                    srcIdxs,
+                    tgtEdge
+                )
+            }
+        )
+    }
+}

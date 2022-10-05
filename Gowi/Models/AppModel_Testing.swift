@@ -22,6 +22,7 @@ extension AppModel {
         }
     }
 
+    static let testingMode1ourIdPresent = UUID(uuidString: "70BF1680-CA95-48B5-BD0E-FCEAF7FEC4DD")!
     fileprivate func testMode1() {
         let root = systemRootItem
         log.debug("In testMode1  systemRootItem = \(self.systemRootItem.description)")
@@ -36,7 +37,7 @@ extension AppModel {
 
             // Bit of a hack to ensure always have this ID present for the URL routing tests
             if idx == numItemsToDo {
-                item.ourIdS = UUID(uuidString: "70BF1680-CA95-48B5-BD0E-FCEAF7FEC4DD")!
+                item.ourIdS = Self.testingMode1ourIdPresent
             }
         }
         }

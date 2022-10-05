@@ -69,13 +69,21 @@ extension SideBar {
     }
 }
 
-// struct Sidebar_Previews: PreviewProvider {
-//    @StateObject static var am = AppModel(items: Test_Data)
-//    @State static var itemsSelected: Set<String> = []
-//    @State static var tabSelected: SideBar.TabOption = .waiting
-//
-//    static var previews: some View {
-//        SideBar.Layout(tabSelected: $tabSelected, itemsSelected: $itemsSelected, itemsWaiting: Main.sideBarItemsListWaiting(am.items), itemsDone: Main.sideBarItemsListDone(am.items), itemsAll: Main.sideBarItemsListAll(am.items), onMoveOfWaitingItems: Main.sideBarOnMoveOfWaitingItems
-//        )
-//    }
-// }
+ struct Sidebar_Previews: PreviewProvider {
+    @StateObject static var am = AppModel.sharedInMemoryWithTestData
+    @State static var itemsSelected: Set<UUID> = []
+    @State static var tabSelected: SideBar.TabOption = .waiting
+     
+     
+
+    static var previews: some View {
+        SideBar.Layout(
+            tabSelected: $tabSelected,
+            itemsSelected: $itemsSelected,
+            itemsWaiting: Main.sideBarItemsListWaiting(am.systemRootItem.childrenListAsSet),
+            itemsDone: Main.sideBarItemsListDone(am.systemRootItem.childrenListAsSet),
+            itemsAll: Main.sideBarItemsListAll(am.systemRootItem.childrenListAsSet),
+            onMoveOfWaitingItems: Main.sideBarOnMoveOfWaitingItems
+        )
+    }
+ }
