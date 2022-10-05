@@ -14,6 +14,7 @@
 		FF1A944C28EC9598008303B8 /* Test_AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944B28EC9598008303B8 /* Test_AppModel.swift */; };
 		FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A946E28ED85A9008303B8 /* SideBar.swift */; };
 		FF1A947128ED85CC008303B8 /* SideBarItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947028ED85CC008303B8 /* SideBarItemList.swift */; };
+		FF1A947328EDA3A2008303B8 /* Test_WaitingItemsReordering.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947228EDA3A2008303B8 /* Test_WaitingItemsReordering.swift */; };
 		FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8228EC7B8100868F77 /* GowiApp.swift */; };
 		FFA62B8528EC7B8100868F77 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8428EC7B8100868F77 /* Main.swift */; };
 		FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFA62B8628EC7B8300868F77 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 		FF1A944B28EC9598008303B8 /* Test_AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_AppModel.swift; sourceTree = "<group>"; };
 		FF1A946E28ED85A9008303B8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBar.swift; sourceTree = "<group>"; };
 		FF1A947028ED85CC008303B8 /* SideBarItemList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarItemList.swift; sourceTree = "<group>"; };
+		FF1A947228EDA3A2008303B8 /* Test_WaitingItemsReordering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_WaitingItemsReordering.swift; sourceTree = "<group>"; };
 		FFA62B7F28EC7B8100868F77 /* Gowi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gowi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFA62B8228EC7B8100868F77 /* GowiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiApp.swift; sourceTree = "<group>"; };
 		FFA62B8428EC7B8100868F77 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		FFA62B9828EC7B8300868F77 /* GowiTests */ = {
 			isa = PBXGroup;
 			children = (
+				FF1A947228EDA3A2008303B8 /* Test_WaitingItemsReordering.swift */,
 				FF1A944B28EC9598008303B8 /* Test_AppModel.swift */,
 			);
 			path = GowiTests;
@@ -313,6 +316,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF1A944C28EC9598008303B8 /* Test_AppModel.swift in Sources */,
+				FF1A947328EDA3A2008303B8 /* Test_WaitingItemsReordering.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

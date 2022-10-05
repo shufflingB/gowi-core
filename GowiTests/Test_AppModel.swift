@@ -35,7 +35,7 @@ class Test_AppModel: XCTestCase {
         XCTAssertNotNil(appModel.systemRootItem,
                         "When a new appModel is instantiated it automatically creates a new system Root item")
 
-        XCTAssertTrue(rootItem.id != nil,
+        XCTAssertTrue(rootItem.ourId != nil,
                       "And it should have a valid ID")
 
         XCTAssertTrue(rootItem.root,
