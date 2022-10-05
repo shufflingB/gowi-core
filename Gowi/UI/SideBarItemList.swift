@@ -20,9 +20,9 @@ struct SideBarItemList: View {
                     Text(item.titleS)
                 }
             }
-            .onMove(perform: { a, b in
+            .onMove(perform: { sourceIndices, tgtIdxsEdge in
                 withAnimation {
-                    onMovePerform(a, b)
+                    onMovePerform(sourceIndices, tgtIdxsEdge)
                 }
             })
         }

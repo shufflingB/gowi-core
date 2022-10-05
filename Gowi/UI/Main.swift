@@ -13,23 +13,21 @@ struct Main: View {
 //    @SceneStorage("selection051022") var sideBarItemSelections: Set<String> = []
     @State var sideBarItemSelections: Set<UUID> = []
     @SceneStorage("tab051022") var sideBarTabSelected: SideBar.TabOption = .waiting
-    
-    
-
 
     var body: some View {
         NavigationView {
-            SideBar(stateView:self)
+            SideBar(stateView: self)
         }
     }
 }
 
+extension Main {
+    // MARK: SideBar
 
-extension Main { // MARK: SideBar
     internal var itemsAll: Set<Item> {
         appModel.systemRootItem.childrenListAsSet
     }
-    
+
     internal var sideBarItemsListWaiting: Array<Item> {
         Self.sideBarItemsListWaiting(itemsAll)
     }
@@ -69,6 +67,7 @@ extension Main { // MARK: SideBar
         appModel.objectWillChange.send()
     }
 
+    private static let SideBarDefaultOffset = 100.0
     static func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
         // i.e. those sorted by Item priority
         /// just use what we've already worked out for the detail.
@@ -82,49 +81,46 @@ extension Main { // MARK: SideBar
         /// source Idx =2
         /// -------------- tgtIdxEdge = 3
 
-//        guard let sourceIndicesFirstIdx = sourceIndices.first, let sourceIndicesLastIdx = sourceIndices.last else {
-//            return
-//        }
-//
-//        let notMovingEdges = (sourceIndicesFirstIdx ... sourceIndicesLastIdx + 1)
-//        guard notMovingEdges.contains(tgtIdxsEdge) == false else {
-//            // print("Not moving because trying to move within the range of the existing items")
-//            return
-//        }
-//
-//        let itemsSelected: Array<Item> = sourceIndices.map({ items[$0] })
-//
-//        let movingUp: Bool = sourceIndicesFirstIdx > tgtIdxsEdge ? true : false
-//        // print("sourceIndixe.first =\(sourceIndicesFirstIdx),  last = \(sourceIndices.last!) tgtEdge = \(tgtIdxsEdge), Moving up \(movingUp)")
-//
-//        let itemPriorityAboveTgtEdge = tgtIdxsEdge == 0
-//            ? items[0].priority + SideBarDefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
-//            : items[tgtIdxsEdge - 1].priority
-//
-//        let itemPriorityBelowTgtEdge = tgtIdxsEdge == items.count
-//            ? items[items.count - 1].priority - SideBarDefaultOffset /// Dragging to tail, no Item below so have to special case
-//            : items[tgtIdxsEdge].priority
-//
-//        let priorityStepSize = (itemPriorityAboveTgtEdge - itemPriorityBelowTgtEdge) / Double(itemsSelected.count + 1)
-//
-//        if movingUp {
-//            _ = itemsSelected
-//                .enumerated()
-//                .map { (idx: Int, item: Item) in /// map is preferred over forEach as it runs more quickly and produces a nice animation
-//                    item.priority = itemPriorityBelowTgtEdge + priorityStepSize * Double(itemsSelected.count - idx)
-//                    // print("Down Setting item \(item.id), idx = \(idx), to priority = \(item.priority) ")
-//                }
-//        } else {
-//            _ = itemsSelected
-//                .reversed()
-//                .enumerated()
-//                .map { (idx: Int, item: Item) in /// map is preferred over forEach as it runs more quickly and produces a nice animation
-//                    item.priority = itemPriorityAboveTgtEdge - priorityStepSize * Double(itemsSelected.count - idx)
-//                    // print("Down Setting item \(item.id), idx = \(idx), to priority = \(item.priority) ")
-//                }
-//        }
+        guard let sourceIndicesFirstIdx = sourceIndices.first, let sourceIndicesLastIdx = sourceIndices.last else {
+            return
+        }
+
+        let notMovingEdges = (sourceIndicesFirstIdx ... sourceIndicesLastIdx + 1)
+        guard notMovingEdges.contains(tgtIdxsEdge) == false else {
+            // print("Not moving because trying to move within the range of the existing items")
+            return
+        }
+
+        let itemsSelected: Array<Item> = sourceIndices.map({ items[$0] })
+
+        let movingUp: Bool = sourceIndicesFirstIdx > tgtIdxsEdge ? true : false
+        // print("sourceIndixe.first =\(sourceIndicesFirstIdx),  last = \(sourceIndices.last!) tgtEdge = \(tgtIdxsEdge), Moving up \(movingUp)")
+
+        let itemPriorityAboveTgtEdge = tgtIdxsEdge == 0
+            ? items[0].priority + SideBarDefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
+            : items[tgtIdxsEdge - 1].priority
+
+        let itemPriorityBelowTgtEdge = tgtIdxsEdge == items.count
+            ? items[items.count - 1].priority - SideBarDefaultOffset /// Dragging to tail, no Item below so have to special case
+            : items[tgtIdxsEdge].priority
+
+        let priorityStepSize = (itemPriorityAboveTgtEdge - itemPriorityBelowTgtEdge) / Double(itemsSelected.count + 1)
+
+        if movingUp {
+            _ = itemsSelected
+                .enumerated()
+                .map { (idx: Int, item: Item) in /// map is preferred over forEach as it runs more quickly and produces a nice animation
+                    item.priority = itemPriorityBelowTgtEdge + priorityStepSize * Double(itemsSelected.count - idx)
+                    // print("Down Setting item \(item.id), idx = \(idx), to priority = \(item.priority) ")
+                }
+        } else {
+            _ = itemsSelected
+                .reversed()
+                .enumerated()
+                .map { (idx: Int, item: Item) in /// map is preferred over forEach as it runs more quickly and produces a nice animation
+                    item.priority = itemPriorityAboveTgtEdge - priorityStepSize * Double(itemsSelected.count - idx)
+                    // print("Down Setting item \(item.id), idx = \(idx), to priority = \(item.priority) ")
+                }
+        }
     }
-    
-    
-    
 }
