@@ -25,12 +25,11 @@ extension AppModel {
     static let testingMode1ourIdPresent = UUID(uuidString: "70BF1680-CA95-48B5-BD0E-FCEAF7FEC4DD")!
     fileprivate func testMode1() {
         let root = systemRootItem
-        log.debug("In testMode1  systemRootItem = \(self.systemRootItem.description)")
+        log.debug("\(#function) adding test data")
 
         let numItemsToDo = 10
         viewContext.performAndWait { (1 ... numItemsToDo).forEach { idx in
-            print("Idx = \(idx)")
-            let item = Self.itemCreate(viewContext, parent: root)
+            let item = Self.itemSetup(viewContext, priority: Double(idx), complete: nil, parentList: [root], childrenList: nil)
             item.title = "title for item \(idx)"
             item.notes = "notes for item \(idx)"
             item.priority = Double(idx)
@@ -41,6 +40,6 @@ extension AppModel {
             }
         }
         }
-        saveToCoreData()
+        AppModel.saveToCoreData(viewContext)
     }
 }

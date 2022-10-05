@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Gowi
 
-final class Test_WaitingItemsReordering: XCTestCase {
+final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
     var appModel = AppModel.sharedInMemoryWithTestData
 
     var rootItem: Item {
@@ -29,7 +29,8 @@ final class Test_WaitingItemsReordering: XCTestCase {
 
         let srcIndices = IndexSet([1])
         let tgtIdx = 0
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -53,7 +54,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
 
         let srcIndices = IndexSet([0])
         let tgtIdx = 2 // <- When dragging down, Apple expects to add +1 to expected final location
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -77,7 +78,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
 
         let srcIndices = IndexSet([numTestItems - 1])
         let tgtIdx = numTestItems - 2
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -102,7 +103,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
         let srcIndices = IndexSet([numTestItems - 2])
         let tgtIdx = numTestItems // <- When dragging down, Apple expects to add +1 to expected final location
 
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -127,7 +128,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 1
 
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -152,7 +153,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 4 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -176,7 +177,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
         let srcIndices = IndexSet([2, 4])
         let tgtIdx = 0
 
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -204,7 +205,7 @@ final class Test_WaitingItemsReordering: XCTestCase {
         let srcIndices = IndexSet([1, 3])
         let tgtIdx = 5 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        Main.sideBarOnMoveOfWaitingItems(originalList, srcIndices, tgtIdx)
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -225,5 +226,32 @@ final class Test_WaitingItemsReordering: XCTestCase {
 
         XCTAssertEqual(updatedList[4].ourIdS, originalList[3].ourIdS,
                        "And the tail Item is second of the moved Items, i.e. the original fourth Item")
+    }
+
+    func test300_itemReorderingIsUndoable() throws {
+        let undoMgr = UndoManager()
+
+        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let srcIndices = IndexSet([0, 1])
+        let tgtIdx = 3
+
+        AppModel.onMoveHighToLowPriority(originalList, srcIndices, tgtIdx)
+
+        let afterMoveList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+
+        XCTAssertEqual(afterMoveList[0].ourIdS, originalList[2].ourIdS,
+                       "And the updated list ends up with the 3rd Item at the top of the list")
+        XCTAssertEqual(afterMoveList[1].ourIdS, originalList[0].ourIdS)
+        XCTAssertEqual(afterMoveList[2].ourIdS, originalList[1].ourIdS)
+
+        undoMgr.undo()
+
+        let afterUndo: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+
+        afterUndo.indices.forEach { idx in
+
+            XCTAssertEqual(afterUndo[idx].ourIdS, originalList[idx].ourIdS,
+                           "When the Undo command is used any previous item move operations are undone")
+        }
     }
 }

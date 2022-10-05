@@ -5,23 +5,21 @@
 //  Created by Jonathan Hume on 30/05/2022.
 //
 
+import AppKit
 import Foundation
 @testable import Gowi
-import XCTest
-import AppKit
 import os
+import XCTest
 
-
-class Test_AppModel: XCTestCase {
-    
+class AppModelTest: XCTestCase {
 //    ProcessInfo.processInfo.environment["GOWI_TESTMODE"]
-    
+
     var appModel = AppModel.sharedInMemoryNoTestData
     var rootItem: Item {
         appModel.systemRootItem
     }
 
-    override func setUpWithError() throws {        
+    override func setUpWithError() throws {
         appModel = AppModel.sharedInMemoryNoTestData
     }
 
@@ -54,7 +52,7 @@ class Test_AppModel: XCTestCase {
     func test010_createOneItem() throws {
         let rootKidCount: Int = rootItem.childrenList?.count ?? 0
 
-        let newItem = AppModel.itemCreate(appModel.viewContext, parent: rootItem)
+        let newItem = AppModel.itemSetup(appModel.viewContext, priority: 0.0, complete: nil, parentList: [rootItem], childrenList: nil)
         let eDate = Date()
         XCTAssertEqual(newItem.created!.timeIntervalSince1970, eDate.timeIntervalSince1970, accuracy: 0.1,
                        "When a new Item is created it should have an appropriate creation date")
@@ -71,6 +69,4 @@ class Test_AppModel: XCTestCase {
         XCTAssertEqual(childParentItems.first, rootItem,
                        "And that Child Item should correspondingly also have the Root Item as its Parent")
     }
-
-
 }
