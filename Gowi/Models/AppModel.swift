@@ -61,7 +61,10 @@ final class AppModel: ObservableObject, Identifiable {
             name: "Gowi",
             inMemory: inMemory
         )
-        container.viewContext.undoManager = UndoManager()
+        let vcUM = UndoManager()
+        vcUM.groupsByEvent = false
+        container.viewContext.undoManager = vcUM
+        
 
         let dbgTitle = inMemory ? Self.RootInMemoryTitle : Self.RootNormalTitle
 

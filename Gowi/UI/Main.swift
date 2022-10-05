@@ -7,9 +7,12 @@
 
 import CoreData
 import SwiftUI
+import Combine
 
 struct Main: View {
     @EnvironmentObject var appModel: AppModel
+    @Environment(\.undoManager) var windowUM: UndoManager?
+
 //    @SceneStorage("selection051022") var sideBarItemSelections: Set<String> = []
     @State var sideBarItemSelections: Set<UUID> = []
     @SceneStorage("tab051022") var sideBarTabSelected: SideBar.TabOption = .waiting
@@ -63,11 +66,13 @@ extension Main {
     }
 
     internal func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        Self.sideBarOnMoveOfWaitingItems(items, sourceIndices, tgtIdxsEdge)
+        Self.sideBarOnMoveOfWaitingItems(withTarget: appModel, externalUM: windowUM, context: appModel.viewContext, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
         appModel.objectWillChange.send()
     }
 
-    static func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        AppModel.onMoveHighToLowPriority(items, sourceIndices, tgtIdxsEdge)
+    static func sideBarOnMoveOfWaitingItems<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int)  where T.ObjectWillChangePublisher == ObservableObjectPublisher {
+//        AppModel.onMoveHighToLowPriority(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+
+        AppModel.onMovePriorityOrderedUndoable(withTarget: withTarget, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
     }
 }

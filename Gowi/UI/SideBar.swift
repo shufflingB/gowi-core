@@ -83,7 +83,7 @@ extension SideBar {
             itemsWaiting: Main.sideBarItemsListWaiting(am.systemRootItem.childrenListAsSet),
             itemsDone: Main.sideBarItemsListDone(am.systemRootItem.childrenListAsSet),
             itemsAll: Main.sideBarItemsListAll(am.systemRootItem.childrenListAsSet),
-            onMoveOfWaitingItems: Main.sideBarOnMoveOfWaitingItems
+            onMoveOfWaitingItems: {_,_,_ in}
         )
     }
  }

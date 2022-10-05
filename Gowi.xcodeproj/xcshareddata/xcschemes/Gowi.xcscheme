@@ -38,11 +38,6 @@
                BlueprintName = "GowiTests"
                ReferencedContainer = "container:Gowi.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "AppModelTest_reorderingBasedOnItemPriority/test300_itemReorderingIsUndoable()">
-               </Test>
-            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO"

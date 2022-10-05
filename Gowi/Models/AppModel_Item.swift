@@ -5,6 +5,7 @@
 //  Created by Jonathan Hume on 11/08/2021.
 //
 
+import Combine
 import CoreData
 import SwiftUI
 
@@ -29,8 +30,64 @@ extension AppModel {
         }
     }
 
+    private static func undoPreFlight(externalUM: UndoManager?, contextUM: UndoManager?)
+        -> (externalUM: UndoManager, contextUM: UndoManager)? {
+        guard let externalUM = externalUM else {
+            log.debug("\(#function), Not reordering, externalUM is nil")
+            return nil
+        }
+
+        guard let contextUM = contextUM else {
+            log.debug("\(#function), Not reordering, contextUM is nil")
+            return nil
+        }
+        return (externalUM, contextUM)
+    }
+
+    private static func undoRegisterPassThroughWithExternal<T: ObservableObject>(logOperationDescription: String, withTarget: T, externalUM: UndoManager, passToUM: UndoManager, redoOperation: @escaping () -> Void) where T.ObjectWillChangePublisher == ObservableObjectPublisher {
+        /// Register the pass-through to the Child UndoManager with the UI's UndoManager
+        ///
+        ///
+        ///
+        externalUM.registerUndo(withTarget: withTarget) { (targetInstance: T) in
+            log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of pass-through to viewContext's UndoManager")
+            withAnimation {
+                targetInstance.objectWillChange.send()
+                passToUM.undo()
+            }
+
+            /// Register how to Redo the Undo if necessary
+            externalUM.registerUndo(withTarget: targetInstance) { _ in
+                log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of its registered redo operation")
+                redoOperation()
+            }
+        }
+    }
+
+    static func onMovePriorityOrderedUndoable<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) where T.ObjectWillChangePublisher == ObservableObjectPublisher {
+        guard let (externalUM, contextUM) = Self.undoPreFlight(externalUM: externalUM, contextUM: context.undoManager) else {
+            log.warning("\(#function) can't make undoable as externalUM is nil ")
+            AppModel.onMovePriorityOrdered(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+            return
+        }
+        let extUMgroupsByEventStash = externalUM.groupsByEvent
+        externalUM.groupsByEvent = false
+        externalUM.beginUndoGrouping()
+
+        contextUM.beginUndoGrouping()
+        AppModel.onMovePriorityOrdered(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        contextUM.endUndoGrouping()
+
+        undoRegisterPassThroughWithExternal(logOperationDescription: #function, withTarget: withTarget, externalUM: externalUM, passToUM: contextUM) {
+            onMovePriorityOrderedUndoable(withTarget: withTarget, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        }
+
+        externalUM.endUndoGrouping()
+        externalUM.groupsByEvent = extUMgroupsByEventStash
+    }
+
     private static let SideBarDefaultOffset = 100.0
-    static func onMoveHighToLowPriority(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
+    static func onMovePriorityOrdered(items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
         // i.e. those sorted by Item priority
         /// just use what we've already worked out for the detail.
         /// E.g. for 3 item list

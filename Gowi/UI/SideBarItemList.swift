@@ -38,9 +38,12 @@ struct ItemList_Previews: PreviewProvider {
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             onMovePerform: { srcIdxs, tgtEdge in
                 Main.sideBarOnMoveOfWaitingItems(
-                    Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-                    srcIdxs,
-                    tgtEdge
+                    withTarget: appModel,
+                    externalUM: nil,
+                    context: appModel.viewContext,
+                    items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+                    sourceIndices: srcIdxs,
+                    tgtIdxsEdge: tgtEdge
                 )
             }
         )
