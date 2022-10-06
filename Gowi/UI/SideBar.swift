@@ -28,6 +28,8 @@ struct SideBar: View {
 
 extension SideBar {
     struct Layout: View {
+        
+        @EnvironmentObject var appModel: AppModel
         @Binding var tabSelected: SideBar.TabOption
         @Binding var itemsSelected: Set<UUID>
         let itemsWaiting: Array<Item>
@@ -58,7 +60,8 @@ extension SideBar {
                         }
                         .tag(SideBar.TabOption.done)
 
-                    SideBarItemList(selections: $itemsSelected, items: itemsAll, onMovePerform: { _, _ in })
+                    
+                    SideBarItemList(selections: $itemsSelected, items: itemsAll , onMovePerform: { _, _ in })
                         .tabItem {
                             Text("All")
                         }
@@ -73,8 +76,8 @@ extension SideBar {
     @StateObject static var am = AppModel.sharedInMemoryWithTestData
     @State static var itemsSelected: Set<UUID> = []
     @State static var tabSelected: SideBar.TabOption = .waiting
-     
-     
+
+
 
     static var previews: some View {
         SideBar.Layout(

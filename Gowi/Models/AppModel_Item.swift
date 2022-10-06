@@ -53,7 +53,7 @@ extension AppModel {
             log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of pass-through to viewContext's UndoManager")
             withAnimation {
                 passToUM.undo()
-                targetInstance.objectWillChange.send()
+//                targetInstance.objectWillChange.send()
             }
 
             /// Register how to Redo the Undo if necessary
@@ -61,7 +61,7 @@ extension AppModel {
                 log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of its registered redo operation")
                 withAnimation {
                     redoOperation()
-                    t.objectWillChange.send()
+//                    t.objectWillChange.send()
                 }
             }
         }
@@ -69,7 +69,6 @@ extension AppModel {
 
     func onMovePriorityOrderedUndoable(externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
         Self.onMovePriorityOrderedUndoable(withTarget: self, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-        objectWillChange.send()
     }
 
     private static func onMovePriorityOrderedUndoable<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) where T.ObjectWillChangePublisher == ObservableObjectPublisher {

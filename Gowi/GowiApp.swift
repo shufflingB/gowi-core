@@ -13,8 +13,9 @@ struct GowiApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Main()
+            Main(with: appModel.systemRootItem)
                 .environmentObject(appModel)
+                .environment(\.managedObjectContext, appModel.container.viewContext)
         }
     }
 }

@@ -5,13 +5,20 @@
 //  Created by Jonathan Hume on 04/10/2022.
 //
 
+import Combine
 import CoreData
 import SwiftUI
-import Combine
 
 struct Main: View {
     @EnvironmentObject var appModel: AppModel
     @Environment(\.undoManager) var windowUM: UndoManager?
+
+    init(with root: Item) {
+        _itemsAllFromFR = FetchRequest<Item>(
+            sortDescriptors: [NSSortDescriptor(key: "created", ascending: true)],
+            predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
+        )
+    }
 
 //    @SceneStorage("selection051022") var sideBarItemSelections: Set<String> = []
     @State var sideBarItemSelections: Set<UUID> = []
@@ -22,16 +29,17 @@ struct Main: View {
             SideBar(stateView: self)
         }
     }
+
+    @FetchRequest private var itemsAllFromFR: FetchedResults<Item>
 }
 
 extension Main {
     internal var itemsAll: Set<Item> {
-        // TODO: Update the appModel to listen for changes to sortable properties on items and generate its own objectWillChange.send()
-        // and remove the ones have to hardcode in the appModel when changing dates and priorities.
-        appModel.systemRootItem.childrenListAsSet
+        Set(itemsAllFromFR)
     }
-    
+
     // MARK: SideBar
+
     internal var sideBarItemsListWaiting: Array<Item> {
         Self.sideBarItemsListWaiting(itemsAll)
     }
@@ -68,6 +76,5 @@ extension Main {
 
     internal func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
         appModel.onMovePriorityOrderedUndoable(externalUM: windowUM, context: appModel.viewContext, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-        
     }
 }

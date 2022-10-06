@@ -90,6 +90,7 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 //    case missingManagedObjectContext
 // }
 
+import SwiftUI
 extension Item {
     var ourIdS: UUID {
         get { ourId ?? UUID() }
@@ -125,9 +126,24 @@ extension Item {
     var parentListAsSet: Set<Item> {
         parentList as? Set<Item> ?? []
     }
-    
+
     var childrenListAsSet: Set<Item> {
         childrenList as? Set<Item> ?? []
-        
     }
+
+//    var childrenFetchRequestAll: FetchRequest<Item> {
+//        FetchRequest(
+//            fetchRequest: Self.childrenFetchRequest(for: self, sortedBy: [NSSortDescriptor(key: "priority", ascending: true)] )
+//        )
+//    }
+//
+//    private static func childrenFetchRequest(for parent: Item, sortedBy sortDescriptors: Array<NSSortDescriptor>, addingOther otherPredicates: Array<NSPredicate> = []) -> NSFetchRequest<Item> {
+//        let parentPredicate = NSPredicate(format: "parentList CONTAINS %@", parent as CVarArg)
+//        let combinedPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [parentPredicate] + otherPredicates)
+//        let request = NSFetchRequest<Item>(entityName: String(describing: Item.self))
+//        request.sortDescriptors = sortDescriptors
+//
+//        request.predicate = combinedPredicate
+//        return request
+//    }
 }
