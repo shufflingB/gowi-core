@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Gowi
 
-final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
+final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     var appModel = AppModel.sharedInMemoryWithTestData
 
     var rootItem: Item {
@@ -30,7 +30,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([1])
         let tgtIdx = 0
 
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -54,7 +54,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
 
         let srcIndices = IndexSet([0])
         let tgtIdx = 2 // <- When dragging down, Apple expects to add +1 to expected final location
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -78,7 +78,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
 
         let srcIndices = IndexSet([numTestItems - 1])
         let tgtIdx = numTestItems - 2
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -103,7 +103,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([numTestItems - 2])
         let tgtIdx = numTestItems // <- When dragging down, Apple expects to add +1 to expected final location
 
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -128,7 +128,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 1
 
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -153,7 +153,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 4 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -177,7 +177,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([2, 4])
         let tgtIdx = 0
 
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -205,7 +205,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([1, 3])
         let tgtIdx = 5 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        AppModel.onMovePriorityOrdered(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
         let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -235,9 +235,8 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
 
-        appModel.onMovePriorityOrderedUndoable(
+        appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
@@ -281,9 +280,8 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         var srcIndices = IndexSet([0])
         var tgtIdx = 2
 
-        appModel.onMovePriorityOrderedUndoable(
+        appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
@@ -294,9 +292,8 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         srcIndices = IndexSet([1])
         tgtIdx = 3
 
-        appModel.onMovePriorityOrderedUndoable(
+        appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
@@ -307,9 +304,8 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         /// Third reorder - Original 1st from current 3rd to 4th postion
         srcIndices = IndexSet([2])
         tgtIdx = 4
-        appModel.onMovePriorityOrderedUndoable(
+        appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
@@ -340,9 +336,8 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         // First reordering
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
-        appModel.onMovePriorityOrderedUndoable(
+        appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )

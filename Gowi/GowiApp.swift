@@ -17,5 +17,8 @@ struct GowiApp: App {
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)
         }
+        .commands {
+            Main_MenuBar(appModel: appModel)
+        }
     }
 }

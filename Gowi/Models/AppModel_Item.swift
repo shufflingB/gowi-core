@@ -44,57 +44,55 @@ extension AppModel {
         return (externalUM, contextUM)
     }
 
-    private static func undoRegisterPassThroughWithExternal<T: ObservableObject>(logOperationDescription: String, withTarget: T, externalUM: UndoManager, passToUM: UndoManager, redoOperation: @escaping () -> Void) where T.ObjectWillChangePublisher == ObservableObjectPublisher {
-        /// Register the pass-through to the Child UndoManager with the UI's UndoManager
+    private static func registerPassThroughUndo(
+        with externalUM: UndoManager?, passingTo undoableTgtUM: UndoManager?, withTarget: AnyObject,
+        setActionName actionName: String, action: @escaping () -> Void) {
         ///
-        ///
-        ///
-        externalUM.registerUndo(withTarget: withTarget) { (targetInstance: T) in
-            log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of pass-through to viewContext's UndoManager")
-            withAnimation {
-                passToUM.undo()
-//                targetInstance.objectWillChange.send()
-            }
-
-            /// Register how to Redo the Undo if necessary
-            externalUM.registerUndo(withTarget: targetInstance) { t in
-                log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of its registered redo operation")
-                withAnimation {
-                    redoOperation()
-//                    t.objectWillChange.send()
-                }
-            }
-        }
-    }
-
-    func onMovePriorityOrderedUndoable(externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
-        Self.onMovePriorityOrderedUndoable(withTarget: self, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-    }
-
-    private static func onMovePriorityOrderedUndoable<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) where T.ObjectWillChangePublisher == ObservableObjectPublisher {
-        guard let (externalUM, contextUM) = Self.undoPreFlight(externalUM: externalUM, contextUM: context.undoManager) else {
+        guard let (externalUM, undoableTgtUM) = Self.undoPreFlight(externalUM: externalUM, contextUM: undoableTgtUM) else {
             log.warning("\(#function) can't make undoable as externalUM is nil ")
-            AppModel.onMovePriorityOrdered(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+            action()
             return
         }
         let extUMgroupsByEventStash = externalUM.groupsByEvent
         externalUM.groupsByEvent = false
+
         externalUM.beginUndoGrouping()
 
-        contextUM.beginUndoGrouping()
-        AppModel.onMovePriorityOrdered(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-        contextUM.endUndoGrouping()
+        // Carry out the action that can the undoableTgtUM "knows" how to to undo.
+        undoableTgtUM.beginUndoGrouping()
 
-        undoRegisterPassThroughWithExternal(logOperationDescription: #function, withTarget: withTarget, externalUM: externalUM, passToUM: contextUM) {
-            onMovePriorityOrderedUndoable(withTarget: withTarget, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        action()
+
+        undoableTgtUM.endUndoGrouping()
+
+        externalUM.registerUndo(withTarget: withTarget) { (targetInstance: AnyObject) in
+            log.debug(" SwiftUI UndoManager undo call triggered running of pass-through to viewContext's UndoManager")
+            withAnimation {
+                undoableTgtUM.undo()
+            }
+
+            /// Register how to Redo the Undo if necessary
+            externalUM.registerUndo(withTarget: targetInstance) { _ in
+                log.debug("SwiftUI UndoManager undo call triggered running of its registered redo operation")
+                withAnimation {
+                    registerPassThroughUndo(with: externalUM, passingTo: undoableTgtUM, withTarget: withTarget, setActionName: actionName, action: action)
+                }
+            }
         }
-
+        externalUM.setActionName(actionName)
         externalUM.endUndoGrouping()
         externalUM.groupsByEvent = extUMgroupsByEventStash
     }
 
+    func reOrderUsingPriority(externalUM: UndoManager?, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
+        Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Move") {
+            AppModel.reOrderUsingPriority(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        }
+    }
+
     private static let SideBarDefaultOffset = 100.0
-    static func onMovePriorityOrdered(items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
+
+    static func reOrderUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
         // i.e. those sorted by Item priority
         /// just use what we've already worked out for the detail.
         /// E.g. for 3 item list
@@ -181,15 +179,36 @@ extension AppModel {
 //        return newItem
 //    }
 
-    static func itemSetup(_ moc: NSManagedObjectContext, priority: Double, complete: Date?, parentList: NSSet?, childrenList: NSSet?) -> Item {
+//    func itemAddToUndoable(
+//        externalUM: UndoManager,
+//        parents: Set<Item>, title: String, priority: Double, complete: Date?, notes: String, children: Set<Item>
+//    ) -> Item {
+//
+//
+//
+//    }
+
+    func itemAddTo(externalUM: UndoManager?, parents: Set<Item>, title: String, priority: Double, complete: Date?, notes: String, children: Set<Item>) -> Item {
+        var item: Item?
+        Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "New Item") {
+            item = Self.itemAddTo(self.viewContext, title: title, parents: parents, priority: priority, complete: complete, children: children, notes: notes)
+        }
+        return item!
+    }
+
+    static func itemAddTo(_ moc: NSManagedObjectContext, title: String, parents: Set<Item>, priority: Double, complete: Date?, children: Set<Item>, notes: String?) -> Item {
         /// Used to instantiate the bare minimum for iit
         let newItem = Item(context: moc)
-        newItem.ourIdS = UUID()
-        newItem.parentList = parentList
-        newItem.childrenList = childrenList
+        newItem.ourId = UUID()
         newItem.created = Date()
-        newItem.completed = complete
+        newItem.title = title
         newItem.priority = priority
+        newItem.completed = complete
+        newItem.notes = notes
+
+        newItem.parentList = parents as NSSet
+        newItem.childrenList = children as NSSet
+
         return newItem
     }
 }

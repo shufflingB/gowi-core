@@ -15,7 +15,7 @@ struct Main: View {
 
     init(with root: Item) {
         _itemsAllFromFR = FetchRequest<Item>(
-            sortDescriptors: [NSSortDescriptor(key: "created", ascending: true)],
+            sortDescriptors: [],
             predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
         )
     }
@@ -28,6 +28,7 @@ struct Main: View {
         NavigationView {
             SideBar(stateView: self)
         }
+        .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
     }
 
     @FetchRequest private var itemsAllFromFR: FetchedResults<Item>
@@ -37,6 +38,7 @@ extension Main {
     internal var itemsAll: Set<Item> {
         Set(itemsAllFromFR)
     }
+    
 
     // MARK: SideBar
 
@@ -75,6 +77,6 @@ extension Main {
     }
 
     internal func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        appModel.onMovePriorityOrderedUndoable(externalUM: windowUM, context: appModel.viewContext, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        appModel.reOrderUsingPriority(externalUM: windowUM, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
     }
 }

@@ -11,10 +11,10 @@
 		FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */; };
 		FF1A944828EC8A9B008303B8 /* AppModel_Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944728EC8A9B008303B8 /* AppModel_Item.swift */; };
 		FF1A944A28EC927E008303B8 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944928EC927E008303B8 /* Item.swift */; };
-		FF1A944C28EC9598008303B8 /* AppModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944B28EC9598008303B8 /* AppModelTest.swift */; };
+		FF1A944C28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944B28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift */; };
 		FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A946E28ED85A9008303B8 /* SideBar.swift */; };
 		FF1A947128ED85CC008303B8 /* SideBarItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947028ED85CC008303B8 /* SideBarItemList.swift */; };
-		FF1A947328EDA3A2008303B8 /* AppModelTest_reorderingBasedOnItemPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947228EDA3A2008303B8 /* AppModelTest_reorderingBasedOnItemPriority.swift */; };
+		FF1A947328EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947228EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift */; };
 		FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8228EC7B8100868F77 /* GowiApp.swift */; };
 		FFA62B8528EC7B8100868F77 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8428EC7B8100868F77 /* Main.swift */; };
 		FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFA62B8628EC7B8300868F77 /* Assets.xcassets */; };
@@ -22,6 +22,10 @@
 		FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8D28EC7B8300868F77 /* Gowi.xcdatamodeld */; };
 		FFA62BA428EC7B8300868F77 /* GowiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62BA328EC7B8300868F77 /* GowiUITests.swift */; };
 		FFA62BA628EC7B8300868F77 /* GowiUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62BA528EC7B8300868F77 /* GowiUITestsLaunchTests.swift */; };
+		FFDE6CDD28EF109E009736E3 /* Main_MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDC28EF109E009736E3 /* Main_MenuBar.swift */; };
+		FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
+		FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */; };
+		FFDE6CE528EF2708009736E3 /* FocusedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE428EF2707009736E3 /* FocusedValues.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,10 +50,10 @@
 		FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_Testing.swift; sourceTree = "<group>"; };
 		FF1A944728EC8A9B008303B8 /* AppModel_Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_Item.swift; sourceTree = "<group>"; };
 		FF1A944928EC927E008303B8 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		FF1A944B28EC9598008303B8 /* AppModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModelTest.swift; sourceTree = "<group>"; };
+		FF1A944B28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test010_AppModel_Item_Creation.swift; sourceTree = "<group>"; };
 		FF1A946E28ED85A9008303B8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBar.swift; sourceTree = "<group>"; };
 		FF1A947028ED85CC008303B8 /* SideBarItemList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideBarItemList.swift; sourceTree = "<group>"; };
-		FF1A947228EDA3A2008303B8 /* AppModelTest_reorderingBasedOnItemPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModelTest_reorderingBasedOnItemPriority.swift; sourceTree = "<group>"; };
+		FF1A947228EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift; sourceTree = "<group>"; };
 		FFA62B7F28EC7B8100868F77 /* Gowi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gowi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFA62B8228EC7B8100868F77 /* GowiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiApp.swift; sourceTree = "<group>"; };
 		FFA62B8428EC7B8100868F77 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
@@ -61,6 +65,10 @@
 		FFA62B9F28EC7B8300868F77 /* GowiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GowiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFA62BA328EC7B8300868F77 /* GowiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiUITests.swift; sourceTree = "<group>"; };
 		FFA62BA528EC7B8300868F77 /* GowiUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FFDE6CDC28EF109E009736E3 /* Main_MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main_MenuBar.swift; sourceTree = "<group>"; };
+		FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KbShortcuts.swift; sourceTree = "<group>"; };
+		FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
+		FFDE6CE428EF2707009736E3 /* FocusedValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusedValues.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +102,6 @@
 				FF1A944328EC873D008303B8 /* AppModel.swift */,
 				FF1A944728EC8A9B008303B8 /* AppModel_Item.swift */,
 				FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */,
-				FF1A944928EC927E008303B8 /* Item.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -103,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				FFA62B8428EC7B8100868F77 /* Main.swift */,
+				FFDE6CDC28EF109E009736E3 /* Main_MenuBar.swift */,
 				FF1A946E28ED85A9008303B8 /* SideBar.swift */,
 				FF1A947028ED85CC008303B8 /* SideBarItemList.swift */,
 			);
@@ -133,6 +141,8 @@
 			isa = PBXGroup;
 			children = (
 				FFA62B8228EC7B8100868F77 /* GowiApp.swift */,
+				FFDE6CE328EF2670009736E3 /* ExtExtensions */,
+				FFDE6CDE28EF1478009736E3 /* Defs */,
 				FF1A946D28ED7B90008303B8 /* UI */,
 				FF1A944228EC7C1C008303B8 /* Models */,
 				FFA62B8628EC7B8300868F77 /* Assets.xcassets */,
@@ -154,8 +164,8 @@
 		FFA62B9828EC7B8300868F77 /* GowiTests */ = {
 			isa = PBXGroup;
 			children = (
-				FF1A944B28EC9598008303B8 /* AppModelTest.swift */,
-				FF1A947228EDA3A2008303B8 /* AppModelTest_reorderingBasedOnItemPriority.swift */,
+				FF1A944B28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift */,
+				FF1A947228EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift */,
 			);
 			path = GowiTests;
 			sourceTree = "<group>";
@@ -167,6 +177,24 @@
 				FFA62BA528EC7B8300868F77 /* GowiUITestsLaunchTests.swift */,
 			);
 			path = GowiUITests;
+			sourceTree = "<group>";
+		};
+		FFDE6CDE28EF1478009736E3 /* Defs */ = {
+			isa = PBXGroup;
+			children = (
+				FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */,
+				FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */,
+			);
+			path = Defs;
+			sourceTree = "<group>";
+		};
+		FFDE6CE328EF2670009736E3 /* ExtExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				FF1A944928EC927E008303B8 /* Item.swift */,
+				FFDE6CE428EF2707009736E3 /* FocusedValues.swift */,
+			);
+			path = ExtExtensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,8 +331,12 @@
 				FF1A944828EC8A9B008303B8 /* AppModel_Item.swift in Sources */,
 				FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */,
 				FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */,
+				FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */,
+				FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */,
 				FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */,
+				FFDE6CDD28EF109E009736E3 /* Main_MenuBar.swift in Sources */,
 				FF1A944A28EC927E008303B8 /* Item.swift in Sources */,
+				FFDE6CE528EF2708009736E3 /* FocusedValues.swift in Sources */,
 				FF1A944428EC873D008303B8 /* AppModel.swift in Sources */,
 				FF1A947128ED85CC008303B8 /* SideBarItemList.swift in Sources */,
 				FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */,
@@ -315,8 +347,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF1A944C28EC9598008303B8 /* AppModelTest.swift in Sources */,
-				FF1A947328EDA3A2008303B8 /* AppModelTest_reorderingBasedOnItemPriority.swift in Sources */,
+				FF1A944C28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift in Sources */,
+				FF1A947328EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ import Foundation
 import os
 import XCTest
 
-class AppModelTest: XCTestCase {
+class Test010_AppModel_Item_Creation: XCTestCase {
 //    ProcessInfo.processInfo.environment["GOWI_TESTMODE"]
 
     var appModel = AppModel.sharedInMemoryNoTestData
@@ -21,6 +21,7 @@ class AppModelTest: XCTestCase {
 
     override func setUpWithError() throws {
         appModel = AppModel.sharedInMemoryNoTestData
+        continueAfterFailure = false
     }
 
     override func tearDownWithError() throws {
@@ -50,9 +51,10 @@ class AppModelTest: XCTestCase {
     }
 
     func test010_createOneItem() throws {
-        let rootKidCount: Int = rootItem.childrenList?.count ?? 0
+        let rootKidCount: Int = rootItem.childrenListAsSet.count
 
-        let newItem = AppModel.itemSetup(appModel.viewContext, priority: 0.0, complete: nil, parentList: [rootItem], childrenList: nil)
+        
+        let newItem = appModel.itemAddTo(externalUM: nil, parents: [rootItem], title: "Some title", priority: 0.0, complete: nil, notes: "Blah", children: [])
         let eDate = Date()
         XCTAssertEqual(newItem.created!.timeIntervalSince1970, eDate.timeIntervalSince1970, accuracy: 0.1,
                        "When a new Item is created it should have an appropriate creation date")
@@ -68,5 +70,26 @@ class AppModelTest: XCTestCase {
         let childParentItems: Set<Item> = newItem.parentList as? Set<Item> ?? []
         XCTAssertEqual(childParentItems.first, rootItem,
                        "And that Child Item should correspondingly also have the Root Item as its Parent")
+    }
+
+    func test020_itemCreationIsUndoable() {
+        let originalKidCount: Int = rootItem.childrenListAsSet.count
+        let undoMgr = UndoManager()
+
+        let newItem = appModel.itemAddTo(externalUM: undoMgr, parents: [rootItem], title: "Some title", priority: 0.0, complete: nil, notes: "Blah", children: [])
+
+        XCTAssertEqual(rootItem.childrenListAsSet.count, originalKidCount + 1,
+                       "When a new Item is created the Root Item should now have one extra Child Item")
+
+        let rootChildItems = rootItem.childrenListAsSet
+        XCTAssertEqual(rootChildItems.first, newItem,
+                       "And that Child Item should be the Item just created")
+
+        XCTAssertTrue(undoMgr.canUndo, "And the addition of the new Item should be undoable")
+
+        undoMgr.undo()
+
+        XCTAssertEqual(rootItem.childrenListAsSet.count, originalKidCount,
+                       "And afther the change is undone the number of children is as it was originally")
     }
 }

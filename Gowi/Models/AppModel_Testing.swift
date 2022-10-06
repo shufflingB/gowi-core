@@ -29,10 +29,16 @@ extension AppModel {
 
         let numItemsToDo = 10
         viewContext.performAndWait { (1 ... numItemsToDo).forEach { idx in
-            let item = Self.itemSetup(viewContext, priority: Double(idx), complete: nil, parentList: [root], childrenList: nil)
-            item.title = "title for item \(idx)"
-            item.notes = "notes for item \(idx)"
-            item.priority = Double(idx)
+
+            let item = self.itemAddTo(
+                externalUM: nil,
+                parents: [root],
+                title: "title for item \(idx)",
+                priority: Double(idx),
+                complete: nil,
+                notes: "notes for item \(idx)",
+                children: []
+            )
 
             // Bit of a hack to ensure always have this ID present for the URL routing tests
             if idx == numItemsToDo {
