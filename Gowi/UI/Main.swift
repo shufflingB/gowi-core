@@ -25,12 +25,13 @@ struct Main: View {
 }
 
 extension Main {
-    // MARK: SideBar
-
     internal var itemsAll: Set<Item> {
+        // TODO: Update the appModel to listen for changes to sortable properties on items and generate its own objectWillChange.send()
+        // and remove the ones have to hardcode in the appModel when changing dates and priorities.
         appModel.systemRootItem.childrenListAsSet
     }
-
+    
+    // MARK: SideBar
     internal var sideBarItemsListWaiting: Array<Item> {
         Self.sideBarItemsListWaiting(itemsAll)
     }
@@ -66,13 +67,7 @@ extension Main {
     }
 
     internal func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        Self.sideBarOnMoveOfWaitingItems(withTarget: appModel, externalUM: windowUM, context: appModel.viewContext, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-        appModel.objectWillChange.send()
-    }
-
-    static func sideBarOnMoveOfWaitingItems<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int)  where T.ObjectWillChangePublisher == ObservableObjectPublisher {
-//        AppModel.onMoveHighToLowPriority(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-
-        AppModel.onMovePriorityOrderedUndoable(withTarget: withTarget, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        appModel.onMovePriorityOrderedUndoable(externalUM: windowUM, context: appModel.viewContext, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        
     }
 }

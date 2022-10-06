@@ -235,8 +235,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
 
-        AppModel.onMovePriorityOrderedUndoable(
-            withTarget: appModel,
+        appModel.onMovePriorityOrderedUndoable(
             externalUM: undoMgr,
             context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
@@ -282,8 +281,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         var srcIndices = IndexSet([0])
         var tgtIdx = 2
 
-        AppModel.onMovePriorityOrderedUndoable(
-            withTarget: appModel,
+        appModel.onMovePriorityOrderedUndoable(
             externalUM: undoMgr,
             context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
@@ -296,8 +294,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         srcIndices = IndexSet([1])
         tgtIdx = 3
 
-        AppModel.onMovePriorityOrderedUndoable(
-            withTarget: appModel,
+        appModel.onMovePriorityOrderedUndoable(
             externalUM: undoMgr,
             context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
@@ -310,8 +307,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         /// Third reorder - Original 1st from current 3rd to 4th postion
         srcIndices = IndexSet([2])
         tgtIdx = 4
-        AppModel.onMovePriorityOrderedUndoable(
-            withTarget: appModel,
+        appModel.onMovePriorityOrderedUndoable(
             externalUM: undoMgr,
             context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
@@ -344,8 +340,7 @@ final class AppModelTest_reorderingBasedOnItemPriority: XCTestCase {
         // First reordering
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
-        AppModel.onMovePriorityOrderedUndoable(
-            withTarget: appModel,
+        appModel.onMovePriorityOrderedUndoable(
             externalUM: undoMgr,
             context: appModel.viewContext,
             items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),

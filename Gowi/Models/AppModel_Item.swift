@@ -52,19 +52,27 @@ extension AppModel {
         externalUM.registerUndo(withTarget: withTarget) { (targetInstance: T) in
             log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of pass-through to viewContext's UndoManager")
             withAnimation {
-                targetInstance.objectWillChange.send()
                 passToUM.undo()
+                targetInstance.objectWillChange.send()
             }
 
             /// Register how to Redo the Undo if necessary
-            externalUM.registerUndo(withTarget: targetInstance) { _ in
+            externalUM.registerUndo(withTarget: targetInstance) { t in
                 log.debug("\(logOperationDescription): SwiftUI UndoManager undo call triggered running of its registered redo operation")
-                redoOperation()
+                withAnimation {
+                    redoOperation()
+                    t.objectWillChange.send()
+                }
             }
         }
     }
 
-    static func onMovePriorityOrderedUndoable<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) where T.ObjectWillChangePublisher == ObservableObjectPublisher {
+    func onMovePriorityOrderedUndoable(externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
+        Self.onMovePriorityOrderedUndoable(withTarget: self, externalUM: externalUM, context: context, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        objectWillChange.send()
+    }
+
+    private static func onMovePriorityOrderedUndoable<T: ObservableObject>(withTarget: T, externalUM: UndoManager?, context: NSManagedObjectContext, items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) where T.ObjectWillChangePublisher == ObservableObjectPublisher {
         guard let (externalUM, contextUM) = Self.undoPreFlight(externalUM: externalUM, contextUM: context.undoManager) else {
             log.warning("\(#function) can't make undoable as externalUM is nil ")
             AppModel.onMovePriorityOrdered(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)

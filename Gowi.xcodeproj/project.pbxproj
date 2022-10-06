@@ -133,8 +133,8 @@
 			isa = PBXGroup;
 			children = (
 				FFA62B8228EC7B8100868F77 /* GowiApp.swift */,
-				FF1A944228EC7C1C008303B8 /* Models */,
 				FF1A946D28ED7B90008303B8 /* UI */,
+				FF1A944228EC7C1C008303B8 /* Models */,
 				FFA62B8628EC7B8300868F77 /* Assets.xcassets */,
 				FFA62B9028EC7B8300868F77 /* Gowi.entitlements */,
 				FFA62B8D28EC7B8300868F77 /* Gowi.xcdatamodeld */,
