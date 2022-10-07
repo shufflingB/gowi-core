@@ -30,7 +30,7 @@ extension AppModel {
         let numItemsToDo = 10
         viewContext.performAndWait { (1 ... numItemsToDo).forEach { idx in
 
-            let item = self.itemAddTo(
+            let item = self.itemAddNewTo(
                 externalUM: nil,
                 parents: [root],
                 title: "title for item \(idx)",
@@ -46,6 +46,6 @@ extension AppModel {
             }
         }
         }
-        AppModel.saveToCoreData(viewContext)
+        saveToCoreData()
     }
 }

@@ -45,7 +45,7 @@ extension Main_MenuBar {
                 Text("Moc has changes = \(appModel.hasUnPushedChanges.description)")
                 Button("Save Changes") {
                     withAnimation {
-                        AppModel.saveToCoreData(appModel.viewContext)
+                        appModel.saveToCoreData()
                     }
                 }
                 .accessibilityIdentifier(AccessId.FileMenuSave.rawValue)
@@ -69,7 +69,7 @@ extension Main_MenuBar {
             Section {
                 Button("New Item") {
                     withAnimation {
-                        _ = appModel.itemAddTo(externalUM: windowUM, parents: [appModel.systemRootItem], title: "New", priority: 0.0, complete: nil, notes: "", children: [])
+                        _ = appModel.itemAddNewTo(externalUM: windowUM, parents: [appModel.systemRootItem], title: "New", priority: 0.0, complete: nil, notes: "", children: [])
                     }
                 }
                 .accessibilityIdentifier(AccessId.ItemsMenuNew.rawValue)
