@@ -35,6 +35,9 @@ extension AppModel {
     }
 
   
+    
+    
+    
     func itemAddNewTo(
         externalUM: UndoManager?,
         parents: Set<Item>, title: String, priority: Double, complete: Date?, notes: String, children: Set<Item>
@@ -65,6 +68,32 @@ extension AppModel {
 
         return newItem
     }
+    
+    func itemNewInsertInPriority(
+        windowUM: UndoManager?,
+        parent: Item, list items: Array<Item>, where tgtIdxsEdge: Int,
+        title: String, complete: Date?, notes: String, children: Set<Item>
+    ) -> Item {
+        /// --------------- tgtIdxEdge = 0
+        /// sourceItem  0
+        /// --------------- tgtIdxEdge = 1
+        /// source Idx = 1
+        /// -------------- tgtIdxEdge = 2
+        /// source Idx =2
+        /// -------------- tgtIdxEdge = 3
+        /// ...
+
+        let priorities = AppModel.itemPriorityPair(forEdgeIdx: tgtIdxsEdge, items: items)
+
+        let priorityStep: Double = (priorities.aboveEdge - priorities.belowEdge) / 2
+
+        let insertPriority = tgtIdxsEdge < items.count
+            ? priorities.belowEdge + priorityStep
+            : priorities.aboveEdge - priorityStep
+
+        return itemAddNewTo(externalUM: windowUM, parents: [parent], title: "New item", priority: insertPriority, complete: nil, notes: "", children: [])
+    }
+    
 
     func reOrderUsingPriority(
         externalUM: UndoManager?,
@@ -77,6 +106,10 @@ extension AppModel {
     }
 
     static func itemPriorityPair(forEdgeIdx tgtIdxsEdge: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
+        guard items.count > 0 else {
+            return (aboveEdge: SideBarDefaultOffset, belowEdge: -SideBarDefaultOffset)
+        }
+        
         let itemPriorityAboveTgtEdge = tgtIdxsEdge == 0
             ? items[0].priority + SideBarDefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
             : items[tgtIdxsEdge - 1].priority

@@ -6,11 +6,12 @@
 //
 
 @testable import Gowi
+// import Gowi
 import XCTest
 
 final class Test000_System_Init: XCTestCase {
     var appModel = AppModel.sharedInMemoryNoTestData
-    
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         continueAfterFailure = false

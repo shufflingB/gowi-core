@@ -17,7 +17,7 @@ struct SideBar: View {
     var body: some View {
         Layout(
             tabSelected: stateView.$sideBarTabSelected,
-            itemsSelected: stateView.$sideBarItemSelections,
+            itemsSelected: stateView.$sideBarItemIdsSelected,
             itemsWaiting: stateView.sideBarItemsListWaiting,
             itemsDone: stateView.sideBarItemsListDone,
             itemsAll: stateView.sideBarItemsListAll,

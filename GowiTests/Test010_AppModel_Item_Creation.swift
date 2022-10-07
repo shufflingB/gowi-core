@@ -8,6 +8,7 @@
 import AppKit
 import Foundation
 @testable import Gowi
+
 import os
 import XCTest
 
@@ -15,17 +16,21 @@ class Test010_AppModel_Item_Creation: XCTestCase {
 //    ProcessInfo.processInfo.environment["GOWI_TESTMODE"]
 
     var appModel = AppModel.sharedInMemoryNoTestData
-    var rootItem: Item {
-        appModel.systemRootItem
-    }
+    var rootItem: Item { appModel.systemRootItem }
 
     override func setUpWithError() throws {
-        appModel = AppModel.sharedInMemoryNoTestData
         continueAfterFailure = false
+        
+        appModel = AppModel.sharedInMemoryNoTestData
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        rootItem.childrenListAsSet.forEach { item in
+            appModel.viewContext.delete(item)
+        }
+        
+        appModel.saveToCoreData()
     }
 
     func test010_add_a_new_item_root() throws {
@@ -50,6 +55,7 @@ class Test010_AppModel_Item_Creation: XCTestCase {
     }
 
     func test020_adding_a_new_item_is_undoable() {
+
         let originalKidCount: Int = rootItem.childrenListAsSet.count
         let undoMgr = UndoManager()
 
@@ -60,7 +66,9 @@ class Test010_AppModel_Item_Creation: XCTestCase {
                        "When a new Item is created the Root Item should now have one extra Child Item")
 
         let rootChildItems = rootItem.childrenListAsSet
-        XCTAssertEqual(rootChildItems.first, newItem,
+        
+        
+        XCTAssertEqual(rootChildItems.first?.ourIdS, newItem.ourIdS,
                        "And that Child Item should be the Item just created")
 
         XCTAssertTrue(undoMgr.canUndo, "And the addition of the new Item should be undoable")
@@ -71,5 +79,124 @@ class Test010_AppModel_Item_Creation: XCTestCase {
                        "And afther the change is undone the number of children is as it was originally")
     }
 
- 
+    func test100_an_item_can_be_inserted_when_no_items_in_list() {
+
+
+        let undoManager = UndoManager()
+        let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(originalSortedList.count, 0,
+                       "When there are no items in the list at the start")
+
+        let newItem = appModel.itemNewInsertInPriority(
+            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: 0,
+            title: "New item", complete: nil, notes: "", children: []
+        )
+
+        let afterInsertList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterInsertList.count, originalSortedList.count + 1,
+                       "After insert a new Item the list will have grown in length by one Item ")
+
+        XCTAssertEqual(afterInsertList.first?.ourIdS, newItem.ourIdS,
+                       "And that the new Item is at the head of the list organised by priority")
+
+        undoManager.undo()
+        let afterUndoList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterUndoList.count, originalSortedList.count,
+                       "And the addition is undoable ")
+    }
+
+    func test120_an_item_can_be_inserted_as_the_top_priority_in_a_list() {
+        appModel.addTestData(.one)
+
+        let undoManager = UndoManager()
+        let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+
+        let newItem = appModel.itemNewInsertInPriority(
+            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: 0,
+            title: "New item", complete: nil, notes: "", children: []
+        )
+
+        let afterInsertList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterInsertList.count, originalSortedList.count + 1,
+                       "After insert a new Item the list will have grown in length by one Item ")
+
+        XCTAssertEqual(afterInsertList.first?.ourIdS, newItem.ourIdS,
+                       "And that the new Item is at the head of the list organised by priority")
+
+        undoManager.undo()
+        let afterUndoList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterUndoList.count, originalSortedList.count,
+                       "And the addition is undoable ")
+    }
+
+    func test110_sidebars_an_item_can_be_inserted_at_the_bottom_of_waiting_list() {
+        appModel.addTestData(.one)
+
+        let undoManager = UndoManager()
+        let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+
+        let newItem = appModel.itemNewInsertInPriority(
+            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: originalSortedList.count,
+            title: "New item", complete: nil, notes: "", children: []
+        )
+
+        let afterInsertList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterInsertList.count, originalSortedList.count + 1,
+                       "After insert a new Item the list will have grown in length by one Item ")
+
+        XCTAssertEqual(afterInsertList.last?.title, newItem.title,
+                       "And that the new Item is at the tail of the list organised by priority")
+
+        undoManager.undo()
+        let afterUndoList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterUndoList.count, originalSortedList.count,
+                       "And the addition is undoable ")
+    }
+
+    func test120_sidebars_an_item_can_be_inserted_between_items_of_waiting_list() {
+        /// --------------- tgtIdxEdge = 0
+        /// sourceItem  0
+        /// --------------- tgtIdxEdge = 1
+        /// source Idx = 1
+        /// -------------- tgtIdxEdge = 2
+        /// source Idx =2
+        /// -------------- tgtIdxEdge = 3
+        /// ...
+        ///
+        appModel.addTestData(.one)
+
+        let undoManager = UndoManager()
+        let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+
+        // insert between the items at idx 5 and 6 in the waiting  list i.e. tgt Idx edge 6
+
+        let whereTgtEdge = 6
+        let newItem = appModel.itemNewInsertInPriority(
+            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: whereTgtEdge,
+            title: "New item", complete: nil, notes: "", children: []
+        )
+
+        let afterInsertList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+
+        XCTAssertEqual(afterInsertList.count, originalSortedList.count + 1,
+                       "After insert a new Item the list will have grown in length by one Item ")
+
+        XCTAssertEqual(afterInsertList[whereTgtEdge].title, newItem.title,
+                       "And that the new Item will be located at the 6th idx ")
+
+        var idxOffset = 0
+        afterInsertList.indices.forEach { idx in
+            if idx != whereTgtEdge {
+                XCTAssertEqual(afterInsertList[idxOffset].title, originalSortedList[idxOffset].title,
+                               "And the other items remain in the same place relative to each other")
+            } else {
+                idxOffset += 1
+            }
+        }
+
+        undoManager.undo()
+        let afterUndoList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        XCTAssertEqual(afterUndoList.count, originalSortedList.count,
+                       "And the addition is undoable ")
+    }
 }

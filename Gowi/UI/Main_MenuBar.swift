@@ -27,6 +27,8 @@ struct Main_MenuBar: Commands {
     ////        @FocusedValue(\.itemIdsSelectedKey) var itemIdsSelected: Binding<Set<UUID>>?
 
     @FocusedValue(\.windowUndoManager) var windowUM
+    @FocusedValue(\.sideBarItemIdsSelected) var sideBarItemIdsSelected
+    @FocusedValue(\.sideBarTabSelected) var sideBarTabSelected
 
     var body: some Commands {
         menuCommandsFile
@@ -69,7 +71,18 @@ extension Main_MenuBar {
             Section {
                 Button("New Item") {
                     withAnimation {
-                        _ = appModel.itemAddNewTo(externalUM: windowUM, parents: [appModel.systemRootItem], title: "New", priority: 0.0, complete: nil, notes: "", children: [])
+                        guard let sideBarTabSelected = sideBarTabSelected, let sideBarItemIdsSelected = sideBarItemIdsSelected else {
+                            return
+                        }
+
+                        let route = Main.itemAddNew(
+                            appModel: appModel, windowUM: windowUM,
+                            tabSelected: sideBarTabSelected.wrappedValue, parent: appModel.systemRootItem,
+                            list: Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                        )
+
+                        sideBarTabSelected.wrappedValue = route.tabSelected
+                        sideBarItemIdsSelected.wrappedValue = route.itemIdsSelected
                     }
                 }
                 .accessibilityIdentifier(AccessId.ItemsMenuNew.rawValue)

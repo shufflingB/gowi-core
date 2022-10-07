@@ -91,6 +91,7 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 // }
 
 import SwiftUI
+
 extension Item {
     var ourIdS: UUID {
         get { ourId ?? UUID() }
