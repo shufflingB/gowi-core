@@ -85,6 +85,7 @@ extension Main_MenuBar {
                         sideBarItemIdsSelected.wrappedValue = route.itemIdsSelected
                     }
                 }
+                .disabled(sideBarTabSelected == nil)
                 .accessibilityIdentifier(AccessId.ItemsMenuNew.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsNew)
             }
