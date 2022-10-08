@@ -10,14 +10,16 @@ import XCTest
 @testable import Gowi
 
 final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
-    var appModel = AppModel.sharedInMemoryWithTestData
+    var appModel = AppModel(inMemory: true)
+    
 
     var rootItem: Item {
         appModel.systemRootItem
     }
 
     override func setUpWithError() throws {
-        appModel = AppModel.sharedInMemoryWithTestData
+        appModel = AppModel(inMemory: true)
+        appModel.addTestData(.one)
     }
 
     override func tearDownWithError() throws {

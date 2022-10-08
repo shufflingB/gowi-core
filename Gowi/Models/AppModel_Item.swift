@@ -34,10 +34,6 @@ extension AppModel {
         }
     }
 
-  
-    
-    
-    
     func itemAddNewTo(
         externalUM: UndoManager?,
         parents: Set<Item>, title: String, priority: Double, complete: Date?, notes: String, children: Set<Item>
@@ -45,14 +41,14 @@ extension AppModel {
         //
         var item: Item?
         Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "New Item") {
-            item = Self.itemAddNewTo(self.viewContext, parents: parents, title: title,  priority: priority, complete: complete, children: children, notes: notes)
+            item = Self.itemAddNewTo(self.viewContext, parents: parents, title: title, priority: priority, complete: complete, children: children, notes: notes)
         }
         return item!
     }
 
     static func itemAddNewTo(
         _ moc: NSManagedObjectContext,
-         parents: Set<Item>, title: String, priority: Double, complete: Date?, children: Set<Item>, notes: String?
+        parents: Set<Item>, title: String, priority: Double, complete: Date?, children: Set<Item>, notes: String?
     ) -> Item {
         /// Used to instantiate the bare minimum for iit
         let newItem = Item(context: moc)
@@ -68,9 +64,9 @@ extension AppModel {
 
         return newItem
     }
-    
+
     func itemNewInsertInPriority(
-        windowUM: UndoManager?,
+        externalUM: UndoManager?,
         parent: Item, list items: Array<Item>, where tgtIdxsEdge: Int,
         title: String, complete: Date?, notes: String, children: Set<Item>
     ) -> Item {
@@ -91,9 +87,25 @@ extension AppModel {
             ? priorities.belowEdge + priorityStep
             : priorities.aboveEdge - priorityStep
 
-        return itemAddNewTo(externalUM: windowUM, parents: [parent], title: "New item", priority: insertPriority, complete: nil, notes: "", children: [])
+        return itemAddNewTo(externalUM: externalUM, parents: [parent], title: "New item", priority: insertPriority, complete: nil, notes: "", children: [])
     }
-    
+
+    func itemsDelete(
+        externalUM: UndoManager?,
+        list items: Array<Item>
+    ) {
+        //
+        Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Delete") {
+            Self.itemsDelete(self.viewContext, items: items)
+        }
+    }
+
+    static func itemsDelete(_ moc: NSManagedObjectContext, items: Array<Item>) {
+        items.forEach { item in
+            item.parentList = nil /// Just deleting the item is not enough as it doesn't get removed  from  the parent's children lists until after the moc is saved
+            moc.delete(item)
+        }
+    }
 
     func reOrderUsingPriority(
         externalUM: UndoManager?,
@@ -109,7 +121,7 @@ extension AppModel {
         guard items.count > 0 else {
             return (aboveEdge: SideBarDefaultOffset, belowEdge: -SideBarDefaultOffset)
         }
-        
+
         let itemPriorityAboveTgtEdge = tgtIdxsEdge == 0
             ? items[0].priority + SideBarDefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
             : items[tgtIdxsEdge - 1].priority
@@ -120,7 +132,7 @@ extension AppModel {
 
         return (aboveEdge: itemPriorityAboveTgtEdge, belowEdge: itemPriorityBelowTgtEdge)
     }
-    
+
     static func reOrderUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
         // i.e. those sorted by Item priority
         /// just use what we've already worked out for the detail.
@@ -143,14 +155,20 @@ extension AppModel {
             // print("Not moving because trying to move within the range of the existing items")
             return
         }
+        
+        guard sourceIndices.allSatisfy({ $0 >= 0 && $0 < items.count}) else {
+            log.warning("Not moving - not all src idx \(sourceIndices) are in valid range for items to move 0 to \(items.count - 1) ")
+            return
+        }
 
+        
         let itemsSelected: Array<Item> = sourceIndices.map({ items[$0] })
 
         let movingUp: Bool = sourceIndicesFirstIdx > tgtIdxsEdge ? true : false
         // print("sourceIndixe.first =\(sourceIndicesFirstIdx),  last = \(sourceIndices.last!) tgtEdge = \(tgtIdxsEdge), Moving up \(movingUp)")
 
         let itemPriorities = itemPriorityPair(forEdgeIdx: tgtIdxsEdge, items: items)
-        
+
         let priorityStepSize = (itemPriorities.aboveEdge - itemPriorities.belowEdge) / Double(itemsSelected.count + 1)
 
         if movingUp {

@@ -20,7 +20,7 @@ extension Main { // MARK: Model Intents
     ) -> (newItem: Item, tabSelected: SideBar.TabOption, itemIdsSelected: Set<UUID>) {
         //
         let newItem = appModel.itemNewInsertInPriority(
-            windowUM: windowUM,
+            externalUM: windowUM,
             parent: parent, list: items, where: 0,
             title: "New Item", complete: nil, notes: "", children: []
         )

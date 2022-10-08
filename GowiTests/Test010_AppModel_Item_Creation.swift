@@ -15,22 +15,16 @@ import XCTest
 class Test010_AppModel_Item_Creation: XCTestCase {
 //    ProcessInfo.processInfo.environment["GOWI_TESTMODE"]
 
-    var appModel = AppModel.sharedInMemoryNoTestData
+    var appModel = AppModel(inMemory: true)
     var rootItem: Item { appModel.systemRootItem }
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        
-        appModel = AppModel.sharedInMemoryNoTestData
+        appModel = AppModel(inMemory: true)
+//        continueAfterFailure = false
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        rootItem.childrenListAsSet.forEach { item in
-            appModel.viewContext.delete(item)
-        }
-        
-        appModel.saveToCoreData()
     }
 
     func test010_add_a_new_item_root() throws {
@@ -55,7 +49,6 @@ class Test010_AppModel_Item_Creation: XCTestCase {
     }
 
     func test020_adding_a_new_item_is_undoable() {
-
         let originalKidCount: Int = rootItem.childrenListAsSet.count
         let undoMgr = UndoManager()
 
@@ -66,8 +59,7 @@ class Test010_AppModel_Item_Creation: XCTestCase {
                        "When a new Item is created the Root Item should now have one extra Child Item")
 
         let rootChildItems = rootItem.childrenListAsSet
-        
-        
+
         XCTAssertEqual(rootChildItems.first?.ourIdS, newItem.ourIdS,
                        "And that Child Item should be the Item just created")
 
@@ -80,15 +72,13 @@ class Test010_AppModel_Item_Creation: XCTestCase {
     }
 
     func test100_an_item_can_be_inserted_when_no_items_in_list() {
-
-
         let undoManager = UndoManager()
         let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         XCTAssertEqual(originalSortedList.count, 0,
                        "When there are no items in the list at the start")
 
         let newItem = appModel.itemNewInsertInPriority(
-            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: 0,
+            externalUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: 0,
             title: "New item", complete: nil, notes: "", children: []
         )
 
@@ -112,7 +102,7 @@ class Test010_AppModel_Item_Creation: XCTestCase {
         let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         let newItem = appModel.itemNewInsertInPriority(
-            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: 0,
+            externalUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: 0,
             title: "New item", complete: nil, notes: "", children: []
         )
 
@@ -136,7 +126,7 @@ class Test010_AppModel_Item_Creation: XCTestCase {
         let originalSortedList = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         let newItem = appModel.itemNewInsertInPriority(
-            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: originalSortedList.count,
+            externalUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: originalSortedList.count,
             title: "New item", complete: nil, notes: "", children: []
         )
 
@@ -172,7 +162,7 @@ class Test010_AppModel_Item_Creation: XCTestCase {
 
         let whereTgtEdge = 6
         let newItem = appModel.itemNewInsertInPriority(
-            windowUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: whereTgtEdge,
+            externalUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: whereTgtEdge,
             title: "New item", complete: nil, notes: "", children: []
         )
 

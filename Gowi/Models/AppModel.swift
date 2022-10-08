@@ -40,6 +40,20 @@ final class AppModel: ObservableObject, Identifiable {
         am.addTestData(.one)
         return am
     }()
+    
+    func resetInMemShared() {
+        Self.sharedInMemoryNoTestData =  AppModel(inMemory: true)
+        let am = AppModel(inMemory: true)
+        am.addTestData(.one)
+        Self.sharedInMemoryWithTestData = am
+    }
+//        let am = AppModel(inMemory: true)
+////        am.addTestData(.one)
+//
+//
+//
+//
+//    }
 
     let systemRootItem: Item
     let container: NSPersistentCloudKitContainer
@@ -48,8 +62,9 @@ final class AppModel: ObservableObject, Identifiable {
     var viewContext: NSManagedObjectContext {
         container.viewContext
     }
+    
 
-    private init(inMemory: Bool = false) {
+    init(inMemory: Bool = false) {
         // Suggested by https://www.hackingwithswift.com/forums/macos/app-sometimes-crashes-on-launch-since-monterey/10918/15476
         // and https://developer.apple.com/forums/thread/711122
         // as a workaround for tendency to crash on startup bc of possible Apple/SwiftUI bug

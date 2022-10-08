@@ -10,12 +10,9 @@
 import XCTest
 
 final class Test000_System_Init: XCTestCase {
-    var appModel = AppModel.sharedInMemoryNoTestData
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         continueAfterFailure = false
-        appModel = AppModel.sharedInMemoryNoTestData
     }
 
     override func tearDownWithError() throws {
@@ -23,12 +20,13 @@ final class Test000_System_Init: XCTestCase {
     }
 
     func test100_inMemory_no_test_data_GOWI_TESTMODE_0() throws {
-        appModel = AppModel.sharedInMemoryNoTestData
-        let rootItem = appModel.systemRootItem
+        let appModel = AppModel.sharedInMemoryNoTestData
 
         let eDate = Date()
         XCTAssertNotNil(appModel.systemRootItem,
                         "When a new appModel is instantiated it automatically creates a new system Root item")
+
+        let rootItem = appModel.systemRootItem
 
         XCTAssertTrue(rootItem.ourId != nil,
                       "And it should have a valid ID")
@@ -47,13 +45,14 @@ final class Test000_System_Init: XCTestCase {
     }
 
     func test100_inMemory_with_test_data_GOWI_TESTMODE_1() throws {
-        appModel = AppModel.sharedInMemoryWithTestData
-        let rootItem = appModel.systemRootItem
+        let appModel = AppModel.sharedInMemoryWithTestData
 
         let eDate = Date()
 
         XCTAssertNotNil(appModel.systemRootItem,
                         "When a new appModel is instantiated it automatically creates a new system Root item")
+
+        let rootItem = appModel.systemRootItem
 
         XCTAssertTrue(rootItem.ourId != nil,
                       "And it should have a valid ID")

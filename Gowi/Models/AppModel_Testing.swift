@@ -28,7 +28,7 @@ extension AppModel {
         log.debug("\(#function) adding test data")
 
         let numItemsToDo = 10
-        viewContext.performAndWait { (1 ... numItemsToDo).forEach { idx in
+        (1 ... numItemsToDo).forEach { idx in
 
             let item = self.itemAddNewTo(
                 externalUM: nil,
@@ -45,7 +45,7 @@ extension AppModel {
                 item.ourIdS = Self.testingMode1ourIdPresent
             }
         }
-        }
+
         saveToCoreData()
     }
 }

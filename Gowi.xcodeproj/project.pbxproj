@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF09FC4E28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */; };
 		FF1A944428EC873D008303B8 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944328EC873D008303B8 /* AppModel.swift */; };
 		FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */; };
 		FF1A944828EC8A9B008303B8 /* AppModel_Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944728EC8A9B008303B8 /* AppModel_Item.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test020_AppModel_Item_Deletion.swift; sourceTree = "<group>"; };
 		FF1A944328EC873D008303B8 /* AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_Testing.swift; sourceTree = "<group>"; };
 		FF1A944728EC8A9B008303B8 /* AppModel_Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_Item.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 		FFA62B9828EC7B8300868F77 /* GowiTests */ = {
 			isa = PBXGroup;
 			children = (
+				FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */,
 				FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */,
 				FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */,
 				FF1A944B28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift */,
@@ -357,6 +360,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF09FC4E28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift in Sources */,
 				FF1A944C28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift in Sources */,
 				FF1A947328EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift in Sources */,
 				FFDE6CE928F04447009736E3 /* Test500_Main_Intents.swift in Sources */,
