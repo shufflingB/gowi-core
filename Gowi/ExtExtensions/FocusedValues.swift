@@ -11,6 +11,15 @@ import SwiftUI
 struct SideBarItemIdsSelected: FocusedValueKey {
     typealias Value = Binding<Set<UUID>>
 }
+struct SideBarItemsSelectedVisible: FocusedValueKey {
+    typealias Value = Array<Item>
+}
+
+struct SideBarItemsVisible: FocusedValueKey {
+    typealias Value = Array<Item>
+}
+
+
 
 struct SideBarTabSelected: FocusedValueKey {
     typealias Value = Binding<SideBar.TabOption >
@@ -30,6 +39,21 @@ extension FocusedValues {
             self[SideBarItemIdsSelected.self] = newValue
         }
     }
+    
+    var sideBarItemSelectedVisible: SideBarItemsSelectedVisible.Value? {
+        get { self[SideBarItemsSelectedVisible.self] }
+        set {
+            self[SideBarItemsSelectedVisible.self] = newValue
+        }
+    }
+    
+    var sideBarItemsVisible: SideBarItemsVisible.Value? {
+        get { self[SideBarItemsVisible.self] }
+        set {
+            self[SideBarItemsVisible.self] = newValue
+        }
+    }
+    
     
     var sideBarTabSelected: SideBarTabSelected.Value? {
         get { self[SideBarTabSelected.self] }

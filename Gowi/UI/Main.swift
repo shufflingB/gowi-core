@@ -21,9 +21,13 @@ struct Main: View {
     var body: some View {
         NavigationView {
             SideBar(stateView: self)
+            Text("Number selected = \(detailItems.count)")
+            
         }
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
         .focusedValue(\.sideBarItemIdsSelected, $sideBarItemIdsSelected)
+        .focusedValue(\.sideBarItemSelectedVisible, sideBarItemsSelectedVisible)
+        .focusedValue(\.sideBarItemsVisible, sideBarItemsVisible)
         .focusedValue(\.sideBarTabSelected, $sideBarTabSelected)
     }
 

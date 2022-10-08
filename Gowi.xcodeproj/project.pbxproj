@@ -173,10 +173,10 @@
 		FFA62B9828EC7B8300868F77 /* GowiTests */ = {
 			isa = PBXGroup;
 			children = (
-				FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */,
-				FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */,
 				FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */,
 				FF1A944B28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift */,
+				FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */,
+				FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */,
 				FF1A947228EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift */,
 			);
 			path = GowiTests;

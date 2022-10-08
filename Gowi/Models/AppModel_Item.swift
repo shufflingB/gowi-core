@@ -107,16 +107,6 @@ extension AppModel {
         }
     }
 
-    func reOrderUsingPriority(
-        externalUM: UndoManager?,
-        items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int
-    ) {
-        //
-        Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Move") {
-            AppModel.reOrderUsingPriority(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-        }
-    }
-
     static func itemPriorityPair(forEdgeIdx tgtIdxsEdge: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
         guard items.count > 0 else {
             return (aboveEdge: SideBarDefaultOffset, belowEdge: -SideBarDefaultOffset)
@@ -131,6 +121,16 @@ extension AppModel {
             : items[tgtIdxsEdge].priority
 
         return (aboveEdge: itemPriorityAboveTgtEdge, belowEdge: itemPriorityBelowTgtEdge)
+    }
+
+    func reOrderUsingPriority(
+        externalUM: UndoManager?,
+        items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int
+    ) {
+        //
+        Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Move") {
+            AppModel.reOrderUsingPriority(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        }
     }
 
     static func reOrderUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
@@ -155,13 +155,12 @@ extension AppModel {
             // print("Not moving because trying to move within the range of the existing items")
             return
         }
-        
-        guard sourceIndices.allSatisfy({ $0 >= 0 && $0 < items.count}) else {
+
+        guard sourceIndices.allSatisfy({ $0 >= 0 && $0 < items.count }) else {
             log.warning("Not moving - not all src idx \(sourceIndices) are in valid range for items to move 0 to \(items.count - 1) ")
             return
         }
 
-        
         let itemsSelected: Array<Item> = sourceIndices.map({ items[$0] })
 
         let movingUp: Bool = sourceIndicesFirstIdx > tgtIdxsEdge ? true : false

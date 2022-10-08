@@ -28,6 +28,8 @@ struct Main_MenuBar: Commands {
 
     @FocusedValue(\.windowUndoManager) var windowUM
     @FocusedValue(\.sideBarItemIdsSelected) var sideBarItemIdsSelected
+    @FocusedValue(\.sideBarItemSelectedVisible) var sideBarItemsSelectedVisible
+    @FocusedValue(\.sideBarItemsVisible) var sideBarItemsVisible
     @FocusedValue(\.sideBarTabSelected) var sideBarTabSelected
 
     var body: some Commands {
@@ -88,6 +90,26 @@ extension Main_MenuBar {
                 .disabled(sideBarTabSelected == nil)
                 .accessibilityIdentifier(AccessId.ItemsMenuNew.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsNew)
+            }
+            Section {
+                Button("Delete") {
+                    withAnimation {
+                        guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
+                              let sideBarItemsVisible = sideBarItemsVisible else {
+                            return
+                        }
+
+                        sideBarItemIdsSelected?.wrappedValue = Main.itemsDelete(
+                            appModel: appModel, windoUM: windowUM,
+                            sideBarShowingList: sideBarItemsVisible,
+                            previousListSelectionsGoingDown: true,
+                            deleteItems: sideBarItemsSelectedVisible
+                        )
+                    }
+                }
+                .disabled(sideBarItemsSelectedVisible == nil || sideBarItemsSelectedVisible?.count ?? 0 < 1)
+                .accessibilityIdentifier(AccessId.ItemsMenuDeleteItems.rawValue)
+                .keyboardShortcut(KbShortcuts.itemsDelete)
             }
         }
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct GowiApp: App {
-    @StateObject var appModel = AppModel.shared
+    @StateObject var appModel = AppModel.sharedInMemoryWithTestData
 
     var body: some Scene {
         WindowGroup {

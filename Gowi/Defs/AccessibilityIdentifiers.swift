@@ -15,6 +15,7 @@ enum AccessId: String {
     
     /// Items
     case ItemsMenuNew
+    case ItemsMenuDeleteItems
 }
 
 
