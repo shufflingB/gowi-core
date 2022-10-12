@@ -1,0 +1,61 @@
+//
+//  Main_Model_Window.swift
+//  Gowi
+//
+//  Created by Jonathan Hume on 11/10/2022.
+//
+
+import Foundation
+
+extension Main { // SideBar specific Intents
+    internal var sideBarItemsListWaiting: Array<Item> {
+        Self.sideBarItemsListWaiting(itemsAll)
+    }
+
+    static func sideBarItemsListWaiting(_ items: Set<Item>) -> Array<Item> {
+        // Want  [0] to have largest priority value, [end] to have lowest
+        items.filter({ $0.completed == nil }).sorted { $0.priority > $1.priority }
+    }
+
+    internal var sideBarItemsListDone: Array<Item> {
+        Self.sideBarItemsListDone(itemsAll)
+    }
+
+    static func sideBarItemsListDone(_ items: Set<Item>) -> Array<Item> {
+        // Want [0] to have the newest i.e largest completion date, [end] to have lowest
+        // there should be any, but to keep compiler happy, set a very low sentinel value
+
+        items.filter({ $0.completed != nil }).sorted { item1, item2 in
+            let date1: Date = item1.completed!
+            let date2: Date = item2.completed!
+            return date1 > date2
+        }
+    }
+
+    internal var sideBarItemsListAll: Array<Item> {
+        // Want  [0] to have largest priority value, [end] to have lowest
+        Self.sideBarItemsListAll(itemsAll)
+    }
+
+    static func sideBarItemsListAll(_ items: Set<Item>) -> Array<Item> {
+        // Same as for Waiting, Want  [0] to have largest priority value, [end] to have lowest
+        items.sorted { $0.priority > $1.priority }
+    }
+
+    internal func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
+        appModel.reOrderUsingPriority(externalUM: windowUM, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+    }
+
+    internal var sideBarItemsVisible: Array<Item> {
+        switch sideBarTabSelected {
+        case .all:
+            return sideBarItemsListAll
+        case .waiting:
+            return sideBarItemsListWaiting
+        case .done:
+            return sideBarItemsListDone
+        }
+    }
+
+    internal var sideBarItemsSelectedVisible: Array<Item> { detailItems }
+}

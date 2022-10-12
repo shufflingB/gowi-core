@@ -10,12 +10,16 @@ import Foundation
 
 
 enum AccessId: String {
-    /// File
+    // MARK: File
     case FileMenuSave
     
-    /// Items
+    // MARK: Items
     case ItemsMenuNew
     case ItemsMenuDeleteItems
+    
+    // MARK: Window
+    case WindowNewMainTab
+    case WindowNewMain
 }
 
 

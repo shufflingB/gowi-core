@@ -11,19 +11,24 @@ import SwiftUI
 struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
+    static var instanceId: Int = 0
+    
     init(with root: Item) {
-        _itemsAllFromFR = FetchRequest<Item>(
+        _itemsAllFromFetchRequest = FetchRequest<Item>(
             sortDescriptors: [],
             predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
         )
     }
 
     var body: some View {
-        NavigationView {
+        Main.instanceId += 1
+        
+        return NavigationView {
             SideBar(stateView: self)
             Text("Number selected = \(detailItems.count)")
             
         }
+        .navigationTitle("Window \(Self.instanceId)")
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
         .focusedValue(\.sideBarItemIdsSelected, $sideBarItemIdsSelected)
         .focusedValue(\.sideBarItemSelectedVisible, sideBarItemsSelectedVisible)
@@ -35,6 +40,7 @@ struct Main: View {
     @State internal var sideBarItemIdsSelected: Set<UUID> = []
     @SceneStorage("tab051022") internal var sideBarTabSelected: SideBar.TabOption = .waiting
 
-    @FetchRequest internal var itemsAllFromFR: FetchedResults<Item>
+    @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
     @Environment(\.undoManager) internal var windowUM: UndoManager?
+    
 }

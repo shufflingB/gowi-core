@@ -7,13 +7,14 @@
 
 import os
 import SwiftUI
+
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
-extension Main { // MARK: Model Intents
-    // MARK: Window
+extension Main { // Window level intents
+    // MARK: Item's
 
     internal var itemsAll: Set<Item> {
-        Set(itemsAllFromFR)
+        Set(itemsAllFromFetchRequest)
     }
 
     static func itemAddNew(
@@ -83,75 +84,19 @@ extension Main { // MARK: Model Intents
         return newSelection
     }
 
-    // MARK: SideBar
+    // MARK: Window control
 
-    internal var sideBarItemsListWaiting: Array<Item> {
-        Self.sideBarItemsListWaiting(itemsAll)
-    }
-
-    static func sideBarItemsListWaiting(_ items: Set<Item>) -> Array<Item> {
-        // Want  [0] to have largest priority value, [end] to have lowest
-        items.filter({ $0.completed == nil }).sorted { $0.priority > $1.priority }
-    }
-
-    internal var sideBarItemsListDone: Array<Item> {
-        Self.sideBarItemsListDone(itemsAll)
-    }
-
-    static func sideBarItemsListDone(_ items: Set<Item>) -> Array<Item> {
-        // Want [0] to have the newest i.e largest completion date, [end] to have lowest
-        // there should be any, but to keep compiler happy, set a very low sentinel value
-
-        items.filter({ $0.completed != nil }).sorted { item1, item2 in
-            let date1: Date = item1.completed!
-            let date2: Date = item2.completed!
-            return date1 > date2
+    static func openNewWindow(openWindow: OpenWindowAction) {
+        withAnimation {
+            openWindow(id: GowiApp.WindowGroupId.Main.rawValue)
         }
     }
 
-    internal var sideBarItemsListAll: Array<Item> {
-        // Want  [0] to have largest priority value, [end] to have lowest
-        Self.sideBarItemsListAll(itemsAll)
+    static func openNewTab() {
+        AppModel.openNewTab()
     }
 
-    static func sideBarItemsListAll(_ items: Set<Item>) -> Array<Item> {
-        // Same as for Waiting, Want  [0] to have largest priority value, [end] to have lowest
-        items.sorted { $0.priority > $1.priority }
-    }
-
-    internal func sideBarOnMoveOfWaitingItems(_ items: Array<Item>, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        appModel.reOrderUsingPriority(externalUM: windowUM, items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
-    }
-
-    internal var sideBarItemsVisible: Array<Item> {
-        switch sideBarTabSelected {
-        case .all:
-            return sideBarItemsListAll
-        case .waiting:
-            return sideBarItemsListWaiting
-        case .done:
-            return sideBarItemsListDone
-        }
-    }
-
-    internal var sideBarItemsSelectedVisible: Array<Item> { detailItems }
-
-    internal var detailItems: Array<Item> {
-        return Self.detailItems(sideBarTabSelected: sideBarTabSelected, sideBarItemIdsSelected: sideBarItemIdsSelected, all: sideBarItemsListAll, waiting: sideBarItemsListWaiting, done: sideBarItemsListDone)
-    }
-
-    static func detailItems(sideBarTabSelected: SideBar.TabOption, sideBarItemIdsSelected: Set<UUID>, all: Array<Item>, waiting: Array<Item>, done: Array<Item>) -> Array<Item> {
-        func onlySelected(_ items: Array<Item>) -> Array<Item> {
-            items.filter({ sideBarItemIdsSelected.contains($0.ourIdS) })
-        }
-
-        switch sideBarTabSelected {
-        case .all:
-            return onlySelected(all)
-        case .waiting:
-            return onlySelected(waiting)
-        case .done:
-            return onlySelected(done)
-        }
+    static func openNewWindow(openWindow: OpenWindowAction, items: Array<Item>) {
+        openWindow(id: "bum")
     }
 }

@@ -13,6 +13,9 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 
 struct Main_MenuBar: Commands {
     @ObservedObject var appModel: AppModel
+    @Environment(\.openWindow) private var openWindow
+    
+    
 
 //    let openItemsInNewWindow: (_ items: Array<Item>) -> Void
 //    let openItemsInNewTab: (_ items: Array<Item>) -> Void
@@ -35,7 +38,7 @@ struct Main_MenuBar: Commands {
     var body: some Commands {
         menuCommandsFile
         menuCommandsItem
-//        windowMenu
+        windowMenu
     }
 }
 
@@ -55,13 +58,13 @@ extension Main_MenuBar {
                 .accessibilityIdentifier(AccessId.FileMenuSave.rawValue)
                 .keyboardShortcut(KbShortcuts.fileSaveChanges)
 
-                Button("Fundo") {
-                    guard let um = windowUM else {
-                        return
-                    }
-                    print("Trigger")
-                    um.undo()
-                }
+//                Button("Fundo") {
+//                    guard let um = windowUM else {
+//                        return
+//                    }
+//                    print("Trigger")
+//                    um.undo()
+//                }
             }
         }
     }
@@ -92,6 +95,21 @@ extension Main_MenuBar {
                 .keyboardShortcut(KbShortcuts.itemsNew)
             }
             Section {
+                
+                
+                Button("Open in new Window") {
+                    guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
+                          let sideBarItemsVisible = sideBarItemsVisible else {
+                        return
+                    }
+                    // TODO:
+//                    Main.openNewWindow(openWindow: openWindow, items: sideBarItemsSelectedVisible)
+                    
+//                    openWindow(
+             
+                }
+            }
+            Section {
                 Button("Delete") {
                     withAnimation {
                         guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
@@ -113,4 +131,25 @@ extension Main_MenuBar {
             }
         }
     }
+    
+    // MARK: Window
+    var windowMenu: some Commands {
+        CommandGroup(after: CommandGroupPlacement.windowSize) {
+            Section {
+                Button("New Tab") {
+                    Main.openNewTab()
+                }
+                .accessibilityIdentifier(AccessId.WindowNewMainTab.rawValue)
+                .keyboardShortcut(KbShortcuts.windowOpenTab)
+                
+                
+                Button("New Window") {
+                    Main.openNewWindow(openWindow: openWindow)
+                }
+                .accessibilityIdentifier(AccessId.WindowNewMain.rawValue)
+                .keyboardShortcut(KbShortcuts.windowOpenNew)
+            }
+        }
+    }
+    
 }
