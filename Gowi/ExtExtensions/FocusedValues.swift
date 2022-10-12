@@ -7,62 +7,55 @@
 
 import SwiftUI
 
-
-struct SideBarItemIdsSelected: FocusedValueKey {
-    typealias Value = Binding<Set<UUID>>
-}
-struct SideBarItemsSelectedVisible: FocusedValueKey {
-    typealias Value = Array<Item>
-}
-
-struct SideBarItemsVisible: FocusedValueKey {
-    typealias Value = Array<Item>
-}
-
-
-
-struct SideBarTabSelected: FocusedValueKey {
-    typealias Value = Binding<SideBar.TabOption >
-}
-
 struct WindowUndoManager: FocusedValueKey {
     typealias Value = UndoManager
 }
 
+struct SideBarFilterSelected: FocusedValueKey {
+    typealias Value = Binding<SideBar.ListFilterOptions>
+}
+
+struct ContentItemIdsSelected: FocusedValueKey {
+    typealias Value = Binding<Set<UUID>>
+}
+
+struct ContentItemsSelected: FocusedValueKey {
+    typealias Value = Array<Item>
+}
+
+struct ContentItems: FocusedValueKey {
+    typealias Value = Array<Item>
+}
 
 extension FocusedValues {
-    
-    
-    var sideBarItemIdsSelected: SideBarItemIdsSelected.Value? {
-        get { self[SideBarItemIdsSelected.self] }
+    var contentItemIdsSelected: ContentItemIdsSelected.Value? {
+        get { self[ContentItemIdsSelected.self] }
         set {
-            self[SideBarItemIdsSelected.self] = newValue
+            self[ContentItemIdsSelected.self] = newValue
         }
     }
-    
-    var sideBarItemSelectedVisible: SideBarItemsSelectedVisible.Value? {
-        get { self[SideBarItemsSelectedVisible.self] }
+
+    var contentItemsSelected: ContentItemsSelected.Value? {
+        get { self[ContentItemsSelected.self] }
         set {
-            self[SideBarItemsSelectedVisible.self] = newValue
+            self[ContentItemsSelected.self] = newValue
         }
     }
-    
-    var sideBarItemsVisible: SideBarItemsVisible.Value? {
-        get { self[SideBarItemsVisible.self] }
+
+    var contentItems: ContentItems.Value? {
+        get { self[ContentItems.self] }
         set {
-            self[SideBarItemsVisible.self] = newValue
+            self[ContentItems.self] = newValue
         }
     }
-    
-    
-    var sideBarTabSelected: SideBarTabSelected.Value? {
-        get { self[SideBarTabSelected.self] }
+
+    var sideBarFilterSelected: SideBarFilterSelected.Value? {
+        get { self[SideBarFilterSelected.self] }
         set {
-            self[SideBarTabSelected.self] = newValue
+            self[SideBarFilterSelected.self] = newValue
         }
     }
-    
-    
+
     var windowUndoManager: WindowUndoManager.Value? {
         get { self[WindowUndoManager.self] }
         set {

@@ -22,25 +22,34 @@ struct Main: View {
 
     var body: some View {
         Main.instanceId += 1
-        
-        return NavigationView {
+        return NavigationSplitView(columnVisibility: $sideBarListIsVisible, sidebar: {
             SideBar(stateView: self)
+        }, content: {
+            Content(selections: $contentItemIdsSelected, items: contentItems, onMovePerform: contentOnMovePerform)
+        }, detail: {
             Text("Number selected = \(detailItems.count)")
-            
-        }
+        })
         .navigationTitle("Window \(Self.instanceId)")
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
-        .focusedValue(\.sideBarItemIdsSelected, $sideBarItemIdsSelected)
-        .focusedValue(\.sideBarItemSelectedVisible, sideBarItemsSelectedVisible)
-        .focusedValue(\.sideBarItemsVisible, sideBarItemsVisible)
-        .focusedValue(\.sideBarTabSelected, $sideBarTabSelected)
+        
+        .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)
+        
+        .focusedValue(\.contentItemIdsSelected, $contentItemIdsSelected)
+        .focusedValue(\.contentItemsSelected, contentItemsSelected)
+        .focusedValue(\.contentItems, contentItems )
+        
+        
     }
 
-    //    @SceneStorage("selection051022") var sideBarItemSelections: Set<String> = []
-    @State internal var sideBarItemIdsSelected: Set<UUID> = []
-    @SceneStorage("tab051022") internal var sideBarTabSelected: SideBar.TabOption = .waiting
-
     @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
+    
+    @State var sideBarListIsVisible: NavigationSplitViewVisibility = .all
+    @SceneStorage("filter") internal var sideBarFilterSelected: SideBar.ListFilterOptions = .waiting
+    
+    //    @SceneStorage("itemIdsSelected") var contentItemIdsSelected: Set<String> = []
+    @State internal var contentItemIdsSelected: Set<UUID> = []
+
     @Environment(\.undoManager) internal var windowUM: UndoManager?
     
 }
+

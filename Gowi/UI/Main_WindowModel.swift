@@ -19,9 +19,9 @@ extension Main { // Window level intents
 
     static func itemAddNew(
         appModel: AppModel, windowUM: UndoManager?,
-        tabSelected: SideBar.TabOption,
+        tabSelected: SideBar.ListFilterOptions,
         parent: Item, list items: Array<Item>
-    ) -> (newItem: Item, tabSelected: SideBar.TabOption, itemIdsSelected: Set<UUID>) {
+    ) -> (newItem: Item, tabSelected: SideBar.ListFilterOptions, itemIdsSelected: Set<UUID>) {
         //
         let newItem = appModel.itemNewInsertInPriority(
             externalUM: windowUM,
@@ -29,7 +29,7 @@ extension Main { // Window level intents
             title: "New Item", complete: nil, notes: "", children: []
         )
 
-        let newTabSelected: SideBar.TabOption = tabSelected == .done ? .waiting : tabSelected
+        let newTabSelected: SideBar.ListFilterOptions = tabSelected == .done ? .waiting : tabSelected
 
         return (newItem: newItem, tabSelected: newTabSelected, itemIdsSelected: [newItem.ourIdS])
     }
@@ -93,7 +93,7 @@ extension Main { // Window level intents
     }
 
     static func openNewTab() {
-        AppModel.openNewTab()
+        _ = AppModel.openNewTab()
     }
 
     static func openNewWindow(openWindow: OpenWindowAction, items: Array<Item>) {

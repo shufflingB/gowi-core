@@ -30,10 +30,10 @@ struct Main_MenuBar: Commands {
     ////        @FocusedValue(\.itemIdsSelectedKey) var itemIdsSelected: Binding<Set<UUID>>?
 
     @FocusedValue(\.windowUndoManager) var windowUM
-    @FocusedValue(\.sideBarItemIdsSelected) var sideBarItemIdsSelected
-    @FocusedValue(\.sideBarItemSelectedVisible) var sideBarItemsSelectedVisible
-    @FocusedValue(\.sideBarItemsVisible) var sideBarItemsVisible
-    @FocusedValue(\.sideBarTabSelected) var sideBarTabSelected
+    @FocusedValue(\.contentItemIdsSelected) var sideBarItemIdsSelected
+    @FocusedValue(\.contentItemsSelected) var sideBarItemsSelectedVisible
+    @FocusedValue(\.contentItems) var sideBarItemsVisible
+    @FocusedValue(\.sideBarFilterSelected) var sideBarFilterSelected
 
     var body: some Commands {
         menuCommandsFile
@@ -76,38 +76,39 @@ extension Main_MenuBar {
             Section {
                 Button("New Item") {
                     withAnimation {
-                        guard let sideBarTabSelected = sideBarTabSelected, let sideBarItemIdsSelected = sideBarItemIdsSelected else {
+                        guard let sideBarFilterSelected = sideBarFilterSelected,
+                                let sideBarItemIdsSelected = sideBarItemIdsSelected else {
                             return
                         }
 
                         let route = Main.itemAddNew(
                             appModel: appModel, windowUM: windowUM,
-                            tabSelected: sideBarTabSelected.wrappedValue, parent: appModel.systemRootItem,
-                            list: Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                            tabSelected: sideBarFilterSelected.wrappedValue, parent: appModel.systemRootItem,
+                            list: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
                         )
 
-                        sideBarTabSelected.wrappedValue = route.tabSelected
+                        sideBarFilterSelected.wrappedValue = route.tabSelected
                         sideBarItemIdsSelected.wrappedValue = route.itemIdsSelected
                     }
                 }
-                .disabled(sideBarTabSelected == nil)
+                .disabled(sideBarFilterSelected == nil)
                 .accessibilityIdentifier(AccessId.ItemsMenuNew.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsNew)
             }
             Section {
                 
                 
-                Button("Open in new Window") {
-                    guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
-                          let sideBarItemsVisible = sideBarItemsVisible else {
-                        return
-                    }
-                    // TODO:
-//                    Main.openNewWindow(openWindow: openWindow, items: sideBarItemsSelectedVisible)
-                    
-//                    openWindow(
-             
-                }
+//                Button("Open in new Window") {
+//                    guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
+//                          let sideBarItemsVisible = sideBarItemsVisible else {
+//                        return
+//                    }
+//                    // TODO:
+////                    Main.openNewWindow(openWindow: openWindow, items: sideBarItemsSelectedVisible)
+//
+////                    openWindow(
+//
+//                }
             }
             Section {
                 Button("Delete") {

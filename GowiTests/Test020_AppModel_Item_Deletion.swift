@@ -21,7 +21,7 @@ final class Test020_AppModel_Item_Deletion: XCTestCase {
     }
 
     func test_010_items_can_be_deleted() {
-        let originalSortedList = Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+        let originalSortedList = Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertGreaterThan(originalSortedList.count, 9,
                              "When there are more nine Items in the list at the start of the test")
@@ -30,7 +30,7 @@ final class Test020_AppModel_Item_Deletion: XCTestCase {
 
         AppModel.itemsDelete(appModel.viewContext, items: deleteItems)
 
-        let afterDeleting = Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+        let afterDeleting = Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(afterDeleting.count, originalSortedList.count - deleteItems.count,
                        "Then after deleting the number in the list should be reduced by \(deleteItems.count)")
@@ -39,7 +39,7 @@ final class Test020_AppModel_Item_Deletion: XCTestCase {
     func test_100_an_items_can_be_deleted_is_undoable_using_instance() {
         let um = UndoManager()
 
-        let originalSortedList = Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+        let originalSortedList = Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertGreaterThan(originalSortedList.count, 9,
                              "When there are more nine Items in the list at the start of the test")
@@ -48,14 +48,14 @@ final class Test020_AppModel_Item_Deletion: XCTestCase {
 
         appModel.itemsDelete(externalUM: um, list: deleteItems)
 
-        let afterDeleting = Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+        let afterDeleting = Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(afterDeleting.count, originalSortedList.count - deleteItems.count,
                        "Then after deleting the number in the list should be reduced by \(deleteItems.count)")
 
         um.undo()
 
-        let afterUndo = Main.sideBarItemsListAll(appModel.systemRootItem.childrenListAsSet)
+        let afterUndo = Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(afterUndo.count, originalSortedList.count,
                        "And after an undo is triggered the deleted Items are restored")

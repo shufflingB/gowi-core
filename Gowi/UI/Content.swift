@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SideBarItemList: View {
+struct Content: View {
     @Binding var selections: Set<UUID>
     let items: Array<Item>
     let onMovePerform: (_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) -> Void
@@ -33,9 +33,9 @@ struct ItemList_Previews: PreviewProvider {
     @State static var selections: Set<UUID> = [AppModel.testingMode1ourIdPresent]
 
     static var previews: some View {
-        SideBarItemList(
+        Content(
             selections: $selections,
-            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             onMovePerform: { _, _ in }
         )
     }

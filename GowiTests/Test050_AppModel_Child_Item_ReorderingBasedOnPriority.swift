@@ -27,14 +27,14 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test130_itemsMoveSecondItemUpToHead() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         let srcIndices = IndexSet([1])
         let tgtIdx = 0
 
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the second Item is moved to the head of the list then the original and updated lists should remain the same size")
@@ -52,13 +52,13 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test140_itemMoveFirstItemDownToSecond() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         let srcIndices = IndexSet([0])
         let tgtIdx = 2 // <- When dragging down, Apple expects to add +1 to expected final location
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the head Item is moved to the second place in the list then the original and updated lists should remain the same size")
@@ -75,14 +75,14 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test150_itemMoveTailItemUpToPenultimate() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         let numTestItems = originalList.count
 
         let srcIndices = IndexSet([numTestItems - 1])
         let tgtIdx = numTestItems - 2
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the tail Item is moved to the penultimate position in the list then the original and updated lists should remain the same size")
@@ -99,7 +99,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test160_itemMovePenultimateItemDownToTail() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         let numTestItems = originalList.count
 
         let srcIndices = IndexSet([numTestItems - 2])
@@ -107,7 +107,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the penultimate Item is moved to the tail of the list then the original and updated lists should remain the same size")
@@ -124,7 +124,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test170_itemMoveThirdItemUpToSecond() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 //        let numTestItems = originalList.count
 
         let srcIndices = IndexSet([2])
@@ -132,7 +132,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the third Item is moved to the second place in the list then the original and updated lists should remain the same size")
@@ -149,7 +149,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test180_itemMoveThirdDownToFourth() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 //        let numTestItems = originalList.count
 
         let srcIndices = IndexSet([2])
@@ -157,7 +157,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the third Item is moved to the fourth place in the list then the original and updated lists should remain the same size")
@@ -174,14 +174,14 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test200_discontinuousItemsSelectionMoveUpToHead() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         let srcIndices = IndexSet([2, 4])
         let tgtIdx = 0
 
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the the third and fifth Item are moved to the head of list then the original and updated lists should remain the same size")
@@ -202,14 +202,14 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     }
 
     func test210_discontinuousItemsSelectionMoveDownToTail() throws {
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         let srcIndices = IndexSet([1, 3])
         let tgtIdx = 5 // <- When dragging down, Apple expects to add +1 to expected final location
 
         AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
 
-        let updatedList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the the third and fifth Item are moved to the tail of list then the original and updated lists should remain the same size")
@@ -233,17 +233,17 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     func test310_itemReorderingIsUndoable() throws {
         let undoMgr = UndoManager()
 
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
 
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
 
-        let afterMoveList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterMoveList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         XCTAssertEqual(afterMoveList[0].ourIdS, originalList[2].ourIdS,
                        "And the updated list ends up with the 3rd Item at the top of the list")
@@ -252,7 +252,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         undoMgr.undo()
 
-        let afterUndo: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterUndo: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         afterUndo.indices.forEach { idx in
 
@@ -273,7 +273,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     func test350_itemReorderingMultipleMovesRequireMultipleUndoesToUndo() throws {
         let undoMgr = UndoManager()
 
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print("Initial list = \(originalList.map({ $0.titleS }))")
 
         /// Each move is intended to move the item at the head of the list down one place, looking at the titles should make it easy to understand if things are working
@@ -284,10 +284,10 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
-        let afterFirstList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterFirstList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print("After 1st move list = \(afterFirstList.map({ $0.titleS }))")
 
         /// Second reordering - Original 1st from current 2nd to 3rd position
@@ -296,11 +296,11 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
 
-        let afterSecondList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterSecondList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print("After 2nd move list = \(afterSecondList.map({ $0.titleS }))")
 
         /// Third reorder - Original 1st from current 3rd to 4th postion
@@ -308,24 +308,24 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         tgtIdx = 4
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
-        let afterThirdList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterThirdList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print("After 3rd move list = \(afterThirdList.map({ $0.titleS }))")
 
         undoMgr.undo()
-        let afterUndo1: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterUndo1: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print(" After 1st undo = \(afterUndo1.map({ $0.titleS }))")
         try checkNoTitleDifference(actual: afterUndo1, expected: afterSecondList)
 
         undoMgr.undo()
-        let afterUndo2: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterUndo2: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print(" After 2nd undo = \(afterUndo2.map({ $0.titleS }))")
         try checkNoTitleDifference(actual: afterUndo2, expected: afterFirstList)
 
         undoMgr.undo()
-        let afterUndo3: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterUndo3: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print(" After 2nd undo = \(afterUndo3.map({ $0.titleS }))")
         try checkNoTitleDifference(actual: afterUndo3, expected: originalList)
     }
@@ -333,39 +333,39 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     func test400_undoRedoCyclesArePossible() throws {
         let undoMgr = UndoManager()
 
-        let originalList: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         // First reordering
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
-            items: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
+            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
         )
-        let afterFirstReorder: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterFirstReorder: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
         /// Undo/Redo first cycle
         undoMgr.undo()
-        let afterFirstUndo: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterFirstUndo: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         try checkNoTitleDifference(actual: afterFirstUndo, expected: originalList)
 
         undoMgr.redo()
-        let afterFirstRedo: Array<Item> = Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterFirstRedo: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         try checkNoTitleDifference(actual: afterFirstRedo, expected: afterFirstReorder)
 
         /// Undo/Redo second cycle
         undoMgr.undo()
-        try checkNoTitleDifference(actual: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: originalList)
+        try checkNoTitleDifference(actual: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: originalList)
 
         undoMgr.redo()
-        try checkNoTitleDifference(actual: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: afterFirstReorder)
+        try checkNoTitleDifference(actual: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: afterFirstReorder)
 
         /// Undo/Redo third cycle
         undoMgr.undo()
-        try checkNoTitleDifference(actual: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: originalList)
+        try checkNoTitleDifference(actual: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: originalList)
 
         undoMgr.redo()
-        try checkNoTitleDifference(actual: Main.sideBarItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: afterFirstReorder)
+        try checkNoTitleDifference(actual: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet), expected: afterFirstReorder)
     }
 }
