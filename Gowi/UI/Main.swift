@@ -12,12 +12,14 @@ struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
     static var instanceId: Int = 0
-    
-    init(with root: Item) {
+    let route: RoutingOpt?
+
+    init(with root: Item, routing: RoutingOpt? = nil) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(
             sortDescriptors: [],
             predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
         )
+        route = routing
     }
 
     var body: some View {
@@ -30,26 +32,39 @@ struct Main: View {
             Text("Number selected = \(detailItems.count)")
         })
         .navigationTitle("Window \(Self.instanceId)")
+        .onAppear {
+            guard let route = route else {
+                print("No routing for window = \(Self.instanceId) ")
+                return
+            }
+            switch route {
+            case let .showItems(_, filterSelected, contentItemIdsSelected):
+                print("Is routing window = \(Self.instanceId) ")
+                self.sideBarFilterSelected = filterSelected
+                self.contentItemIdsSelected = contentItemIdsSelected
+            }
+        }
+        .onOpenURL { url in
+            print("URL = \(url)")
+            // TODO : Coalesce routing with that in onAppear
+        }
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
-        
+
         .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)
-        
+
         .focusedValue(\.contentItemIdsSelected, $contentItemIdsSelected)
         .focusedValue(\.contentItemsSelected, contentItemsSelected)
-        .focusedValue(\.contentItems, contentItems )
-        
-        
+        .focusedValue(\.contentItems, contentItems)
     }
 
     @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
-    
-    @State var sideBarListIsVisible: NavigationSplitViewVisibility = .all
-    @SceneStorage("filter") internal var sideBarFilterSelected: SideBar.ListFilterOptions = .waiting
-    
+
+    @State var sideBarListIsVisible: NavigationSplitViewVisibility = .detailOnly
+    @SceneStorage("filter") internal var sideBarFilterSelected: SideBar.ListFilterOption = .waiting
+
     //    @SceneStorage("itemIdsSelected") var contentItemIdsSelected: Set<String> = []
     @State internal var contentItemIdsSelected: Set<UUID> = []
 
     @Environment(\.undoManager) internal var windowUM: UndoManager?
-    
+    @Environment(\.openWindow) internal var openWindow
 }
-

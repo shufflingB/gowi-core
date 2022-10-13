@@ -14,31 +14,18 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 struct Main_MenuBar: Commands {
     @ObservedObject var appModel: AppModel
     @Environment(\.openWindow) private var openWindow
-    
-    
-
-//    let openItemsInNewWindow: (_ items: Array<Item>) -> Void
-//    let openItemsInNewTab: (_ items: Array<Item>) -> Void
-
-    ////        @FocusedValue(\.sidebarListSelectedKey) var listSelected: Binding<AppModel.RoutingOpts.ListSelected>?
-    ////        @FocusedValue(\.itemsSelectedKey) var itemsSelected: Array<Item>?
-    ////        @FocusedValue(\.itemsAllKey) var itemsAll: Array<Item>?
-    ////        @FocusedValue(\.keyWindowNumberKey) var keyWindowNumber: Int?
-    ////        @FocusedValue(\.keyWindowUndoManager) var keyWindowUndoManager: UndoManager?
-    ////        @FocusedValue(\.mainVmKey) var mainVm: MainVM?
-    ////        @FocusedValue(\.focusKey) var focus: FocusState<UIFocusable?>.Binding?
-    ////        @FocusedValue(\.itemIdsSelectedKey) var itemIdsSelected: Binding<Set<UUID>>?
 
     @FocusedValue(\.windowUndoManager) var windowUM
-    @FocusedValue(\.contentItemIdsSelected) var sideBarItemIdsSelected
-    @FocusedValue(\.contentItemsSelected) var sideBarItemsSelectedVisible
-    @FocusedValue(\.contentItems) var sideBarItemsVisible
+    @FocusedValue(\.contentItemIdsSelected) var contentItemIdsSelected
+    @FocusedValue(\.contentItemsSelected) var contentItemsSelected
+
+    @FocusedValue(\.contentItems) var contentItems
     @FocusedValue(\.sideBarFilterSelected) var sideBarFilterSelected
 
     var body: some Commands {
         menuCommandsFile
         menuCommandsItem
-        windowMenu
+        menuCommandsWindow
     }
 }
 
@@ -77,7 +64,7 @@ extension Main_MenuBar {
                 Button("New Item") {
                     withAnimation {
                         guard let sideBarFilterSelected = sideBarFilterSelected,
-                                let sideBarItemIdsSelected = sideBarItemIdsSelected else {
+                              let contentItemIdsSelected = contentItemIdsSelected else {
                             return
                         }
 
@@ -88,69 +75,84 @@ extension Main_MenuBar {
                         )
 
                         sideBarFilterSelected.wrappedValue = route.tabSelected
-                        sideBarItemIdsSelected.wrappedValue = route.itemIdsSelected
+                        contentItemIdsSelected.wrappedValue = route.itemIdsSelected
                     }
                 }
                 .disabled(sideBarFilterSelected == nil)
-                .accessibilityIdentifier(AccessId.ItemsMenuNew.rawValue)
+                .accessibilityIdentifier(AccessId.ItemsMenuNewItem.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsNew)
             }
+
             Section {
+                Button("Print URL to console") {
+                    guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
+                    
+                    _ = Main.urlEncode(.showItems(msgId: UUID(),
+                                              sideBarFilterSelected: sideBarFilterSelected.wrappedValue, contentItemIdsSelected: contentItemIdsSelected.wrappedValue))
+                    
+                    
+                }
                 
                 
-//                Button("Open in new Window") {
-//                    guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
-//                          let sideBarItemsVisible = sideBarItemsVisible else {
-//                        return
-//                    }
-//                    // TODO:
-////                    Main.openNewWindow(openWindow: openWindow, items: sideBarItemsSelectedVisible)
-//
-////                    openWindow(
-//
-//                }
+                Button("Open in New Tab") {
+                    guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
+                    Main.openNewTab(
+                        openWindow: openWindow,
+                        sideBarFilterSelected: sideBarFilterSelected.wrappedValue,
+                        contentItemIdsSelected: contentItemIdsSelected.wrappedValue
+                    )
+                }
+                .accessibilityIdentifier(AccessId.ItemsMenuOpenItemInNewTab.rawValue)
+                .keyboardShortcut(KbShortcuts.itemsOpenInNewTab)
+                
+                Button("Open in New Window") {
+                    guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
+                    Main.openNewWindow(
+                        openWindow: openWindow,
+                        sideBarFilterSelected: sideBarFilterSelected.wrappedValue,
+                        contentItemIdsSelected: contentItemIdsSelected.wrappedValue
+                    )
+                }
+                .accessibilityIdentifier(AccessId.ItemsMenuOpenItemInNewWindow.rawValue)
+                .keyboardShortcut(KbShortcuts.itemsOpenInNewWindow)
             }
+
             Section {
                 Button("Delete") {
                     withAnimation {
-                        guard let sideBarItemsSelectedVisible = sideBarItemsSelectedVisible,
-                              let sideBarItemsVisible = sideBarItemsVisible else {
+                        guard let contentItemsSelected = contentItemsSelected,
+                              let contentItems = contentItems else {
                             return
                         }
 
-                        sideBarItemIdsSelected?.wrappedValue = Main.itemsDelete(
+                        contentItemIdsSelected?.wrappedValue = Main.itemsDelete(
                             appModel: appModel, windoUM: windowUM,
-                            sideBarShowingList: sideBarItemsVisible,
+                            sideBarShowingList: contentItems,
                             previousListSelectionsGoingDown: true,
-                            deleteItems: sideBarItemsSelectedVisible
+                            deleteItems: contentItemsSelected
                         )
                     }
                 }
-                .disabled(sideBarItemsSelectedVisible == nil || sideBarItemsSelectedVisible?.count ?? 0 < 1)
+                .disabled(contentItemsSelected == nil || contentItemsSelected?.count ?? 0 < 1)
                 .accessibilityIdentifier(AccessId.ItemsMenuDeleteItems.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsDelete)
             }
         }
     }
-    
+
     // MARK: Window
-    var windowMenu: some Commands {
+
+    var menuCommandsWindow: some Commands {
         CommandGroup(after: CommandGroupPlacement.windowSize) {
             Section {
-                Button("New Tab") {
-                    Main.openNewTab()
-                }
-                .accessibilityIdentifier(AccessId.WindowNewMainTab.rawValue)
-                .keyboardShortcut(KbShortcuts.windowOpenTab)
-                
-                
+  
+
                 Button("New Window") {
                     Main.openNewWindow(openWindow: openWindow)
                 }
-                .accessibilityIdentifier(AccessId.WindowNewMain.rawValue)
+                .accessibilityIdentifier(AccessId.WindowMenuNewMain.rawValue)
                 .keyboardShortcut(KbShortcuts.windowOpenNew)
             }
         }
     }
-    
 }

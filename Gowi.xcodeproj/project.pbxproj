@@ -17,9 +17,9 @@
 		FF1A947128ED85CC008303B8 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947028ED85CC008303B8 /* Content.swift */; };
 		FF1A947328EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A947228EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift */; };
 		FF23068C28F6E6F700EE103B /* Main_SideBarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF23068B28F6E6F700EE103B /* Main_SideBarModel.swift */; };
+		FF23068E28F7265700EE103B /* Main_RoutingOpts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF23068D28F7265700EE103B /* Main_RoutingOpts.swift */; };
 		FF9F22BA28F5832C0046D72D /* Main_ContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22B928F5832C0046D72D /* Main_ContentModel.swift */; };
 		FF9F22BC28F583D30046D72D /* Main_DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22BB28F583D30046D72D /* Main_DetailModel.swift */; };
-		FF9F22BE28F596290046D72D /* AppModell_UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22BD28F596280046D72D /* AppModell_UI.swift */; };
 		FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8228EC7B8100868F77 /* GowiApp.swift */; };
 		FFA62B8528EC7B8100868F77 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8428EC7B8100868F77 /* Main.swift */; };
 		FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFA62B8628EC7B8300868F77 /* Assets.xcassets */; };
@@ -34,6 +34,7 @@
 		FFDE6CE728F02945009736E3 /* Test000_System_Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */; };
 		FFDE6CE928F04447009736E3 /* Test500_Main_Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */; };
 		FFDE6CEC28F072C4009736E3 /* Main_WindowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CEB28F072C4009736E3 /* Main_WindowModel.swift */; };
+		FFF6339D28F85EE800509E90 /* AppModel_URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF6339C28F85EE800509E90 /* AppModel_URL.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,9 +65,10 @@
 		FF1A947028ED85CC008303B8 /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		FF1A947228EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift; sourceTree = "<group>"; };
 		FF23068B28F6E6F700EE103B /* Main_SideBarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_SideBarModel.swift; sourceTree = "<group>"; };
+		FF23068D28F7265700EE103B /* Main_RoutingOpts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main_RoutingOpts.swift; sourceTree = "<group>"; };
+		FF86E89528F76E3F0098A335 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF9F22B928F5832C0046D72D /* Main_ContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_ContentModel.swift; sourceTree = "<group>"; };
 		FF9F22BB28F583D30046D72D /* Main_DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_DetailModel.swift; sourceTree = "<group>"; };
-		FF9F22BD28F596280046D72D /* AppModell_UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModell_UI.swift; sourceTree = "<group>"; };
 		FFA62B7F28EC7B8100868F77 /* Gowi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gowi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFA62B8228EC7B8100868F77 /* GowiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GowiApp.swift; sourceTree = "<group>"; };
 		FFA62B8428EC7B8100868F77 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 		FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test000_System_Init.swift; sourceTree = "<group>"; };
 		FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test500_Main_Intents.swift; sourceTree = "<group>"; };
 		FFDE6CEB28F072C4009736E3 /* Main_WindowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_WindowModel.swift; sourceTree = "<group>"; };
+		FFF6339C28F85EE800509E90 /* AppModel_URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_URL.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,8 +120,8 @@
 			children = (
 				FF1A944328EC873D008303B8 /* AppModel.swift */,
 				FF1A944728EC8A9B008303B8 /* AppModel_Item.swift */,
+				FFF6339C28F85EE800509E90 /* AppModel_URL.swift */,
 				FF1A944528EC8A03008303B8 /* AppModel_Testing.swift */,
-				FF9F22BD28F596280046D72D /* AppModell_UI.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -127,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				FFA62B8428EC7B8100868F77 /* Main.swift */,
+				FF23068D28F7265700EE103B /* Main_RoutingOpts.swift */,
 				FFDE6CEB28F072C4009736E3 /* Main_WindowModel.swift */,
 				FF23068B28F6E6F700EE103B /* Main_SideBarModel.swift */,
 				FF9F22B928F5832C0046D72D /* Main_ContentModel.swift */,
@@ -161,6 +165,7 @@
 		FFA62B8128EC7B8100868F77 /* Gowi */ = {
 			isa = PBXGroup;
 			children = (
+				FF86E89528F76E3F0098A335 /* Info.plist */,
 				FFA62B8228EC7B8100868F77 /* GowiApp.swift */,
 				FFDE6CE328EF2670009736E3 /* ExtExtensions */,
 				FFDE6CDE28EF1478009736E3 /* Defs */,
@@ -351,14 +356,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF23068E28F7265700EE103B /* Main_RoutingOpts.swift in Sources */,
 				FFA62B8528EC7B8100868F77 /* Main.swift in Sources */,
 				FF1A944828EC8A9B008303B8 /* AppModel_Item.swift in Sources */,
+				FFF6339D28F85EE800509E90 /* AppModel_URL.swift in Sources */,
 				FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */,
 				FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */,
 				FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */,
 				FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */,
 				FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */,
-				FF9F22BE28F596290046D72D /* AppModell_UI.swift in Sources */,
 				FFDE6CDD28EF109E009736E3 /* Main_MenuBar.swift in Sources */,
 				FF23068C28F6E6F700EE103B /* Main_SideBarModel.swift in Sources */,
 				FF1A944A28EC927E008303B8 /* Item.swift in Sources */,
@@ -541,6 +547,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Gowi/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -571,6 +578,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Gowi/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -19,9 +19,9 @@ extension Main { // Window level intents
 
     static func itemAddNew(
         appModel: AppModel, windowUM: UndoManager?,
-        tabSelected: SideBar.ListFilterOptions,
+        tabSelected: SideBar.ListFilterOption,
         parent: Item, list items: Array<Item>
-    ) -> (newItem: Item, tabSelected: SideBar.ListFilterOptions, itemIdsSelected: Set<UUID>) {
+    ) -> (newItem: Item, tabSelected: SideBar.ListFilterOption, itemIdsSelected: Set<UUID>) {
         //
         let newItem = appModel.itemNewInsertInPriority(
             externalUM: windowUM,
@@ -29,7 +29,7 @@ extension Main { // Window level intents
             title: "New Item", complete: nil, notes: "", children: []
         )
 
-        let newTabSelected: SideBar.ListFilterOptions = tabSelected == .done ? .waiting : tabSelected
+        let newTabSelected: SideBar.ListFilterOption = tabSelected == .done ? .waiting : tabSelected
 
         return (newItem: newItem, tabSelected: newTabSelected, itemIdsSelected: [newItem.ourIdS])
     }
@@ -85,18 +85,40 @@ extension Main { // Window level intents
     }
 
     // MARK: Window control
+    
+    /// When WindowGroup receives a Routing Option for which it has previously rendered a view  it will raise that instance instead of creating a new one [0]. It's understanding of same
+    /// as id.new == id.previous, value.new ==  value.previous. QED to allow the same route message to create and raise existing windows; have to a field that allows unique'ification
+    /// for raisg and a special value always gets used when we juse want to raise if possible.  That's what msgId: and MsgIdToUseSameWindowIfPossible are about respectively
+    
+    /// [0] It's actually more clever than just the fire and forget we're using here;  the route information that  it creates can be bound to the values in the view so that it can track what is currently being displayed.
+    
+    static private let MsgIdToUseSameWindowIfPossible = UUID()
+
+    static func openNewWindow(openWindow: OpenWindowAction, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
+        
+        let route = RoutingOpt.showItems(msgId: MsgIdToUseSameWindowIfPossible, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+
+        openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
+    }
 
     static func openNewWindow(openWindow: OpenWindowAction) {
-        withAnimation {
-            openWindow(id: GowiApp.WindowGroupId.Main.rawValue)
+        openWindow(id: GowiApp.WindowGroupId.Main.rawValue)
+    }
+
+    
+    static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
+        let route = RoutingOpt.showItems(msgId: UUID(), sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+        
+
+        if let intialWindow = NSApplication.shared.keyWindow {
+            withAnimation {
+                openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
+                
+                guard let newWindow = NSApplication.shared.keyWindow, intialWindow != newWindow else {
+                    return
+                }
+                intialWindow.addTabbedWindow(newWindow, ordered: .above)
+            }
         }
-    }
-
-    static func openNewTab() {
-        _ = AppModel.openNewTab()
-    }
-
-    static func openNewWindow(openWindow: OpenWindowAction, items: Array<Item>) {
-        openWindow(id: "bum")
     }
 }

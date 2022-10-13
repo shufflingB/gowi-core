@@ -12,7 +12,7 @@ extension Main {
         return Self.detailItems(sideBarTabSelected: sideBarFilterSelected, sideBarItemIdsSelected: contentItemIdsSelected, all: contentItemsListAll, waiting: contentItemsListWaiting, done: contentItemsListDone)
     }
 
-    static func detailItems(sideBarTabSelected: SideBar.ListFilterOptions, sideBarItemIdsSelected: Set<UUID>, all: Array<Item>, waiting: Array<Item>, done: Array<Item>) -> Array<Item> {
+    static func detailItems(sideBarTabSelected: SideBar.ListFilterOption, sideBarItemIdsSelected: Set<UUID>, all: Array<Item>, waiting: Array<Item>, done: Array<Item>) -> Array<Item> {
         func onlySelected(_ items: Array<Item>) -> Array<Item> {
             items.filter({ sideBarItemIdsSelected.contains($0.ourIdS) })
         }

@@ -14,12 +14,13 @@ enum AccessId: String {
     case FileMenuSave
     
     // MARK: Items
-    case ItemsMenuNew
+    case ItemsMenuNewItem
     case ItemsMenuDeleteItems
+    case ItemsMenuOpenItemInNewTab
+    case ItemsMenuOpenItemInNewWindow
     
     // MARK: Window
-    case WindowNewMainTab
-    case WindowNewMain
+    case WindowMenuNewMain
 }
 
 

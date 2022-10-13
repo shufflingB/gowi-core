@@ -10,7 +10,7 @@ import SwiftUI
 struct SideBar: View {
     let stateView: Main
 
-    enum ListFilterOptions: String, CaseIterable {
+    enum ListFilterOption: String, CaseIterable, Codable {
         case waiting = "Waiting", done = "Done", all = "All"
     }
 
@@ -23,8 +23,8 @@ struct SideBar: View {
 
 extension SideBar {
     struct Layout: View {
-        @Binding var listSelected: ListFilterOptions
-        let listOfAvailableFilters: Array<ListFilterOptions>
+        @Binding var listSelected: ListFilterOption
+        let listOfAvailableFilters: Array<ListFilterOption>
 
         var body: some View {
             List(listOfAvailableFilters, id:\.self, selection: $listSelected) { filterByItem in
