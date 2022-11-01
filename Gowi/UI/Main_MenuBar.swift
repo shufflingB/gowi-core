@@ -94,6 +94,8 @@ extension Main_MenuBar {
                 }
                 
                 
+                
+                
                 Button("Open in New Tab") {
                     guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
                     Main.openNewTab(

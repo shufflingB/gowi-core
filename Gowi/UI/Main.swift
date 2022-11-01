@@ -13,6 +13,7 @@ struct Main: View {
 
     static var instanceId: Int = 0
     let route: RoutingOpt?
+    
 
     init(with root: Item, routing: RoutingOpt? = nil) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(

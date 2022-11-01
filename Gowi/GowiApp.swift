@@ -22,6 +22,7 @@ struct GowiApp: App {
 
     var body: some Scene {
         WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.RoutingOpt.self) { $fart in
+//            _ = print("Fart = \(fart)")
             Main(with: appModel.systemRootItem, routing: fart)
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)
