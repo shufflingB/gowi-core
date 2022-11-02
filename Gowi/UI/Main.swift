@@ -12,15 +12,14 @@ struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
     static var instanceId: Int = 0
-    let route: RoutingOpt?
-    
+    @Binding var route: RoutingOpt?
 
-    init(with root: Item, routing: RoutingOpt? = nil) {
+    init(with root: Item, route: Binding<Main.RoutingOpt?>) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(
             sortDescriptors: [],
             predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
         )
-        route = routing
+        _route = route
     }
 
     var body: some View {
@@ -39,16 +38,41 @@ struct Main: View {
                 return
             }
             switch route {
-            case let .showItems(_, filterSelected, contentItemIdsSelected):
-                print("Is routing window = \(Self.instanceId) ")
+            case let .showItems(msgId, filterSelected, contentItemIdsSelected):
+                print("Is routing window = \(Self.instanceId)  with msg Id = \(msgId)")
                 self.sideBarFilterSelected = filterSelected
                 self.contentItemIdsSelected = contentItemIdsSelected
             }
         }
         .onOpenURL { url in
             print("URL = \(url)")
-            // TODO : Coalesce routing with that in onAppear
+            // TODO: Coalesce routing with that in onAppear
         }
+        .onChange(of: contentItemIdsSelected, perform: { newValue in
+            guard let route = route else {
+                print("No route set for window so nothing to UPDATE = \(Self.instanceId) ")
+                return
+            }
+            switch route {
+            case let .showItems(msgId, filterSelected, _):
+                print("Is UPDATING route for window = \(Self.instanceId)  with msg Id = \(msgId) because of seletction")
+                $route.wrappedValue = .showItems(msgId: msgId, sideBarFilterSelected: filterSelected,
+                                                 contentItemIdsSelected: newValue)
+            }
+        })
+        .onChange(of: sideBarFilterSelected, perform: { newValue in
+            guard let route = route else {
+                print("No route set for window so nothing to UPDATE = \(Self.instanceId) ")
+                return
+            }
+            switch route {
+            case let .showItems(msgId, _, contentItemIdsSelected):
+                print("Is UPDATING route for window = \(Self.instanceId)  with msg Id = \(msgId) because of filter")
+                $route.wrappedValue = .showItems(msgId: msgId, sideBarFilterSelected: newValue,
+                                                 contentItemIdsSelected: contentItemIdsSelected)
+            }
+        })
+
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
 
         .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)

@@ -21,9 +21,9 @@ struct GowiApp: App {
     @StateObject var appModel = AppModel.sharedInMemoryWithTestData
 
     var body: some Scene {
-        WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.RoutingOpt.self) { $fart in
+        WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.RoutingOpt.self) { $route in
 //            _ = print("Fart = \(fart)")
-            Main(with: appModel.systemRootItem, routing: fart)
+            Main(with: appModel.systemRootItem, route: $route)
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)
                 .handlesExternalEvents(preferring: ["gowi://main/"], allowing: ["*"])
