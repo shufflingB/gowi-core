@@ -12,7 +12,7 @@ import SwiftUI
 
 @main
 struct GowiApp: App {
-    static let URLScheme: String = "gowi" // As per target's registered URL Types URL Scheme
+    
     
     enum WindowGroupId: String {
         case Main
@@ -21,9 +21,10 @@ struct GowiApp: App {
     @StateObject var appModel = AppModel.sharedInMemoryWithTestData
 
     var body: some Scene {
-        WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.RoutingOpt.self) { $route in
+        WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.WindowGroupRoutingOpt.self) { $route in
 //            _ = print("Fart = \(fart)")
             Main(with: appModel.systemRootItem, route: $route)
+ 
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)
                 .handlesExternalEvents(preferring: ["gowi://main/"], allowing: ["*"])

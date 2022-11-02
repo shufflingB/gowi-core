@@ -12,9 +12,9 @@ struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
     static var instanceId: Int = 0
-    @Binding var windowGroupRoute: RoutingOpt?
+    @Binding var windowGroupRoute: WindowGroupRoutingOpt?
 
-    init(with root: Item, route: Binding<Main.RoutingOpt?>) {
+    init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(
             sortDescriptors: [],
             predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
@@ -24,25 +24,39 @@ struct Main: View {
 
     var body: some View {
         Main.instanceId += 1
-        return WindowGroupRoute(winId: Main.instanceId, sideBarFilterSelected: $sideBarFilterSelected, contentItemIdsSelected: $contentItemIdsSelected, route: $windowGroupRoute) {
-            NavigationSplitView(columnVisibility: $sideBarListIsVisible, sidebar: {
-                SideBar(stateView: self)
-            }, content: {
-                Content(selections: $contentItemIdsSelected, items: contentItems, onMovePerform: contentOnMovePerform)
-            }, detail: {
-                Text("Number selected = \(detailItems.count)")
-            })
+        return WindowGroupRoute(
+            winId: Main.instanceId,
+            sideBarFilterSelected: $sideBarFilterSelected,
+            contentItemIdsSelected: $contentItemIdsSelected,
+            route: $windowGroupRoute
+        ) {
+            NavigationSplitView(
+                columnVisibility: $sideBarListIsVisible,
+                sidebar: {
+                    SideBar(stateView: self)
+                }, content: {
+                    Content(selections: $contentItemIdsSelected, items: contentItems, onMovePerform: contentOnMovePerform)
+                }, detail: {
+                    Text("Number selected = \(detailItems.count)")
+                }
+            )
             .navigationTitle("Window \(Self.instanceId)")
         }
-        .onOpenURL { url in
-            print("URL = \(url)")
-            // TODO: Coalesce routing with that in onAppear
-        }
+        .onOpenURL(perform: { url in
+            // Decode the URL into a RoutingOpt
+            print("Got URL \(url)")
+            if let windowGroupRoute = Main.urlDecode(url) {
+                openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: windowGroupRoute)
+            } else {
+                print("TODO: Handle the default case")
+            }
+
+//            let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: .done, contentItemIdsSelected: [])
+
+        })
 
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
-
         .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)
-
         .focusedValue(\.contentItemIdsSelected, $contentItemIdsSelected)
         .focusedValue(\.contentItemsSelected, contentItemsSelected)
         .focusedValue(\.contentItems, contentItems)

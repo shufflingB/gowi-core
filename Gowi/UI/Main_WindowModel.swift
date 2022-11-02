@@ -93,7 +93,7 @@ extension Main { // Window level intents
     /// [0] It's actually more clever than just the fire and forget we're using here;  the route information that  it creates can be bound to the values in the view so that it can track what is currently being displayed.
 
     static func openNewWindow(openWindow: OpenWindowAction, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
-        let route = RoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+        let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
 
         openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
     }
@@ -103,7 +103,7 @@ extension Main { // Window level intents
     }
 
     static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
-        let route = RoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+        let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
 
         if let intialWindow = NSApplication.shared.keyWindow {
             withAnimation {
