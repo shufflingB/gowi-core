@@ -37,8 +37,9 @@ extension Main_MenuBar {
                 Button("Print URL to console") {
                     guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
 
-                    _ = Main.urlEncode(.showItems(msgId: UUID(),
-                                                  sideBarFilterSelected: sideBarFilterSelected.wrappedValue, contentItemIdsSelected: contentItemIdsSelected.wrappedValue))
+                    _ = Main.urlEncode(.showItems(
+                        sideBarFilterSelected: sideBarFilterSelected.wrappedValue, contentItemIdsSelected: contentItemIdsSelected.wrappedValue)
+                    )
                 }
 
                 Button("Open in New Tab") {

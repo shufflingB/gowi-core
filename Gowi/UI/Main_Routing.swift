@@ -14,7 +14,7 @@ extension Main {
     enum RoutingOpt: Hashable, Codable {
 //        typealias RawValue = URL?
 
-        case showItems(msgId: UUID, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
+        case showItems(sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
 
 //        init?(rawValue: URL?) {
 //
@@ -76,8 +76,8 @@ extension Main { /// URL defs
         components.host = UrlHost.main.rawValue
 
         switch routingOpts {
-        case let .showItems(msgId, sideBarFilterSelected, contentItemIdsSelected):
-            _ = msgId
+        case let .showItems(sideBarFilterSelected, contentItemIdsSelected):
+            
             components.path = UrlPath.showItems.rawValue
 
             let queryFilterSelected = URLQueryItem(
