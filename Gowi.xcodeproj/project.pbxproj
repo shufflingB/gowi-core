@@ -34,6 +34,9 @@
 		FFDE6CE728F02945009736E3 /* Test000_System_Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */; };
 		FFDE6CE928F04447009736E3 /* Test500_Main_Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */; };
 		FFDE6CEC28F072C4009736E3 /* Main_WindowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CEB28F072C4009736E3 /* Main_WindowModel.swift */; };
+		FFDF93AB2912991700B83CB8 /* itemCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDF93AA2912991700B83CB8 /* itemCommands.swift */; };
+		FFDF93AD29129ABE00B83CB8 /* fileCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDF93AC29129ABE00B83CB8 /* fileCommands.swift */; };
+		FFDF93AF29129B4400B83CB8 /* windowCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDF93AE29129B4400B83CB8 /* windowCommands.swift */; };
 		FFF6339D28F85EE800509E90 /* AppModel_URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF6339C28F85EE800509E90 /* AppModel_URL.swift */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +90,9 @@
 		FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test000_System_Init.swift; sourceTree = "<group>"; };
 		FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test500_Main_Intents.swift; sourceTree = "<group>"; };
 		FFDE6CEB28F072C4009736E3 /* Main_WindowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_WindowModel.swift; sourceTree = "<group>"; };
+		FFDF93AA2912991700B83CB8 /* itemCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = itemCommands.swift; sourceTree = "<group>"; };
+		FFDF93AC29129ABE00B83CB8 /* fileCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fileCommands.swift; sourceTree = "<group>"; };
+		FFDF93AE29129B4400B83CB8 /* windowCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = windowCommands.swift; sourceTree = "<group>"; };
 		FFF6339C28F85EE800509E90 /* AppModel_URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel_URL.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,13 +135,13 @@
 		FF1A946D28ED7B90008303B8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				FFDF93A92912983300B83CB8 /* Main_Menubar */,
 				FFA62B8428EC7B8100868F77 /* Main.swift */,
 				FF23068D28F7265700EE103B /* Main_RoutingOpts.swift */,
 				FFDE6CEB28F072C4009736E3 /* Main_WindowModel.swift */,
 				FF23068B28F6E6F700EE103B /* Main_SideBarModel.swift */,
 				FF9F22B928F5832C0046D72D /* Main_ContentModel.swift */,
 				FF9F22BB28F583D30046D72D /* Main_DetailModel.swift */,
-				FFDE6CDC28EF109E009736E3 /* Main_MenuBar.swift */,
 				FF1A946E28ED85A9008303B8 /* SideBar.swift */,
 				FF1A947028ED85CC008303B8 /* Content.swift */,
 			);
@@ -224,6 +230,17 @@
 				FFDE6CE428EF2707009736E3 /* FocusedValues.swift */,
 			);
 			path = ExtExtensions;
+			sourceTree = "<group>";
+		};
+		FFDF93A92912983300B83CB8 /* Main_Menubar */ = {
+			isa = PBXGroup;
+			children = (
+				FFDE6CDC28EF109E009736E3 /* Main_MenuBar.swift */,
+				FFDF93AA2912991700B83CB8 /* itemCommands.swift */,
+				FFDF93AC29129ABE00B83CB8 /* fileCommands.swift */,
+				FFDF93AE29129B4400B83CB8 /* windowCommands.swift */,
+			);
+			path = Main_Menubar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,13 +375,16 @@
 			files = (
 				FF23068E28F7265700EE103B /* Main_RoutingOpts.swift in Sources */,
 				FFA62B8528EC7B8100868F77 /* Main.swift in Sources */,
+				FFDF93AB2912991700B83CB8 /* itemCommands.swift in Sources */,
 				FF1A944828EC8A9B008303B8 /* AppModel_Item.swift in Sources */,
 				FFF6339D28F85EE800509E90 /* AppModel_URL.swift in Sources */,
 				FF1A946F28ED85A9008303B8 /* SideBar.swift in Sources */,
 				FF1A944628EC8A04008303B8 /* AppModel_Testing.swift in Sources */,
 				FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */,
 				FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */,
+				FFDF93AF29129B4400B83CB8 /* windowCommands.swift in Sources */,
 				FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */,
+				FFDF93AD29129ABE00B83CB8 /* fileCommands.swift in Sources */,
 				FFDE6CDD28EF109E009736E3 /* Main_MenuBar.swift in Sources */,
 				FF23068C28F6E6F700EE103B /* Main_SideBarModel.swift in Sources */,
 				FF1A944A28EC927E008303B8 /* Item.swift in Sources */,

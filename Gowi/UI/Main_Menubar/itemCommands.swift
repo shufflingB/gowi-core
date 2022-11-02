@@ -1,64 +1,14 @@
 //
-//  App+ContentViewCommands.swift
-//  App+ContentViewCommands
+//  itemCommands.swift
+//  Gowi
 //
-//  Created by Jonathan Hume on 23/08/2021.
+//  Created by Jonathan Hume on 02/11/2022.
 //
 
-import AppKit
-import os
 import SwiftUI
 
-fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
-
-struct Main_MenuBar: Commands {
-    @ObservedObject var appModel: AppModel
-    @Environment(\.openWindow) private var openWindow
-
-    @FocusedValue(\.windowUndoManager) var windowUM
-    @FocusedValue(\.contentItemIdsSelected) var contentItemIdsSelected
-    @FocusedValue(\.contentItemsSelected) var contentItemsSelected
-
-    @FocusedValue(\.contentItems) var contentItems
-    @FocusedValue(\.sideBarFilterSelected) var sideBarFilterSelected
-
-    var body: some Commands {
-        menuCommandsFile
-        menuCommandsItem
-        menuCommandsWindow
-    }
-}
-
 extension Main_MenuBar {
-    // MARK: File menu
-
-    var menuCommandsFile: some Commands {
-        CommandGroup(replacing: CommandGroupPlacement.newItem) {
-            Section {
-                Text("TODO: JSON import and export")
-                Text("Moc has changes = \(appModel.hasUnPushedChanges.description)")
-                Button("Save Changes") {
-                    withAnimation {
-                        appModel.saveToCoreData()
-                    }
-                }
-                .accessibilityIdentifier(AccessId.FileMenuSave.rawValue)
-                .keyboardShortcut(KbShortcuts.fileSaveChanges)
-
-//                Button("Fundo") {
-//                    guard let um = windowUM else {
-//                        return
-//                    }
-//                    print("Trigger")
-//                    um.undo()
-//                }
-            }
-        }
-    }
-
-    // MARK: Item menu
-
-    var menuCommandsItem: some Commands {
+    var itemCommands: some Commands {
         return CommandMenu("Items") {
             Section {
                 Button("New Item") {
@@ -86,16 +36,11 @@ extension Main_MenuBar {
             Section {
                 Button("Print URL to console") {
                     guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
-                    
+
                     _ = Main.urlEncode(.showItems(msgId: UUID(),
-                                              sideBarFilterSelected: sideBarFilterSelected.wrappedValue, contentItemIdsSelected: contentItemIdsSelected.wrappedValue))
-                    
-                    
+                                                  sideBarFilterSelected: sideBarFilterSelected.wrappedValue, contentItemIdsSelected: contentItemIdsSelected.wrappedValue))
                 }
-                
-                
-                
-                
+
                 Button("Open in New Tab") {
                     guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
                     Main.openNewTab(
@@ -106,7 +51,7 @@ extension Main_MenuBar {
                 }
                 .accessibilityIdentifier(AccessId.ItemsMenuOpenItemInNewTab.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsOpenInNewTab)
-                
+
                 Button("Open in New Window") {
                     guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
                     Main.openNewWindow(
@@ -138,22 +83,6 @@ extension Main_MenuBar {
                 .disabled(contentItemsSelected == nil || contentItemsSelected?.count ?? 0 < 1)
                 .accessibilityIdentifier(AccessId.ItemsMenuDeleteItems.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsDelete)
-            }
-        }
-    }
-
-    // MARK: Window
-
-    var menuCommandsWindow: some Commands {
-        CommandGroup(after: CommandGroupPlacement.windowSize) {
-            Section {
-  
-
-                Button("New Window") {
-                    Main.openNewWindow(openWindow: openWindow)
-                }
-                .accessibilityIdentifier(AccessId.WindowMenuNewMain.rawValue)
-                .keyboardShortcut(KbShortcuts.windowOpenNew)
             }
         }
     }
