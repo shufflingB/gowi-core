@@ -62,8 +62,8 @@ struct Main: View {
     @State var sideBarListIsVisible: NavigationSplitViewVisibility = .detailOnly
     @SceneStorage("filter") internal var sideBarFilterSelected: SideBar.ListFilterOption = .waiting
 
-    //    @SceneStorage("itemIdsSelected") var contentItemIdsSelected: Set<String> = []
-    @State internal var contentItemIdsSelected: Set<UUID> = []
+    @SceneStorage("itemIdsSelected") var contentItemIdsSelected: Set<UUID> = []
+//    @State internal var contentItemIdsSelected: Set<UUID> = []
 
     @Environment(\.undoManager) internal var windowUM: UndoManager?
     @Environment(\.openWindow) internal var openWindow
