@@ -12,7 +12,7 @@ extension Main_MenuBar {
         CommandGroup(after: CommandGroupPlacement.windowSize) {
             Section {
                 Button("New Window") {
-                    Main.openNewWindow(openWindow: openWindow)
+                    openWindow(id: GowiApp.WindowGroupId.Main.rawValue)
                 }
                 .accessibilityIdentifier(AccessId.WindowMenuNewMain.rawValue)
                 .keyboardShortcut(KbShortcuts.windowOpenNew)

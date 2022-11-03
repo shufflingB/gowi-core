@@ -54,12 +54,14 @@ extension Main_MenuBar {
                 .keyboardShortcut(KbShortcuts.itemsOpenInNewTab)
 
                 Button("Open in New Window") {
-                    guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
-                    Main.openNewWindow(
-                        openWindow: openWindow,
+                    guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else {
+                        return
+                    }
+                    let route = Main.WindowGroupRoutingOpt.showItems(
                         sideBarFilterSelected: sideBarFilterSelected.wrappedValue,
                         contentItemIdsSelected: contentItemIdsSelected.wrappedValue
                     )
+                    openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
                 }
                 .accessibilityIdentifier(AccessId.ItemsMenuOpenItemInNewWindow.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsOpenInNewWindow)

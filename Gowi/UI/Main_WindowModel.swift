@@ -86,22 +86,6 @@ extension Main { // Window level intents
 
     // MARK: Window control
 
-    /// When WindowGroup receives a Routing Option for which it has previously rendered a view  it will raise that instance instead of creating a new one [0]. It's understanding of same
-    /// as id.new == id.previous, value.new ==  value.previous. QED to allow the same route message to create and raise existing windows; have to a field that allows unique'ification
-    /// for raisg and a special value always gets used when we juse want to raise if possible.  That's what msgId: and MsgIdToUseSameWindowIfPossible are about respectively
-
-    /// [0] It's actually more clever than just the fire and forget we're using here;  the route information that  it creates can be bound to the values in the view so that it can track what is currently being displayed.
-
-    static func openNewWindow(openWindow: OpenWindowAction, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
-        let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
-
-        openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
-    }
-
-    static func openNewWindow(openWindow: OpenWindowAction) {
-        openWindow(id: GowiApp.WindowGroupId.Main.rawValue)
-    }
-
     static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
         let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
 
