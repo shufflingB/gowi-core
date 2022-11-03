@@ -115,7 +115,7 @@ extension Main { /// URL defs
                 case SideBar.ListFilterOption.all.rawValue:
                     fallthrough
                 default:
-                    sidebarSelected = .done
+                    sidebarSelected = .all
                 }
             case UrlQuery.itemId.rawValue:
                 if let qiVal = qi.value, let id = UUID(uuidString: qiVal) {

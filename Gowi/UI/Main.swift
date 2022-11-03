@@ -48,25 +48,7 @@ struct Main: View {
             )
             .navigationTitle("Window \(winId)")
         }
-        .onOpenURL(perform: { url in
-            // Decode the URL into a RoutingOpt
-//            print("onOpenURL handling \(url) for windowId = \()")
-            if let decodedWinGrpRoute = Main.urlDecode(url) {
-                if windowGroupRoute != nil {
-                    // Have an existing window
-                    print("Have existing window route set, just check for raise")
-                    openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: decodedWinGrpRoute)
-                } else {
-                    print("No existing route set")
-                }
-                
-            } else {
-                print("TODO: Handle the default case")
-            }
 
-//            let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: .done, contentItemIdsSelected: [])
-
-        })
 
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
         .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)
