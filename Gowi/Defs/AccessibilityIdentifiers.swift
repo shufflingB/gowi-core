@@ -21,6 +21,10 @@ enum AccessId: String {
     
     // MARK: Window
     case WindowMenuNewMain
+    
+    
+    // MARK: Main Window
+    case MainWindowDetailTitleField
 }
 
 

@@ -24,7 +24,7 @@ extension Main { /// URL defs
 //        case all = "/v1/all"
 //        case waiting = "/v1/waiting"
 //        case done = "/v1/done"
-        case getEmpty = "/v1/getnew"
+//        case getEmpty = "/v1/getnew"
     }
 
     enum UrlQuery: String {

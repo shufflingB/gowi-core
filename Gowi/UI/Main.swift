@@ -43,7 +43,7 @@ struct Main: View {
                 }, content: {
                     Content(selections: $contentItemIdsSelected, items: contentItems, onMovePerform: contentOnMovePerform)
                 }, detail: {
-                    Text("Number selected = \(detailItems.count)")
+                    Detail(stateView: self)
                 }
             )
             .navigationTitle("Window \(winId)")

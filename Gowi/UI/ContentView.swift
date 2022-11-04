@@ -15,15 +15,27 @@ struct Content: View {
     var body: some View {
         List(selection: $selections) {
             ForEach(items, id: \.ourIdS) { item in
-                HStack {
-                    Text(item.titleS)
-                }
+                Row(item: item)
             }
             .onMove(perform: { sourceIndices, tgtIdxsEdge in
                 withAnimation {
                     onMovePerform(sourceIndices, tgtIdxsEdge)
                 }
             })
+        }
+    }
+}
+
+extension Content {
+    private struct Row: View {
+        @ObservedObject var item: Item
+        var body: some View {
+            HStack {
+                TextField(
+                    "",
+                    text: $item.titleS
+                )
+            }
         }
     }
 }
