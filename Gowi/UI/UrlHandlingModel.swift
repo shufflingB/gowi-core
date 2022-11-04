@@ -97,7 +97,7 @@ extension Main { /// URL defs
             return nil
         }
 
-        var sidebarSelected: SideBar.ListFilterOption = .all // Safe default
+        var sidebarSelected: Sidebar.ListFilterOption = .all // Safe default
         var itemsSelected: Set<UUID> = [] // Safe default
 
         
@@ -107,12 +107,12 @@ extension Main { /// URL defs
                 let qiVal:String? = qi.value
                 
                 switch qiVal {
-                case SideBar.ListFilterOption.done.rawValue:
+                case Sidebar.ListFilterOption.done.rawValue:
                     sidebarSelected = .done
-                case SideBar.ListFilterOption.waiting.rawValue:
+                case Sidebar.ListFilterOption.waiting.rawValue:
                     sidebarSelected = .waiting
 
-                case SideBar.ListFilterOption.all.rawValue:
+                case Sidebar.ListFilterOption.all.rawValue:
                     fallthrough
                 default:
                     sidebarSelected = .all

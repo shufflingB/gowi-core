@@ -11,14 +11,12 @@ import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
 extension Main {
-    enum WindowGroupRoutingOpt: Hashable, Codable {
-        case showItems(sideBarFilterSelected: SideBar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
-    }
 
-    struct WindowGroupRoute<Content: View>: View {
+
+    struct WindowGroupRouteView<Content: View>: View {
         init(
             winId: Int,
-            sideBarFilterSelected: Binding<SideBar.ListFilterOption>,
+            sideBarFilterSelected: Binding<Sidebar.ListFilterOption>,
             contentItemIdsSelected: Binding<Set<UUID>>,
             route: Binding<WindowGroupRoutingOpt?>,
             @ViewBuilder content: () -> Content
@@ -107,7 +105,7 @@ extension Main {
         }
 
         private let winId: Int
-        @Binding private var sideBarFilterSelected: SideBar.ListFilterOption
+        @Binding private var sideBarFilterSelected: Sidebar.ListFilterOption
         @Binding private var contentItemIdsSelected: Set<UUID>
         @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
         private let content: Content

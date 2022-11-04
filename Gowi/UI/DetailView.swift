@@ -11,14 +11,14 @@ struct Detail: View {
     let stateView: Main
 
     var body: some View {
-        Layout(items: stateView.detailItems, onItemCompletes: {_ in} )
+        Layout(stateView: stateView, items: stateView.detailItems)
     }
 }
 
 extension Detail {
     struct Layout: View {
+        let stateView: Main
         let items: Array<Item>
-        let onItemCompletes: (_ item: Item) -> Void
 
         var body: some View {
             if items.count == 0 {
@@ -27,9 +27,9 @@ extension Detail {
                 ZStack {
                     ForEach(items.indices, id: \.self) { idx in
                         if items.count == 1 {
-                            Detail.ItemView(item: items[idx], onItemCompletes: onItemCompletes)
+                            ItemView(stateView: stateView, item: items[idx])
                         } else {
-                            Detail.ItemView(item: items[idx], onItemCompletes: onItemCompletes)
+                            ItemView(stateView: stateView, item: items[idx])
                                 .border(Color.accentColor)
                                 .padding(.all)
                                 .zIndex(-Double(idx))

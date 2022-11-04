@@ -14,23 +14,20 @@ struct Main: View {
     static var instantiationCount: Int = 0
     @Binding var windowGroupRoute: WindowGroupRoutingOpt?
     @State var winId: Int
-    
+
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(
             sortDescriptors: [],
             predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
         )
         _windowGroupRoute = route
-        
 
         _winId = State(initialValue: Self.instantiationCount)
         Self.instantiationCount += 1
     }
 
-    
     var body: some View {
-        
-        return WindowGroupRoute(
+        return WindowGroupRouteView(
             winId: winId,
             sideBarFilterSelected: $sideBarFilterSelected,
             contentItemIdsSelected: $contentItemIdsSelected,
@@ -39,7 +36,7 @@ struct Main: View {
             NavigationSplitView(
                 columnVisibility: $sideBarListIsVisible,
                 sidebar: {
-                    SideBar(stateView: self)
+                    Sidebar(stateView: self)
                 }, content: {
                     Content(selections: $contentItemIdsSelected, items: contentItems, onMovePerform: contentOnMovePerform)
                 }, detail: {
@@ -48,7 +45,6 @@ struct Main: View {
             )
             .navigationTitle("Window \(winId)")
         }
-
 
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
         .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)
@@ -60,11 +56,15 @@ struct Main: View {
     @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
 
     @State var sideBarListIsVisible: NavigationSplitViewVisibility = .detailOnly
-    @SceneStorage("filter") internal var sideBarFilterSelected: SideBar.ListFilterOption = .waiting
+    @SceneStorage("filter") internal var sideBarFilterSelected: Sidebar.ListFilterOption = .waiting
 
     @SceneStorage("itemIdsSelected") var contentItemIdsSelected: Set<UUID> = []
 //    @State internal var contentItemIdsSelected: Set<UUID> = []
 
     @Environment(\.undoManager) internal var windowUM: UndoManager?
     @Environment(\.openWindow) internal var openWindow
+
+    enum WindowGroupRoutingOpt: Hashable, Codable {
+        case showItems(sideBarFilterSelected: Sidebar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
+    }
 }

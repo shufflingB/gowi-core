@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SideBar: View {
+struct Sidebar: View {
     let stateView: Main
 
     enum ListFilterOption: String, CaseIterable, Codable {
@@ -21,7 +21,7 @@ struct SideBar: View {
     }
 }
 
-extension SideBar {
+extension Sidebar {
     struct Layout: View {
         @Binding var listSelected: ListFilterOption
         let listOfAvailableFilters: Array<ListFilterOption>
