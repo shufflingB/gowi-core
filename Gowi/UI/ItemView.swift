@@ -14,7 +14,13 @@ struct ItemView: View {
     @ObservedObject var item: Item
 
     var body: some View {
-        Layout(item: item, urlForItem: itemURL, onItemCompletes: { _ in }, itemSetCompletionDate: { _ in })
+        Layout(item: item, urlForItem: itemURL, itemSetCompletionDate: { nv in
+            withAnimation {
+                item.completed = nv
+                stateView.appModel.objectWillChange.send()
+            }
+
+        })
     }
 
     private var itemURL: URL {
@@ -25,7 +31,6 @@ struct ItemView: View {
     struct Layout: View {
         @ObservedObject var item: Item
         let urlForItem: URL
-        let onItemCompletes: (_ item: Item) -> Void
         let itemSetCompletionDate: (Date?) -> Void
 
         var body: some View {
@@ -43,16 +48,15 @@ struct ItemView: View {
 
                 routingRow()
                     .padding(.horizontal)
-                
+
                 dateRow()
                     .padding(.horizontal)
-                
+
                 TextEditor(text: $item.notesS)
                     .accessibilityIdentifier(AccessId.MainWindowDetailTextEditor.rawValue)
                     .cornerRadius(4)
                     .font(.title3)
                     .padding()
-                
             }
             .shadow(radius: 2)
             .frame(alignment: .leading)
@@ -62,7 +66,6 @@ struct ItemView: View {
             return
                 HStack {
                     Button {
-                        log.debug("Trigged copy of ID to clipboard")
                         item.ourIdS.uuidString.copyToPasteboard()
 
                     } label: {
@@ -77,7 +80,6 @@ struct ItemView: View {
                     Spacer()
 
                     Button {
-                        log.debug("Trigged copy URL to clipboard")
                         urlForItem.absoluteString.copyToPasteboard()
 
                     } label: {
@@ -119,7 +121,6 @@ struct ItemView: View {
 
             return HStack {
                 Button {
-                    log.debug("Trigged created copy date to clipboard")
                     createdDate.copyToPasteboard()
                 } label: {
                     Label("Created:", systemImage: "calendar")
@@ -130,7 +131,6 @@ struct ItemView: View {
 
                 Spacer()
                 Button {
-                    log.debug("Trigged completed date to clipboard")
                     completedDate.copyToPasteboard()
                 } label: {
                     Label("Completed:", systemImage: "calendar")

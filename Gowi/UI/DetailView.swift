@@ -23,13 +23,16 @@ extension Detail {
         var body: some View {
             if items.count == 0 {
                 Text("No items selected")
+                    .background(.background)
             } else {
                 ZStack {
                     ForEach(items.indices, id: \.self) { idx in
                         if items.count == 1 {
                             ItemView(stateView: stateView, item: items[idx])
+                                .background(.background)
                         } else {
                             ItemView(stateView: stateView, item: items[idx])
+                                .background(.background)
                                 .border(Color.accentColor)
                                 .padding(.all)
                                 .zIndex(-Double(idx))
