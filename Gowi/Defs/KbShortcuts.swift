@@ -20,6 +20,7 @@ import SwiftUI
 
 struct KbShortcuts{
     static let fileSaveChanges = KeyboardShortcut("s", modifiers: .command)
+//    static let fileAbandonChanges = KeyboardShortcut("s", modifiers: [])
 
     static let itemsNew = KeyboardShortcut("n", modifiers: .command) /// As A's in Reminders
     static let itemsDuplicate = KeyboardShortcut("d", modifiers: .command) /// As in Finder and other's Duplicate binding

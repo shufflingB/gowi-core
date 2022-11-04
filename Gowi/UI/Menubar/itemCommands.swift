@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Main_MenuBar {
+extension Menubar {
     var itemCommands: some Commands {
         return CommandMenu("Items") {
             Section {

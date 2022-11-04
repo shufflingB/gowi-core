@@ -100,7 +100,6 @@ extension Main { // Window level intents
             }
         }
     }
-    
+
     // MARK: NS functionallity
-     
 }

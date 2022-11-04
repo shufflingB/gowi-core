@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Main_MenuBar {
+extension Menubar {
     var fileCommands: some Commands {
         CommandGroup(replacing: CommandGroupPlacement.newItem) {
             Section {
@@ -18,16 +18,18 @@ extension Main_MenuBar {
                         appModel.saveToCoreData()
                     }
                 }
+                .disabled(appModel.hasUnPushedChanges == false)
                 .accessibilityIdentifier(AccessId.FileMenuSave.rawValue)
                 .keyboardShortcut(KbShortcuts.fileSaveChanges)
 
-                //                Button("Fundo") {
-                //                    guard let um = windowUM else {
-                //                        return
-                //                    }
-                //                    print("Trigger")
-                //                    um.undo()
-                //                }
+                Button("Revert Changes") {
+                    withAnimation {
+                        showConfirmCancelLocalDialogue?.wrappedValue = true
+                    }
+                }
+                .disabled(appModel.hasUnPushedChanges == false)
+                .accessibilityIdentifier(AccessId.FileMenuSave.rawValue)
+//                .keyboardShortcut(KbShortcuts.fileSaveChanges)
             }
         }
     }

@@ -11,9 +11,9 @@ import SwiftUI
 struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
-    static var instantiationCount: Int = 0
-    @Binding var windowGroupRoute: WindowGroupRoutingOpt?
-    @State var winId: Int
+    enum WindowGroupRoutingOpt: Hashable, Codable {
+        case showItems(sideBarFilterSelected: Sidebar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
+    }
 
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(
@@ -44,6 +44,15 @@ struct Main: View {
                 }
             )
             .navigationTitle("Window \(winId)")
+            .toolbar(id: "mainWindowToolBar", content: mainToolbar)
+            .confirmationDialog(Text("Revert cancels all unsaved changes?") + Text("(is not undoable)"), isPresented: $showConfirmCancelLocalDialogue) {
+                Button("Revert", role: .destructive) {
+                    withAnimation {
+                        showConfirmCancelLocalDialogue = false
+                        appModel.viewContext.rollback()
+                    }
+                }
+            }
         }
 
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
@@ -51,6 +60,7 @@ struct Main: View {
         .focusedValue(\.contentItemIdsSelected, $contentItemIdsSelected)
         .focusedValue(\.contentItemsSelected, contentItemsSelected)
         .focusedValue(\.contentItems, contentItems)
+        .focusedValue(\.showConfirmCancelLocalDialogue, $showConfirmCancelLocalDialogue)
     }
 
     @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
@@ -64,7 +74,8 @@ struct Main: View {
     @Environment(\.undoManager) internal var windowUM: UndoManager?
     @Environment(\.openWindow) internal var openWindow
 
-    enum WindowGroupRoutingOpt: Hashable, Codable {
-        case showItems(sideBarFilterSelected: Sidebar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
-    }
+    private static var instantiationCount: Int = 0
+    @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
+    @State private var winId: Int
+    @State internal var showConfirmCancelLocalDialogue: Bool = false
 }

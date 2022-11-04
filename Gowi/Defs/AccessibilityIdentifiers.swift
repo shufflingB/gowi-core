@@ -22,6 +22,12 @@ enum AccessId: String {
     // MARK: Main AppMenu Window
     case WindowMenuNewMain
     
+    // MARK: Main Toolbar
+    case MainWindowToolbarSaveChangesPending
+    case MainWindowToolbarSaveChangesNone
+    case MainWindowToolbarRevertChangesPending
+    case MainWindowToolbarRevertChangesNone
+    case MainWindowToolbarCreateItemButton
     
     // MARK: Main Window Detail
     case MainWindowDetailTitleField

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Main_MenuBar {
+extension Menubar {
     var windowCommands: some Commands {
         CommandGroup(after: CommandGroupPlacement.windowSize) {
             Section {

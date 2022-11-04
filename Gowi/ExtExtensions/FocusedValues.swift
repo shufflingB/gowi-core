@@ -27,6 +27,10 @@ struct ContentItems: FocusedValueKey {
     typealias Value = Array<Item>
 }
 
+struct ShowConfirmCancelLocalDialogue: FocusedValueKey {
+    typealias Value = Binding<Bool>
+}
+
 extension FocusedValues {
     var contentItemIdsSelected: ContentItemIdsSelected.Value? {
         get { self[ContentItemIdsSelected.self] }
@@ -60,6 +64,13 @@ extension FocusedValues {
         get { self[WindowUndoManager.self] }
         set {
             self[WindowUndoManager.self] = newValue
+        }
+    }
+    
+    var showConfirmCancelLocalDialogue: ShowConfirmCancelLocalDialogue.Value? {
+        get { self[ShowConfirmCancelLocalDialogue.self] }
+        set {
+            self[ShowConfirmCancelLocalDialogue.self] = newValue
         }
     }
 }

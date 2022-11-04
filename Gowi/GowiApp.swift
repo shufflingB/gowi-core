@@ -32,7 +32,7 @@ struct GowiApp: App {
         .handlesExternalEvents(matching: ["gowi://main/"])
 
         .commands {
-            Main_MenuBar(appModel: appModel)
+            Menubar(appModel: appModel)
         }
     }
 }
