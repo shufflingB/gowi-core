@@ -10,16 +10,16 @@ import Foundation
 
 
 enum AccessId: String {
-    // MARK: File
+    // MARK: Main AppMenu File
     case FileMenuSave
     
-    // MARK: Items
+    // MARK: Main AppMenu Items
     case ItemsMenuNewItem
     case ItemsMenuDeleteItems
     case ItemsMenuOpenItemInNewTab
     case ItemsMenuOpenItemInNewWindow
     
-    // MARK: Window
+    // MARK: Main AppMenu Window
     case WindowMenuNewMain
     
     
@@ -27,6 +27,13 @@ enum AccessId: String {
     case MainWindowDetailTitleField
     case MainWindowDetailId
     case MainWindowDetailItemURL
+    case MainWindowDetailCreatedDate
+    case MainWindowDetailCompletedDate
+    case MainWindowDetailTextEditor
+    
+    
+    // MARK: OptionalDatePicker
+    case OptionalDatePickerDoneToggle
 }
 
 
