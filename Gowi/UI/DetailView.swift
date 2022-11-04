@@ -13,9 +13,7 @@ struct Detail: View {
     var body: some View {
         Layout(stateView: stateView, items: stateView.detailItems)
     }
-}
 
-extension Detail {
     struct Layout: View {
         let stateView: Main
         let items: Array<Item>
@@ -45,7 +43,7 @@ extension Detail {
     }
 }
 
-//struct Previews_Detail: PreviewProvider {
+// struct Previews_Detail: PreviewProvider {
 //    @StateObject static var am = AppModel(items: Test_Data)
 //
 //    static var previews: some View {
@@ -53,4 +51,4 @@ extension Detail {
 //
 //        Detail.Layout(items: items, onItemCompletes: { _ in am.objectWillChange.send() })
 //    }
-//}
+// }
