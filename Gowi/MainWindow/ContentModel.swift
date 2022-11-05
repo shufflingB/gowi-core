@@ -20,11 +20,14 @@ extension Main { // Content specific Intents
             }
         }
     }
-    
-    
+
     internal var contentItemsSelected: Array<Item> {
-        contentItems.filter({contentItemIdsSelected.contains($0.ourIdS)})
+        contentItems.filter({ contentItemIdsSelected.contains($0.ourIdS) })
     }
+
+//    internal var contentItemsSelected: Array<UUID> {
+//        contentItems.filter({contentItemIdsSelected.contains($0.ourIdS)})
+//    }
 
     internal var contentOnMovePerform: (IndexSet, Int) -> Void {
         switch sideBarFilterSelected {
@@ -75,5 +78,11 @@ extension Main { // Content specific Intents
 
     internal func contentOnMoveOfWaitingItems(_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
         appModel.reOrderUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+    }
+
+    internal func contentContextItemsToActOn(onRightClick item: Item) -> Array<Item> {
+        contentItemsSelected.contains(item)
+            ? contentItemsSelected
+            : [item]
     }
 }
