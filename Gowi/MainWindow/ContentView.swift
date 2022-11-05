@@ -15,10 +15,17 @@ extension Main {
             Layout(selections: stateView.$contentItemIdsSelected, items: stateView.contentItems, onMovePerform: stateView.contentOnMovePerform, contextMenu: contextMenu)
         }
 
-        func contextMenu(_ item: Item) -> some View {
-            let itemsToActOn = stateView.contentContextItemsToActOn(onRightClick: item)
+        func contextMenu(_ rhClickItem: Item) -> some View {
+            var itemsToActOn: Array<Item> { stateView.contentItemsSelected.contains(rhClickItem)
+                ? stateView.contentItemsSelected
+                : [rhClickItem]
+            }
 
-            return
+            var isRhItemInSelection: Bool {
+                stateView.contentItemsSelected.contains(rhClickItem)
+            }
+
+            return Group {
                 Button(
                     "Delete",
                     action: {
@@ -33,6 +40,24 @@ extension Main {
                         }
                     }
                 )
+                if isRhItemInSelection == false {
+                    Button("Open in New Tab") {
+                        Main.openNewTab(
+                            openWindow: stateView.openWindow,
+                            sideBarFilterSelected: stateView.sideBarFilterSelected,
+                            contentItemIdsSelected: [rhClickItem.ourIdS]
+                        )
+                    }
+
+                    Button("Open in New Window") {
+                        let route = Main.WindowGroupRoutingOpt.showItems(
+                            sideBarFilterSelected: stateView.sideBarFilterSelected,
+                            contentItemIdsSelected: [rhClickItem.ourIdS]
+                        )
+                        stateView.openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
+                    }
+                }
+            }
         }
     }
 }

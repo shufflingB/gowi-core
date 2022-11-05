@@ -43,7 +43,11 @@ struct Main: View {
                     DetailView(stateView: self)
                 }
             )
-            .navigationTitle("Window \(winId)")
+            .navigationTitle(Text(navigationTitleBlurb))
+            .navigationSubtitle(Text(navigationSubtitleBlurb))
+
+//            .navigationTitle("Window \(winId)")
+//            .navigationSubtitle(Text(sideBarFilterSelected.rawValue))
             .toolbar(id: "mainWindowToolBar", content: toolbar)
             .confirmationDialog(Text("Revert cancels all unsaved changes?") + Text("(is not undoable)"), isPresented: $showConfirmCancelLocalDialogue) {
                 Button("Revert", role: .destructive) {
@@ -62,6 +66,15 @@ struct Main: View {
         .focusedValue(\.contentItems, contentItems)
         .focusedValue(\.showConfirmCancelLocalDialogue, $showConfirmCancelLocalDialogue)
     }
+    
+    private var navigationTitleBlurb: String {
+        "\(sideBarFilterSelected.rawValue) Items"
+    }
+    private var navigationSubtitleBlurb: String {
+        detailItems.first?.titleS ?? "Nothing Selected Yet"
+    }
+
+    
 
     @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
 

@@ -7,13 +7,8 @@
 
 import SwiftUI
 
-
-
-
 @main
 struct GowiApp: App {
-    
-    
     enum WindowGroupId: String {
         case Main
     }
@@ -22,9 +17,7 @@ struct GowiApp: App {
 
     var body: some Scene {
         WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.WindowGroupRoutingOpt.self) { $route in
-//            _ = print("Fart = \(fart)")
             Main(with: appModel.systemRootItem, route: $route)
- 
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)
                 .handlesExternalEvents(preferring: ["gowi://main/"], allowing: ["*"])
@@ -36,4 +29,3 @@ struct GowiApp: App {
         }
     }
 }
-

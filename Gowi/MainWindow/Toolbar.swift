@@ -9,6 +9,7 @@ import SwiftUI
 
 extension Main {
     @ToolbarContentBuilder func toolbar() -> some CustomizableToolbarContent {
+
         ToolbarItem(id: "tbar.new") {
             Button(action: {
                 withAnimation {
@@ -22,12 +23,12 @@ extension Main {
                     contentItemIdsSelected = route.itemIdsSelected
                 }
             }) {
-                Label("New item", systemImage: "square.and.pencil")
+                Label("New Item", systemImage: "square.and.pencil")
             }
-            
+
             .accessibilityIdentifier(AccessId.MainWindowToolbarCreateItemButton.rawValue)
             .font(.title2)
-            .help("Create a new item")
+            .help("Create a new Item")
         }
 
         ToolbarItem(id: "tbar.save") {
@@ -44,17 +45,16 @@ extension Main {
             .help("Save changes")
         }
 
-        ToolbarItem(id: "tbar.spacer") {
-            Spacer()
-        }
+
 
         ToolbarItem(id: "tbar.cancel") {
             Button(action: {
                 showConfirmCancelLocalDialogue = true
             }) {
-                Label("Cancel changes", systemImage: appModel.hasUnPushedChanges ? "arrow.uturn.backward.square" : "arrow.uturn.backward.square")
+                Label("Cancel Changes", systemImage: appModel.hasUnPushedChanges ? "arrow.uturn.backward.square" : "arrow.uturn.backward.square")
                     .foregroundColor(appModel.hasUnPushedChanges ? Color.red : Color.gray)
             }
+
             .disabled(appModel.hasUnPushedChanges == false)
             .accessibilityIdentifier(appModel.hasUnPushedChanges ? AccessId.MainWindowToolbarRevertChangesPending.rawValue : AccessId.MainWindowToolbarRevertChangesNone.rawValue)
             .font(.title2)

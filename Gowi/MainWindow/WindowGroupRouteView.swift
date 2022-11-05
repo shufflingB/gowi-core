@@ -45,7 +45,7 @@ extension Main {
         var body: some View {
             content
                 .onAppear {
-                    if let route: Main.WindowGroupRoutingOpt = windowGroupRoute {
+                    if let route: WindowGroupRoutingOpt = windowGroupRoute {
                         print("Route opened for \(winId)")
                         routeWindow(route)
                     }
