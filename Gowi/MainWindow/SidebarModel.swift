@@ -7,9 +7,9 @@
 
 import SwiftUI
 extension Main {
-    var sideBarAvailableFilters: Array<Sidebar.ListFilterOption> {
+    var sideBarAvailableFilters: Array<SidebarFilterOpt> {
         withAnimation {
-            Array(Sidebar.ListFilterOption.allCases)
+            Array(SidebarFilterOpt.allCases)
         }
     }
 }

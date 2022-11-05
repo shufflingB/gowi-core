@@ -11,12 +11,10 @@ import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
 extension Main {
-
-
     struct WindowGroupRouteView<Content: View>: View {
         init(
             winId: Int,
-            sideBarFilterSelected: Binding<Sidebar.ListFilterOption>,
+            sideBarFilterSelected: Binding<SidebarFilterOpt>,
             contentItemIdsSelected: Binding<Set<UUID>>,
             route: Binding<WindowGroupRoutingOpt?>,
             @ViewBuilder content: () -> Content
@@ -105,7 +103,7 @@ extension Main {
         }
 
         private let winId: Int
-        @Binding private var sideBarFilterSelected: Sidebar.ListFilterOption
+        @Binding private var sideBarFilterSelected: SidebarFilterOpt
         @Binding private var contentItemIdsSelected: Set<UUID>
         @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
         private let content: Content

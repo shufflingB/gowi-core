@@ -12,7 +12,7 @@ struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
     enum WindowGroupRoutingOpt: Hashable, Codable {
-        case showItems(sideBarFilterSelected: Sidebar.ListFilterOption, contentItemIdsSelected: Set<UUID>)
+        case showItems(sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
     }
 
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
@@ -44,7 +44,7 @@ struct Main: View {
                 }
             )
             .navigationTitle("Window \(winId)")
-            .toolbar(id: "mainWindowToolBar", content: mainToolbar)
+            .toolbar(id: "mainWindowToolBar", content: toolbar)
             .confirmationDialog(Text("Revert cancels all unsaved changes?") + Text("(is not undoable)"), isPresented: $showConfirmCancelLocalDialogue) {
                 Button("Revert", role: .destructive) {
                     withAnimation {
@@ -66,7 +66,7 @@ struct Main: View {
     @FetchRequest internal var itemsAllFromFetchRequest: FetchedResults<Item>
 
     @State var sideBarListIsVisible: NavigationSplitViewVisibility = .detailOnly
-    @SceneStorage("filter") internal var sideBarFilterSelected: Sidebar.ListFilterOption = .waiting
+    @SceneStorage("filter") internal var sideBarFilterSelected: SidebarFilterOpt = .waiting
 
     @SceneStorage("itemIdsSelected") var contentItemIdsSelected: Set<UUID> = []
 //    @State internal var contentItemIdsSelected: Set<UUID> = []

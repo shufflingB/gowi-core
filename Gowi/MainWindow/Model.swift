@@ -19,9 +19,9 @@ extension Main { // Window level intents
 
     static func itemAddNew(
         appModel: AppModel, windowUM: UndoManager?,
-        tabSelected: Sidebar.ListFilterOption,
+        tabSelected: SidebarFilterOpt,
         parent: Item, list items: Array<Item>
-    ) -> (newItem: Item, tabSelected: Sidebar.ListFilterOption, itemIdsSelected: Set<UUID>) {
+    ) -> (newItem: Item, tabSelected: SidebarFilterOpt, itemIdsSelected: Set<UUID>) {
         //
         let newItem = appModel.itemNewInsertInPriority(
             externalUM: windowUM,
@@ -29,7 +29,7 @@ extension Main { // Window level intents
             title: "New Item", complete: nil, notes: "", children: []
         )
 
-        let newTabSelected: Sidebar.ListFilterOption = tabSelected == .done ? .waiting : tabSelected
+        let newTabSelected: SidebarFilterOpt = tabSelected == .done ? .waiting : tabSelected
 
         return (newItem: newItem, tabSelected: newTabSelected, itemIdsSelected: [newItem.ourIdS])
     }
@@ -86,7 +86,7 @@ extension Main { // Window level intents
 
     // MARK: Window control
 
-    static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: Sidebar.ListFilterOption, contentItemIdsSelected: Set<UUID>) {
+    static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>) {
         let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
 
         if let intialWindow = NSApplication.shared.keyWindow {

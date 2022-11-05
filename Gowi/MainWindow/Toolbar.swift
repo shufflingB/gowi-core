@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Main {
-    @ToolbarContentBuilder func mainToolbar() -> some CustomizableToolbarContent {
+    @ToolbarContentBuilder func toolbar() -> some CustomizableToolbarContent {
         ToolbarItem(id: "tbar.new") {
             Button(action: {
                 withAnimation {

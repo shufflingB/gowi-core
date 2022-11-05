@@ -12,7 +12,7 @@ struct WindowUndoManager: FocusedValueKey {
 }
 
 struct SideBarFilterSelected: FocusedValueKey {
-    typealias Value = Binding<Sidebar.ListFilterOption>
+    typealias Value = Binding<Main.SidebarFilterOpt>
 }
 
 struct ContentItemIdsSelected: FocusedValueKey {
