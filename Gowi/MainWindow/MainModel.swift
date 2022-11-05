@@ -36,7 +36,7 @@ extension Main { // Window level intents
 
     static func itemsDelete(
         appModel: AppModel, windoUM: UndoManager?,
-        sideBarShowingList: Array<Item>,
+        currentlyShowing: Array<Item>,  //<- Use this to determine where to shift the List highlighted selection to after deletion
         previousListSelectionsGoingDown: Bool,
         deleteItems: Array<Item>
     ) -> Set<UUID> {
@@ -48,32 +48,32 @@ extension Main { // Window level intents
             return []
         }
 
-        guard let firstToDeleteIdx = sideBarShowingList.firstIndex(of: firstToDelete), let lastToDeleteIdx = sideBarShowingList.firstIndex(of: lastToDelete) else {
+        guard let firstToDeleteIdx = currentlyShowing.firstIndex(of: firstToDelete), let lastToDeleteIdx = currentlyShowing.firstIndex(of: lastToDelete) else {
             log.warning("\(#function) not deleting bc unable to find selection in what is showing")
             return []
         }
 
         let possPrecIdx = firstToDeleteIdx - 1
-        let idxPrecedingFirst: Int? = sideBarShowingList.indices.contains(possPrecIdx) ? possPrecIdx : nil
+        let idxPrecedingFirst: Int? = currentlyShowing.indices.contains(possPrecIdx) ? possPrecIdx : nil
 
         let possTrailIdx = lastToDeleteIdx + 1
-        let idxTrailingLast: Int? = sideBarShowingList.indices.contains(possTrailIdx) ? possTrailIdx : nil
+        let idxTrailingLast: Int? = currentlyShowing.indices.contains(possTrailIdx) ? possTrailIdx : nil
 
         let newSelection: Set<UUID> = {
             if previousListSelectionsGoingDown {
                 if let idxTrailingLast = idxTrailingLast {
-                    return [sideBarShowingList[idxTrailingLast].ourIdS]
+                    return [currentlyShowing[idxTrailingLast].ourIdS]
                 } else if let idxPrecedingFirst = idxPrecedingFirst {
-                    return [sideBarShowingList[idxPrecedingFirst].ourIdS]
+                    return [currentlyShowing[idxPrecedingFirst].ourIdS]
                 } else {
                     return []
                 }
 
             } else { // Going Up
                 if let idxPrecedingFirst = idxPrecedingFirst {
-                    return [sideBarShowingList[idxPrecedingFirst].ourIdS]
+                    return [currentlyShowing[idxPrecedingFirst].ourIdS]
                 } else if let idxTrailingLast = idxTrailingLast {
-                    return [sideBarShowingList[idxTrailingLast].ourIdS]
+                    return [currentlyShowing[idxTrailingLast].ourIdS]
                 } else {
                     return []
                 }

@@ -77,7 +77,7 @@ extension Menubar {
 
                         contentItemIdsSelected?.wrappedValue = Main.itemsDelete(
                             appModel: appModel, windoUM: windowUM,
-                            sideBarShowingList: contentItems,
+                            currentlyShowing: contentItems,
                             previousListSelectionsGoingDown: true,
                             deleteItems: contentItemsSelected
                         )
