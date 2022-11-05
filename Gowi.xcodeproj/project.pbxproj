@@ -41,7 +41,7 @@
 		FFDE6CE528EF2708009736E3 /* FocusedValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE428EF2707009736E3 /* FocusedValues.swift */; };
 		FFDE6CE728F02945009736E3 /* Test000_System_Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */; };
 		FFDE6CE928F04447009736E3 /* Test500_Main_Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */; };
-		FFDE6CEC28F072C4009736E3 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CEB28F072C4009736E3 /* Model.swift */; };
+		FFDE6CEC28F072C4009736E3 /* MainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CEB28F072C4009736E3 /* MainModel.swift */; };
 		FFDF93AB2912991700B83CB8 /* itemCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDF93AA2912991700B83CB8 /* itemCommands.swift */; };
 		FFDF93AD29129ABE00B83CB8 /* fileCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDF93AC29129ABE00B83CB8 /* fileCommands.swift */; };
 		FFDF93AF29129B4400B83CB8 /* windowCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDF93AE29129B4400B83CB8 /* windowCommands.swift */; };
@@ -105,7 +105,7 @@
 		FFDE6CE428EF2707009736E3 /* FocusedValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusedValues.swift; sourceTree = "<group>"; };
 		FFDE6CE628F02945009736E3 /* Test000_System_Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test000_System_Init.swift; sourceTree = "<group>"; };
 		FFDE6CE828F04447009736E3 /* Test500_Main_Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test500_Main_Intents.swift; sourceTree = "<group>"; };
-		FFDE6CEB28F072C4009736E3 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		FFDE6CEB28F072C4009736E3 /* MainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainModel.swift; sourceTree = "<group>"; };
 		FFDF93AA2912991700B83CB8 /* itemCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = itemCommands.swift; sourceTree = "<group>"; };
 		FFDF93AC29129ABE00B83CB8 /* fileCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fileCommands.swift; sourceTree = "<group>"; };
 		FFDF93AE29129B4400B83CB8 /* windowCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = windowCommands.swift; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 			children = (
 				FFDF93A92912983300B83CB8 /* Menubar */,
 				FF4E1126291584BC002BEC74 /* Toolbar.swift */,
-				FFDE6CEB28F072C4009736E3 /* Model.swift */,
+				FFDE6CEB28F072C4009736E3 /* MainModel.swift */,
 				FFA62B8428EC7B8100868F77 /* Main.swift */,
 				FFDF93B02912AA4600B83CB8 /* WindowGroupRouteView.swift */,
 				FF23068B28F6E6F700EE103B /* SidebarModel.swift */,
@@ -422,7 +422,7 @@
 				FF9F22BC28F583D30046D72D /* DetailModel.swift in Sources */,
 				FFDE6CE528EF2708009736E3 /* FocusedValues.swift in Sources */,
 				FF9F22BA28F5832C0046D72D /* ContentModel.swift in Sources */,
-				FFDE6CEC28F072C4009736E3 /* Model.swift in Sources */,
+				FFDE6CEC28F072C4009736E3 /* MainModel.swift in Sources */,
 				FF1A944428EC873D008303B8 /* AppModel.swift in Sources */,
 				FF1A947128ED85CC008303B8 /* ContentView.swift in Sources */,
 				FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */,

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Detail: View {
+struct DetailView: View {
     let stateView: Main
 
     var body: some View {

@@ -12,7 +12,7 @@ extension Main {
         case waiting = "Waiting", done = "Done", all = "All"
     }
 
-    struct Sidebar: View {
+    struct SidebarView: View {
         let stateView: Main
 
         var body: some View {

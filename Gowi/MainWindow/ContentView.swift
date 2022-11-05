@@ -8,7 +8,17 @@
 import SwiftUI
 
 extension Main {
-    struct Content: View {
+    struct ContentView: View {
+        let stateView: Main
+
+        var body: some View {
+            Layout(selections: stateView.$contentItemIdsSelected, items: stateView.contentItems, onMovePerform: stateView.contentOnMovePerform)
+        }
+    }
+}
+
+extension Main.ContentView {
+    struct Layout: View {
         @Binding var selections: Set<UUID>
         let items: Array<Item>
         let onMovePerform: (_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) -> Void
@@ -25,16 +35,16 @@ extension Main {
                 })
             }
         }
-    }
 
-    private struct Row: View {
-        @ObservedObject var item: Item
-        var body: some View {
-            HStack {
-                TextField(
-                    "",
-                    text: $item.titleS
-                )
+        private struct Row: View {
+            @ObservedObject var item: Item
+            var body: some View {
+                HStack {
+                    TextField(
+                        "",
+                        text: $item.titleS
+                    )
+                }
             }
         }
     }
@@ -45,7 +55,7 @@ struct Content_Previews: PreviewProvider {
     @State static var selections: Set<UUID> = [AppModel.testingMode1ourIdPresent]
 
     static var previews: some View {
-        Main.Content(
+        Main.ContentView.Layout(
             selections: $selections,
             items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
             onMovePerform: { _, _ in }

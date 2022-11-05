@@ -36,11 +36,11 @@ struct Main: View {
             NavigationSplitView(
                 columnVisibility: $sideBarListIsVisible,
                 sidebar: {
-                    Sidebar(stateView: self)
+                    SidebarView(stateView: self)
                 }, content: {
-                    Content(selections: $contentItemIdsSelected, items: contentItems, onMovePerform: contentOnMovePerform)
+                    ContentView(stateView: self)
                 }, detail: {
-                    Detail(stateView: self)
+                    DetailView(stateView: self)
                 }
             )
             .navigationTitle("Window \(winId)")
