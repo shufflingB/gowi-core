@@ -12,7 +12,6 @@ extension Menubar {
         CommandGroup(replacing: CommandGroupPlacement.newItem) {
             Section {
                 Text("TODO: JSON import and export")
-                Text("Moc has changes = \(appModel.hasUnPushedChanges.description)")
                 Button("Save Changes") {
                     withAnimation {
                         appModel.saveToCoreData()

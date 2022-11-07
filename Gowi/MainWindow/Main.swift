@@ -13,6 +13,7 @@ struct Main: View {
 
     enum WindowGroupRoutingOpt: Hashable, Codable {
         case showItems(sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
+        case newItem(sideBarFilterSelected: SidebarFilterOpt)
     }
 
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {

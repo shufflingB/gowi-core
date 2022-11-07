@@ -12,6 +12,7 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 
 extension Main {
     struct WindowGroupRouteView<Content: View>: View {
+        @EnvironmentObject var appModel: AppModel
         init(
             winId: Int,
             sideBarFilterSelected: Binding<SidebarFilterOpt>,
@@ -35,10 +36,14 @@ extension Main {
 
         func routeWindow(_ route: WindowGroupRoutingOpt) {
             switch route {
-            case let .showItems(filterSelected, contentItemIdsSelected):
-//                print("Is routing window = \(winId)")
-                sideBarFilterSelected = filterSelected
-                self.contentItemIdsSelected = contentItemIdsSelected
+            case let .showItems(sideBarFilterSelected: filter, contentItemIdsSelected: items):
+                sideBarFilterSelected = filter
+                contentItemIdsSelected = items
+
+            case .newItem(sideBarFilterSelected: _):
+                // This gets handled when we have a window undo mananager, as want to make it undoable, and when
+                // onAppear runs that undoManager is defined as nil
+                break
             }
         }
 
@@ -58,6 +63,9 @@ extension Main {
 //                            print("Is UPDATING route for window = \(winId)   because of seletction")
                             $windowGroupRoute.wrappedValue = .showItems(sideBarFilterSelected: filterSelected,
                                                                         contentItemIdsSelected: newValue)
+                        case .newItem(sideBarFilterSelected: _):
+                            // Don't care because on arrival will create new and change route type
+                            break
                         }
 
                     } else {
@@ -72,6 +80,9 @@ extension Main {
 //                            print("Is UPDATING route for window = \(winId)  with  because of filter")
                             $windowGroupRoute.wrappedValue = .showItems(sideBarFilterSelected: newValue,
                                                                         contentItemIdsSelected: contentItemIdsSelected)
+                        case .newItem(sideBarFilterSelected: _):
+                            // Don't care because on arrival will create new and change route type
+                            break
                         }
 
                     } else {
@@ -100,6 +111,29 @@ extension Main {
                         print("TODO: Handle the default case")
                     }
                 })
+                .onChange(of: windowUM) { newValue in
+                    guard let windowUM = newValue else {
+                        return
+                    }
+
+                    switch windowGroupRoute {
+                    case let .newItem(sideBarFilterSelected: filter):
+                        withAnimation {
+                            let route = Main.itemAddNew(
+                                appModel: appModel, windowUM: windowUM,
+                                tabSelected: filter, parent: appModel.systemRootItem,
+                                list: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                            )
+                            contentItemIdsSelected = route.itemIdsSelected
+                            sideBarFilterSelected = filter
+                            // Twiddle the route so that the old one is avaiable again
+                            windowGroupRoute = .showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+                        }
+
+                    default:
+                        return
+                    }
+                }
         }
 
         private let winId: Int
@@ -108,5 +142,6 @@ extension Main {
         @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
         private let content: Content
         @Environment(\.openWindow) internal var openWindow
+        @Environment(\.undoManager) internal var windowUM: UndoManager?
     }
 }

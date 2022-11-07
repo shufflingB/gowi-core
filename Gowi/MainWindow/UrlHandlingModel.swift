@@ -31,7 +31,7 @@ extension Main { /// URL defs
         case itemId = "id"
         case filterId = "fid"
     }
-    
+
     static let UrlRoot: URL = {
         var components = URLComponents()
         components.scheme = AppDefs.URLScheme
@@ -60,6 +60,9 @@ extension Main { /// URL defs
             let query = [queryFilterSelected] + queryItems
 
             components.queryItems = query.count > 0 ? query : nil
+        case .newItem(sideBarFilterSelected: _):
+            // TODO: Add new item URL encoding
+            break
         }
 
         guard let url = components.url else {
@@ -70,7 +73,7 @@ extension Main { /// URL defs
     }
 
     static func urlDecode(_ url: URL) -> WindowGroupRoutingOpt? {
-        //log.debug("\(#function) -   url = \(url)")
+        // log.debug("\(#function) -   url = \(url)")
 
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             log.warning("Failed URL decode, unable to resolve into components")
@@ -106,12 +109,11 @@ extension Main { /// URL defs
         var sidebarSelected: SidebarFilterOpt = .all // Safe default
         var itemsSelected: Set<UUID> = [] // Safe default
 
-        
         queryItems.forEach { (qi: URLQueryItem) in
             switch qi.name {
             case UrlQuery.filterId.rawValue:
-                let qiVal:String? = qi.value
-                
+                let qiVal: String? = qi.value
+
                 switch qiVal {
                 case SidebarFilterOpt.done.rawValue:
                     sidebarSelected = .done
@@ -131,7 +133,7 @@ extension Main { /// URL defs
                 log.warning("URL decode; \(#function) received request to decode query unknown query itemt (\(qi.name))")
             }
         }
-        
+
         return WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sidebarSelected, contentItemIdsSelected: itemsSelected)
     }
 }

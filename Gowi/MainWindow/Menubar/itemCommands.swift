@@ -12,36 +12,29 @@ extension Menubar {
         return CommandMenu("Items") {
             Section {
                 Button("New Item") {
-                    withAnimation {
-                        guard let sideBarFilterSelected = sideBarFilterSelected,
-                              let contentItemIdsSelected = contentItemIdsSelected else {
-                            return
+                    if let sideBarFilterSelected = sideBarFilterSelected,
+                       let contentItemIdsSelected = contentItemIdsSelected {
+                        withAnimation {
+                            let route = Main.itemAddNew(
+                                appModel: appModel, windowUM: windowUM,
+                                tabSelected: sideBarFilterSelected.wrappedValue, parent: appModel.systemRootItem,
+                                list: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                            )
+
+                            sideBarFilterSelected.wrappedValue = route.tabSelected
+                            contentItemIdsSelected.wrappedValue = route.itemIdsSelected
                         }
-
-                        let route = Main.itemAddNew(
-                            appModel: appModel, windowUM: windowUM,
-                            tabSelected: sideBarFilterSelected.wrappedValue, parent: appModel.systemRootItem,
-                            list: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
-                        )
-
-                        sideBarFilterSelected.wrappedValue = route.tabSelected
-                        contentItemIdsSelected.wrappedValue = route.itemIdsSelected
+                    } else {
+                        let route = Main.WindowGroupRoutingOpt.newItem(sideBarFilterSelected: .waiting)
+                        openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
                     }
                 }
-                .disabled(sideBarFilterSelected == nil)
+//                .disabled(sideBarFilterSelected == nil)
                 .accessibilityIdentifier(AccessId.ItemsMenuNewItem.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsNew)
             }
 
             Section {
-                Button("Print URL to console") {
-                    guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
-
-                    _ = Main.urlEncode(.showItems(
-                        sideBarFilterSelected: sideBarFilterSelected.wrappedValue, contentItemIdsSelected: contentItemIdsSelected.wrappedValue)
-                    )
-                }
-
                 Button("Open in New Tab") {
                     guard let sideBarFilterSelected = sideBarFilterSelected, let contentItemIdsSelected = contentItemIdsSelected else { return }
                     Main.openNewTab(
