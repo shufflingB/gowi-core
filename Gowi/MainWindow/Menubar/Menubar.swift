@@ -21,7 +21,6 @@ struct Menubar: Commands {
 
     @FocusedValue(\.contentItems) var contentItems
     @FocusedValue(\.sideBarFilterSelected) var sideBarFilterSelected
-    @FocusedValue(\.showConfirmCancelLocalDialogue) var showConfirmCancelLocalDialogue
 
     var body: some Commands {
         fileCommands

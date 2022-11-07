@@ -23,8 +23,11 @@ extension Menubar {
                 .keyboardShortcut(KbShortcuts.fileSaveChanges)
 
                 Button("Revert Changes") {
+                    guard Main.modalUserConfirmsRevert() else {
+                        return
+                    }
                     withAnimation {
-                        showConfirmCancelLocalDialogue?.wrappedValue = true
+                        appModel.viewContext.rollback()
                     }
                 }
                 .disabled(appModel.hasUnPushedChanges == false)
@@ -34,3 +37,5 @@ extension Menubar {
         }
     }
 }
+
+

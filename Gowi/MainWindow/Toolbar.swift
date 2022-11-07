@@ -9,7 +9,6 @@ import SwiftUI
 
 extension Main {
     @ToolbarContentBuilder func toolbar() -> some CustomizableToolbarContent {
-
         ToolbarItem(id: "tbar.new") {
             Button(action: {
                 withAnimation {
@@ -45,11 +44,14 @@ extension Main {
             .help("Save changes")
         }
 
-
-
         ToolbarItem(id: "tbar.cancel") {
             Button(action: {
-                showConfirmCancelLocalDialogue = true
+                guard Self.modalUserConfirmsRevert() else {
+                    return
+                }
+                withAnimation {
+                    appModel.viewContext.rollback()
+                }
             }) {
                 Label("Cancel Changes", systemImage: appModel.hasUnPushedChanges ? "arrow.uturn.backward.square" : "arrow.uturn.backward.square")
                     .foregroundColor(appModel.hasUnPushedChanges ? Color.red : Color.gray)

@@ -25,6 +25,7 @@
 		FF4E111F29153183002BEC74 /* String+Pasteboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4E111E29153183002BEC74 /* String+Pasteboard.swift */; };
 		FF4E112529153D67002BEC74 /* OptionalDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4E112429153D66002BEC74 /* OptionalDatePickerView.swift */; };
 		FF4E1127291584BC002BEC74 /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4E1126291584BC002BEC74 /* Toolbar.swift */; };
+		FF7CA02029197AFF0018C958 /* ModalAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7CA01F29197AFF0018C958 /* ModalAlerts.swift */; };
 		FF80AF1E2912EBB700D1D910 /* AppDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF80AF1D2912EBB700D1D910 /* AppDefs.swift */; };
 		FF9F22BA28F5832C0046D72D /* ContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22B928F5832C0046D72D /* ContentModel.swift */; };
 		FF9F22BC28F583D30046D72D /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22BB28F583D30046D72D /* DetailModel.swift */; };
@@ -84,6 +85,7 @@
 		FF4E111E29153183002BEC74 /* String+Pasteboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Pasteboard.swift"; sourceTree = "<group>"; };
 		FF4E112429153D66002BEC74 /* OptionalDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalDatePickerView.swift; sourceTree = "<group>"; };
 		FF4E1126291584BC002BEC74 /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
+		FF7CA01F29197AFF0018C958 /* ModalAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAlerts.swift; sourceTree = "<group>"; };
 		FF80AF1D2912EBB700D1D910 /* AppDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefs.swift; sourceTree = "<group>"; };
 		FF86E89528F76E3F0098A335 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF9F22B928F5832C0046D72D /* ContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentModel.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				FF4E111A2914452A002BEC74 /* ItemView.swift */,
 				FF23068D28F7265700EE103B /* UrlHandlingModel.swift */,
 				FF4E112429153D66002BEC74 /* OptionalDatePickerView.swift */,
+				FF7CA01F29197AFF0018C958 /* ModalAlerts.swift */,
 			);
 			path = MainWindow;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				FFDE6CDD28EF109E009736E3 /* Menubar.swift in Sources */,
 				FF23068C28F6E6F700EE103B /* SidebarModel.swift in Sources */,
 				FF1A944A28EC927E008303B8 /* Item.swift in Sources */,
+				FF7CA02029197AFF0018C958 /* ModalAlerts.swift in Sources */,
 				FF9F22BC28F583D30046D72D /* DetailModel.swift in Sources */,
 				FFDE6CE528EF2708009736E3 /* FocusedValues.swift in Sources */,
 				FF9F22BA28F5832C0046D72D /* ContentModel.swift in Sources */,

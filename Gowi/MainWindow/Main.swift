@@ -46,14 +46,6 @@ struct Main: View {
             .toolbar(id: "mainWindowToolBar", content: toolbar)
             .navigationTitle(Text(navigationTitleBlurb))
             .navigationSubtitle(Text(navigationSubtitleBlurb))
-            .confirmationDialog(Text("Revert cancels all unsaved changes?") + Text("(is not undoable)"), isPresented: $showConfirmCancelLocalDialogue) {
-                Button("Revert", role: .destructive) {
-                    withAnimation {
-                        showConfirmCancelLocalDialogue = false
-                        appModel.viewContext.rollback()
-                    }
-                }
-            }
         }
 
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
@@ -61,7 +53,6 @@ struct Main: View {
         .focusedValue(\.contentItemIdsSelected, $contentItemIdsSelected)
         .focusedValue(\.contentItemsSelected, contentItemsSelected)
         .focusedValue(\.contentItems, contentItems)
-        .focusedValue(\.showConfirmCancelLocalDialogue, $showConfirmCancelLocalDialogue)
     }
 
     private var navigationTitleBlurb: String {
@@ -86,5 +77,4 @@ struct Main: View {
     private static var instantiationCount: Int = 0
     @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
     @State private var winId: Int
-    @State internal var showConfirmCancelLocalDialogue: Bool = false
 }
