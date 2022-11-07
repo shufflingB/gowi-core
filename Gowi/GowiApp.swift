@@ -17,7 +17,6 @@ struct GowiApp: App {
 
     @StateObject var appModel = AppModel.shared
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate: AppDelegate
-    @Environment(\.openWindow) var openWindow
 
     var body: some Scene {
         WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.WindowGroupRoutingOpt.self) { $route in
@@ -25,12 +24,12 @@ struct GowiApp: App {
             Main(with: appModel.systemRootItem, route: $route)
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)
-                .handlesExternalEvents(preferring: ["gowi://main/"], allowing: ["*"])
+                .handlesExternalEvents(preferring: [Main.UrlRoot.absoluteString], allowing: ["*"])
                 .onAppear {
                     appDelegate.appModel = appModel
                 }
         }
-        .handlesExternalEvents(matching: ["gowi://main/"])
+        .handlesExternalEvents(matching: [Main.UrlRoot.absoluteString])
         .commands {
             Menubar(appModel: appModel)
         }

@@ -31,6 +31,13 @@ extension Main { /// URL defs
         case itemId = "id"
         case filterId = "fid"
     }
+    
+    static let UrlRoot: URL = {
+        var components = URLComponents()
+        components.scheme = AppDefs.URLScheme
+        components.host = UrlHost.mainWindow.rawValue
+        return components.url!
+    }()
 
     static func urlEncode(_ routingOpts: WindowGroupRoutingOpt) -> URL? {
         var components = URLComponents()
