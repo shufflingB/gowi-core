@@ -59,12 +59,11 @@ extension Main { /// URL defs
             log.warning("Failed to construct openNewWindowURL")
             return nil
         }
-        log.debug("URL = \(url)")
         return url
     }
 
     static func urlDecode(_ url: URL) -> WindowGroupRoutingOpt? {
-        log.debug("\(#function) -  url = \(url)")
+        //log.debug("\(#function) -   url = \(url)")
 
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             log.warning("Failed URL decode, unable to resolve into components")

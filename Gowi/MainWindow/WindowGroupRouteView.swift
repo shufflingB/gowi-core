@@ -36,7 +36,7 @@ extension Main {
         func routeWindow(_ route: WindowGroupRoutingOpt) {
             switch route {
             case let .showItems(filterSelected, contentItemIdsSelected):
-                print("Is routing window = \(winId)")
+//                print("Is routing window = \(winId)")
                 sideBarFilterSelected = filterSelected
                 self.contentItemIdsSelected = contentItemIdsSelected
             }
@@ -46,7 +46,7 @@ extension Main {
             content
                 .onAppear {
                     if let route: WindowGroupRoutingOpt = windowGroupRoute {
-                        print("Route opened for \(winId)")
+//                        print("Route opened for \(winId)")
                         routeWindow(route)
                     }
                 }
@@ -55,7 +55,7 @@ extension Main {
                     if let route = windowGroupRoute {
                         switch route {
                         case let .showItems(filterSelected, _):
-                            print("Is UPDATING route for window = \(winId)   because of seletction")
+//                            print("Is UPDATING route for window = \(winId)   because of seletction")
                             $windowGroupRoute.wrappedValue = .showItems(sideBarFilterSelected: filterSelected,
                                                                         contentItemIdsSelected: newValue)
                         }
@@ -69,7 +69,7 @@ extension Main {
                     if let route = windowGroupRoute {
                         switch route {
                         case let .showItems(_, contentItemIdsSelected):
-                            print("Is UPDATING route for window = \(winId)  with  because of filter")
+//                            print("Is UPDATING route for window = \(winId)  with  because of filter")
                             $windowGroupRoute.wrappedValue = .showItems(sideBarFilterSelected: newValue,
                                                                         contentItemIdsSelected: contentItemIdsSelected)
                         }
@@ -84,14 +84,14 @@ extension Main {
                     print("onOpenURL handling \(url) for windowId = \(winId)")
                     if let decodedWinGrpRoute = Main.urlDecode(url) {
                         if windowGroupRoute != nil { // => User has made +ve routing choices that should not be overriden
-                            print("Using openWindow to indirect route")
+//                            print("Using openWindow to indirect route")
 
                             DispatchQueue.main.async { // <- Without this it will not make the new window the keyWindow, i.e. raise it
                                 openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: decodedWinGrpRoute)
                             }
 
                         } else {
-                            print("Routing directly")
+//                            print("Routing directly")
                             routeWindow(decodedWinGrpRoute)
                             windowGroupRoute = decodedWinGrpRoute
                         }
