@@ -11,11 +11,6 @@ import SwiftUI
 struct Main: View {
     @EnvironmentObject internal var appModel: AppModel
 
-    enum WindowGroupRoutingOpt: Hashable, Codable {
-        case showItems(sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
-        case newItem(sideBarFilterSelected: SidebarFilterOpt)
-    }
-
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
         _itemsAllFromFetchRequest = FetchRequest<Item>(
             sortDescriptors: [],
@@ -34,19 +29,21 @@ struct Main: View {
             contentItemIdsSelected: $contentItemIdsSelected,
             route: $windowGroupRoute
         ) {
-            NavigationSplitView(
-                columnVisibility: $sideBarListIsVisible,
-                sidebar: {
-                    SidebarView(stateView: self)
-                }, content: {
-                    ContentView(stateView: self)
-                }, detail: {
-                    DetailView(stateView: self)
-                }
-            )
-            .toolbar(id: "mainWindowToolBar", content: toolbar)
-            .navigationTitle(Text(navigationTitleBlurb))
-            .navigationSubtitle(Text(navigationSubtitleBlurb))
+            WindowGroupUndoView {
+                NavigationSplitView(
+                    columnVisibility: $sideBarListIsVisible,
+                    sidebar: {
+                        SidebarView(stateView: self)
+                    }, content: {
+                        ContentView(stateView: self)
+                    }, detail: {
+                        DetailView(stateView: self)
+                    }
+                )
+                .toolbar(id: "mainWindowToolBar", content: toolbar)
+                .navigationTitle(Text(navigationTitleBlurb))
+                .navigationSubtitle(Text(navigationSubtitleBlurb))
+            }
         }
 
         .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())

@@ -13,11 +13,14 @@ struct ItemView: View {
     let stateView: Main
     @ObservedObject var item: Item
 
+    @Environment(\.undoManager) private var windowUM: UndoManager?
+
     var body: some View {
         Layout(item: item, urlForItem: itemURL, itemSetCompletionDate: { nv in
             withAnimation {
-                item.completed = nv
-                stateView.appModel.objectWillChange.send()
+                stateView.appModel.itemsSetCompletionDate(externalUM: windowUM, items: [item], date: nv)
+//                item.completed = nv
+//                stateView.appModel.objectWillChange.send()
             }
 
         })
@@ -32,6 +35,7 @@ struct ItemView: View {
         @ObservedObject var item: Item
         let urlForItem: URL
         let itemSetCompletionDate: (Date?) -> Void
+        @FocusedValue(\.undoWfa) var wfa: Main.UndoWorkFocusArea?
 
         var body: some View {
             VStack {
@@ -42,6 +46,7 @@ struct ItemView: View {
                     )
                 }
                 .accessibilityIdentifier(AccessId.MainWindowDetailTitleField.rawValue)
+                .focusedValue(\.undoWfa, .detailTitle)
                 .cornerRadius(8)
                 .font(.title)
                 .padding()
@@ -50,10 +55,12 @@ struct ItemView: View {
                     .padding(.horizontal)
 
                 dateRow()
+                    .focusedValue(\.undoWfa, .detailCompletedDate)
                     .padding(.horizontal)
 
                 TextEditor(text: $item.notesS)
                     .accessibilityIdentifier(AccessId.MainWindowDetailTextEditor.rawValue)
+                    .focusedValue(\.undoWfa, .detailNotes)
                     .cornerRadius(4)
                     .font(.title3)
                     .padding()

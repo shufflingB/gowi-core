@@ -11,6 +11,11 @@ import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
 extension Main {
+    enum WindowGroupRoutingOpt: Hashable, Codable {
+        case showItems(sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
+        case newItem(sideBarFilterSelected: SidebarFilterOpt)
+    }
+    
     struct WindowGroupRouteView<Content: View>: View {
         @EnvironmentObject var appModel: AppModel
         init(

@@ -27,6 +27,10 @@ struct ContentItems: FocusedValueKey {
     typealias Value = Array<Item>
 }
 
+struct UndoWorkFocusAreaKey: FocusedValueKey {
+    typealias Value = Main.UndoWorkFocusArea
+}
+
 extension FocusedValues {
     var contentItemIdsSelected: ContentItemIdsSelected.Value? {
         get { self[ContentItemIdsSelected.self] }
@@ -60,6 +64,13 @@ extension FocusedValues {
         get { self[WindowUndoManager.self] }
         set {
             self[WindowUndoManager.self] = newValue
+        }
+    }
+
+    var undoWfa: UndoWorkFocusAreaKey.Value? {
+        get { self[UndoWorkFocusAreaKey.self] }
+        set {
+            self[UndoWorkFocusAreaKey.self] = newValue
         }
     }
 }

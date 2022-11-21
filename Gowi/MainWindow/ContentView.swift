@@ -10,9 +10,12 @@ import SwiftUI
 extension Main {
     struct ContentView: View {
         let stateView: Main
+        
+        @FocusedValue(\.undoWfa) var wfa: UndoWorkFocusArea?
 
         var body: some View {
             Layout(selections: stateView.$contentItemIdsSelected, items: stateView.contentItems, onMovePerform: stateView.contentOnMovePerform, contextMenu: contextMenu)
+                .focusedValue(\.undoWfa, .content)
         }
 
         func contextMenu(_ rhClickItem: Item) -> some View {

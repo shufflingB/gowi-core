@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailView: View {
     let stateView: Main
+    
 
     var body: some View {
         Layout(stateView: stateView, items: stateView.detailItems)

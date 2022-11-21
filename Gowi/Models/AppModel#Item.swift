@@ -107,6 +107,26 @@ extension AppModel {
         }
     }
 
+    func itemsSetCompletionDate(
+        externalUM: UndoManager?,
+        items: Array<Item>,
+        date: Date?
+    ) {
+        print("Setting new completion date \(String(describing: date))")
+        let actionName = date == nil ? "Marking Incomplete" : "Setting Complete Date"
+        Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: actionName) {
+            Self.itemsSetCompletionDate(self.viewContext, items: items, date: date)
+        }
+        objectWillChange.send()
+    }
+
+    static func itemsSetCompletionDate(_ moc: NSManagedObjectContext, items: Array<Item>, date: Date?) {
+        items.forEach { item in
+            item.completed = date
+            item.objectWillChange.send()
+        }
+    }
+
     static func itemPriorityPair(forEdgeIdx tgtIdxsEdge: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
         guard items.count > 0 else {
             return (aboveEdge: SideBarDefaultOffset, belowEdge: -SideBarDefaultOffset)

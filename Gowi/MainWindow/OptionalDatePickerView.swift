@@ -106,6 +106,7 @@ extension OptionalDatePickerView {
                 DatePicker("", selection: $date)
                     .opacity(isDone ? 1 : 0.5001)
                     .help("Adjust the Item's completion date")
+                
                 /// 1) opacity cannot be set less than 5 otherwise the controls cease to function.
                 /// 2) The text colour for the DatePicker cannot be changed via the foreground modifier without all sorts of comedy
                 /// work-arounds ...
