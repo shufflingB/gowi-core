@@ -33,9 +33,14 @@ struct ItemView: View {
 
     struct Layout: View {
         @ObservedObject var item: Item
+        @FocusState var focus: FocusField?
         let urlForItem: URL
         let itemSetCompletionDate: (Date?) -> Void
         @FocusedValue(\.undoWfa) var wfa: Main.UndoWorkFocusArea?
+        
+        enum FocusField {
+            case title
+        }
 
         var body: some View {
             VStack {
@@ -44,6 +49,7 @@ struct ItemView: View {
                         "Title",
                         text: $item.titleS
                     )
+                    .focused($focus, equals: .title)
                 }
                 .accessibilityIdentifier(AccessId.MainWindowDetailTitleField.rawValue)
                 .focusedValue(\.undoWfa, .detailTitle)
@@ -64,6 +70,10 @@ struct ItemView: View {
                     .cornerRadius(4)
                     .font(.title3)
                     .padding()
+                    .onExitCommand {
+                        focus = .title
+                    }
+                    
             }
             .shadow(radius: 2)
             .frame(alignment: .leading)

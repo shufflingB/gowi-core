@@ -16,11 +16,8 @@ import SwiftUI
  - Things
  */
 
-
-
-struct KbShortcuts{
+struct KbShortcuts {
     static let fileSaveChanges = KeyboardShortcut("s", modifiers: .command)
-//    static let fileAbandonChanges = KeyboardShortcut("s", modifiers: [])
 
     static let itemsNew = KeyboardShortcut("n", modifiers: .command) /// As A's in Reminders
     static let itemsDuplicate = KeyboardShortcut("d", modifiers: .command) /// As in Finder and other's Duplicate binding
@@ -47,6 +44,7 @@ extension KbShortcuts { // Apple default defined shortcuts - only used in the UI
      */
 
     static let appQuit = KeyboardShortcut("q", modifiers: [.command])
+    static let onExit = KeyboardShortcut(.escape)
     static let windowClose = KeyboardShortcut("w", modifiers: [.command])
     static let windowsCloseAll = KeyboardShortcut("w", modifiers: [.command, .option])
     static let windowsMoveFocusToNext = KeyboardShortcut("`", modifiers: [.command])
