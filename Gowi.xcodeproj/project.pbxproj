@@ -37,6 +37,8 @@
 		FFA62BA428EC7B8300868F77 /* GowiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62BA328EC7B8300868F77 /* GowiUITests.swift */; };
 		FFA62BA628EC7B8300868F77 /* GowiUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62BA528EC7B8300868F77 /* GowiUITestsLaunchTests.swift */; };
 		FFB015E0292BC4470064289A /* WindowGroupUndoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB015DF292BC4470064289A /* WindowGroupUndoView.swift */; };
+		FFB015E1292D0E2C0064289A /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
+		FFB015E2292D0E2D0064289A /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
 		FFDE6CDD28EF109E009736E3 /* Menubar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDC28EF109E009736E3 /* Menubar.swift */; };
 		FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
 		FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */; };
@@ -446,6 +448,7 @@
 				FF1A944C28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift in Sources */,
 				FF1A947328EDA3A2008303B8 /* Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift in Sources */,
 				FFDE6CE928F04447009736E3 /* Test500_Main_Intents.swift in Sources */,
+				FFB015E1292D0E2C0064289A /* KbShortcuts.swift in Sources */,
 				FFDE6CE728F02945009736E3 /* Test000_System_Init.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,6 +458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFA62BA628EC7B8300868F77 /* GowiUITestsLaunchTests.swift in Sources */,
+				FFB015E2292D0E2D0064289A /* KbShortcuts.swift in Sources */,
 				FFA62BA428EC7B8300868F77 /* GowiUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

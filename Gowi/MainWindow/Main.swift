@@ -45,12 +45,7 @@ struct Main: View {
                 .navigationSubtitle(Text(navigationSubtitleBlurb))
             }
         }
-
-        .focusedValue(\.windowUndoManager, windowUM ?? UndoManager())
-        .focusedValue(\.sideBarFilterSelected, $sideBarFilterSelected)
-        .focusedValue(\.contentItemIdsSelected, $contentItemIdsSelected)
-        .focusedValue(\.contentItemsSelected, contentItemsSelected)
-        .focusedValue(\.contentItems, contentItems)
+        .focusedValue(\.mainStateView, self)
     }
 
     private var navigationTitleBlurb: String {

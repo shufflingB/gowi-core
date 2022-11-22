@@ -14,19 +14,11 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 struct Menubar: Commands {
     @ObservedObject var appModel: AppModel
     @Environment(\.openWindow) internal var openWindow
-
-    @FocusedValue(\.windowUndoManager) var windowUM
-    @FocusedValue(\.contentItemIdsSelected) var contentItemIdsSelected
-    @FocusedValue(\.contentItemsSelected) var contentItemsSelected
-
-    @FocusedValue(\.contentItems) var contentItems
-    @FocusedValue(\.sideBarFilterSelected) var sideBarFilterSelected
+    @FocusedValue(\.mainStateView) var mainStateView: Main?
 
     var body: some Commands {
         fileCommands
         itemCommands
         windowCommands
     }
-    
 }
-
