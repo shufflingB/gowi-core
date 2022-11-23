@@ -18,6 +18,8 @@ enum AccessId: String {
     case ItemsMenuDeleteItems
     case ItemsMenuOpenItemInNewTab
     case ItemsMenuOpenItemInNewWindow
+    case ItemsMenuNudgePriorityUp
+    case ItemsMenuNudgePriorityDown
     
     // MARK: Main AppMenu Window
     case WindowMenuNewMain

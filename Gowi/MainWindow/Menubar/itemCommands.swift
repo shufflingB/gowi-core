@@ -58,36 +58,101 @@ extension Menubar {
                 .accessibilityIdentifier(AccessId.ItemsMenuOpenItemInNewWindow.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsOpenInNewWindow)
             }
+            
+            // MARK: Nudge Item priority Up & Down in Wait list Buttons
+            do {
+                /// --------------- tgtIdxEdge = 0
+                /// sourceItem  0
+                /// --------------- tgtIdxEdge = 1
+                /// source Idx = 1
+                /// -------------- tgtIdxEdge = 2
+                /// source Idx =2
+                /// -------------- tgtIdxEdge = 3
+                
+                let contentWaitingItems = mainStateView?.contentItemsListWaiting ?? []
 
-            Section {
-//                Button("Nudge Waiting Priority Up") {
-//                    withAnimation {
-//                        guard let contentItemsSelected = contentItemsSelected,
-//                              let contentItems = contentItems else {
-//                            return
-//                        }
-//
-//                    }
-//                }
-                Button("Delete") {
-                    withAnimation {
-                        guard let contentItemsSelected = mainStateView?.contentItemsSelected,
-                              let contentItems = mainStateView?.contentItems else {
-                            return
+                let sourceIndices: IndexSet = IndexSet(
+                    mainStateView?.contentItemsSelected.compactMap { itemInSelection in
+                        contentWaitingItems.firstIndex(where: { $0.ourId == itemInSelection.ourId })
+                    } ?? [])
+
+                let isDisabledBtnBase: Bool = mainStateView?.sideBarFilterSelected != .waiting || sourceIndices.count < 1
+                let isDisabledUpButton: Bool = isDisabledBtnBase || sourceIndices.first ?? 0 <= 0
+                let isDisabledDownButton: Bool = isDisabledBtnBase || sourceIndices.last ?? 0 >= contentWaitingItems.count - 1
+
+                Section {
+                    Button("Nudge Waiting Item Priority Up") {
+                        withAnimation {
+                            guard
+                                let idxInSelectionWithHighestPriority: Int = sourceIndices.first,
+                                let idxInWaitingListNudgeAbove =
+                                idxInSelectionWithHighestPriority - 1 >= 0
+                                    ? idxInSelectionWithHighestPriority - 1
+                                    : nil
+                            else {
+                                return
+                            }
+                            var tgtIdxsEdge: Int { idxInWaitingListNudgeAbove }
+
+                            print("Nudge up Idxs = \(Array(sourceIndices)), to tgtIdxsEdge. \(tgtIdxsEdge). Total items = \(contentWaitingItems.count)")
+                            withAnimation {
+                                appModel.reOrderUsingPriority(
+                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+                            }
                         }
-
-                        
-                        mainStateView?.contentItemIdsSelected = Main.itemsDelete(
-                            appModel: appModel, windoUM: mainStateView?.windowUM,
-                            currentlyShowing: contentItems,
-                            previousListSelectionsGoingDown: true,
-                            deleteItems: contentItemsSelected
-                        )
                     }
+                    .accessibilityIdentifier(AccessId.ItemsMenuNudgePriorityUp.rawValue)
+                    .disabled(isDisabledUpButton)
+                    .keyboardShortcut(KbShortcuts.itemsSelectedNudgePriorityUp)
+                    
+                    Button("Nudge Waiting Item Priority Down") {
+                        withAnimation {
+                            guard
+                                let idxInSelectionWithLowestPriority: Int = sourceIndices.last,
+                                let idxInWaitingListNudgeBelow =
+                                    idxInSelectionWithLowestPriority + 1 <= contentWaitingItems.count - 1
+                                    ? idxInSelectionWithLowestPriority + 1
+                                    : nil
+                            else {
+                                return
+                            }
+                            var tgtIdxsEdge: Int { idxInWaitingListNudgeBelow + 1 }
+
+                            print("Nudge down Idxs = \(Array(sourceIndices)), to tgtIdxsEdge. \(tgtIdxsEdge). Total items = \(contentWaitingItems.count)")
+                            withAnimation {
+                                appModel.reOrderUsingPriority(
+                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+                            }
+                        }
+                    }
+                    .accessibilityIdentifier(AccessId.ItemsMenuNudgePriorityUp.rawValue)
+                    .disabled(isDisabledDownButton)
+                    .keyboardShortcut(KbShortcuts.itemsSelectedNudgePriorityDown)
                 }
-                .disabled(mainStateView?.contentItemsSelected == nil || mainStateView?.contentItemsSelected.count ?? 0 < 1)
-                .accessibilityIdentifier(AccessId.ItemsMenuDeleteItems.rawValue)
-                .keyboardShortcut(KbShortcuts.itemsDelete)
+
+                // MARK: Delete Items button
+                do {
+                    let isDisabledBtn: Bool = mainStateView?.contentItemsSelected == nil || mainStateView?.contentItemsSelected.count ?? 0 < 1
+
+                    Button("Delete") {
+                        withAnimation {
+                            guard let contentItemsSelected = mainStateView?.contentItemsSelected,
+                                  let contentItems = mainStateView?.contentItems else {
+                                return
+                            }
+
+                            mainStateView?.contentItemIdsSelected = Main.itemsDelete(
+                                appModel: appModel, windoUM: mainStateView?.windowUM,
+                                currentlyShowing: contentItems,
+                                previousListSelectionsGoingDown: true,
+                                deleteItems: contentItemsSelected
+                            )
+                        }
+                    }
+                    .disabled(isDisabledBtn)
+                    .accessibilityIdentifier(AccessId.ItemsMenuDeleteItems.rawValue)
+                    .keyboardShortcut(KbShortcuts.itemsDelete)
+                }
             }
         }
     }
