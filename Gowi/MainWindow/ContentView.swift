@@ -10,7 +10,7 @@ import SwiftUI
 extension Main {
     struct ContentView: View {
         let stateView: Main
-        
+
         @FocusedValue(\.undoWfa) var wfa: UndoWorkFocusArea?
 
         var body: some View {
@@ -23,9 +23,8 @@ extension Main {
                 ? stateView.contentItemsSelected
                 : [rhClickItem]
             }
-
-            var isRhItemInSelection: Bool {
-                stateView.contentItemsSelected.contains(rhClickItem)
+            var itemIdsToActOn: Set<UUID> {
+                Set(itemsToActOn.map({ $0.ourIdS }))
             }
 
             return Group {
@@ -43,23 +42,22 @@ extension Main {
                         }
                     }
                 )
-                if isRhItemInSelection == false {
-                    Button("Open in New Tab") {
-                        Main.openNewTab(
-                            openWindow: stateView.openWindow,
-                            sideBarFilterSelected: stateView.sideBarFilterSelected,
-                            contentItemIdsSelected: [rhClickItem.ourIdS]
-                        )
-                    }
 
-                    Button("Open in New Window") {
-                        let route = Main.WindowGroupRoutingOpt.showItems(
-                            openNewWindow: true,
-                            sideBarFilterSelected: stateView.sideBarFilterSelected,
-                            contentItemIdsSelected: [rhClickItem.ourIdS]
-                        )
-                        stateView.openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
-                    }
+                Button("Open in New Tab") {
+                    Main.openNewTab(
+                        openWindow: stateView.openWindow,
+                        sideBarFilterSelected: stateView.sideBarFilterSelected,
+                        contentItemIdsSelected: itemIdsToActOn
+                    )
+                }
+
+                Button("Open in New Window") {
+                    let route = Main.WindowGroupRoutingOpt.showItems(
+                        openNewWindow: true,
+                        sideBarFilterSelected: stateView.sideBarFilterSelected,
+                        contentItemIdsSelected: itemIdsToActOn
+                    )
+                    stateView.openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
                 }
             }
         }
