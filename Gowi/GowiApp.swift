@@ -21,6 +21,7 @@ struct GowiApp: App {
     var body: some Scene {
         WindowGroup(id: WindowGroupId.Main.rawValue, for: Main.WindowGroupRoutingOpt.self) { $route in
 
+            // See comments about how routing is handled in WindowGroupRouteView
             Main(with: appModel.systemRootItem, route: $route)
                 .environmentObject(appModel)
                 .environment(\.managedObjectContext, appModel.container.viewContext)

@@ -54,7 +54,7 @@ extension Main {
                     hackedWFA = newWFA
                 }
                 .onChange(of: hackedWFA, perform: { _ in
-                    print("Got new hackedWFA, clearing window undo stack")
+//                    log.debug("Got new hackedWFA, clearing window undo stack")
                     windowUM?.removeAllActions()
                 })
                 .onReceive(NSApplication.shared.publisher(for: \.keyWindow)) { _ in
