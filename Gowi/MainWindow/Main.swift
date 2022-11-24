@@ -23,10 +23,16 @@ struct Main: View {
     }
 
     var body: some View {
+        let visibleContentItemIdsSelected: Binding<Set<UUID>> = Binding {
+            Set(detailItems.map({ $0.ourIdS }))
+        } set: { nv in
+            contentItemIdsSelected = nv
+        }
+
         return WindowGroupRouteView(
             winId: winId,
             sideBarFilterSelected: $sideBarFilterSelected,
-            contentItemIdsSelected: $contentItemIdsSelected,
+            visibleItemIdsSelected: visibleContentItemIdsSelected,
             route: $windowGroupRoute
         ) {
             WindowGroupUndoView {

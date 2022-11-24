@@ -25,10 +25,6 @@ extension Main { // Content specific Intents
         contentItems.filter({ contentItemIdsSelected.contains($0.ourIdS) })
     }
 
-//    internal var contentItemsSelected: Array<UUID> {
-//        contentItems.filter({contentItemIdsSelected.contains($0.ourIdS)})
-//    }
-
     internal var contentOnMovePerform: (IndexSet, Int) -> Void {
         switch sideBarFilterSelected {
         case .waiting:

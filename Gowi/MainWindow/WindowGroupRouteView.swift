@@ -85,14 +85,14 @@ extension Main {
         init(
             winId: Int,
             sideBarFilterSelected: Binding<SidebarFilterOpt>,
-            contentItemIdsSelected: Binding<Set<UUID>>,
+            visibleItemIdsSelected: Binding<Set<UUID>>,
             route: Binding<WindowGroupRoutingOpt?>,
             @ViewBuilder content: () -> Content
         ) {
             self.winId = winId
             _windowGroupRoute = route
             _sideBarFilterSelected = sideBarFilterSelected
-            _contentItemIdsSelected = contentItemIdsSelected
+            _visibleItemIdsSelected = visibleItemIdsSelected
             self.content = content()
         }
 
@@ -100,7 +100,7 @@ extension Main {
             switch route {
             case let .showItems(openNewWindow: _, sideBarFilterSelected: filter, contentItemIdsSelected: items):
                 sideBarFilterSelected = filter
-                contentItemIdsSelected = items
+                visibleItemIdsSelected = items
 
             case .newItem(sideBarFilterSelected: _):
                 // This gets handled when we have a window undo mananager, as want to make it undoable, and when
@@ -138,15 +138,15 @@ extension Main {
                                 tabSelected: filter, parent: appModel.systemRootItem,
                                 list: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
                             )
-                            contentItemIdsSelected = route.itemIdsSelected
+                            visibleItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter
                             // Update the route so that the newItem route can be triggered again if required.
-                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
                         }
 
                     default:
                         log.debug("onChange(of: windowUM): Creating a default route")
-                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
                         return
                     }
                 }
@@ -171,7 +171,7 @@ extension Main {
                         windowGroupRoute = decodedWinGrpRoute
 
                     } else {
-                        log.debug("onOpenURL: Existing route defined for winId \(winId), using indirect routing to see if anything else can handle or if app needs to open new window")
+                        log.debug("onOpenURL: Existing route defined for winId \(winId), using indirect routing to see if this window or any othercan handle or if app needs to open new window")
 
                         // NB: Have to use dispatch, bc without SwiftUI will not make the window it finds or creates the keyWindow, i.e.
                         // raise it above the others and make it prominent to the user.
@@ -180,7 +180,7 @@ extension Main {
                         }
                     }
                 })
-                .onChange(of: contentItemIdsSelected, perform: { newValue in
+                .onChange(of: visibleItemIdsSelected, perform: { newValue in
                     if let route = windowGroupRoute {
                         switch route {
                         case let .showItems(_, filterSelected, _):
@@ -194,7 +194,7 @@ extension Main {
 
                     } else {
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
-                                                      contentItemIdsSelected: contentItemIdsSelected)
+                                                      contentItemIdsSelected: visibleItemIdsSelected)
                     }
                 })
                 .onChange(of: sideBarFilterSelected, perform: { newValue in
@@ -211,14 +211,14 @@ extension Main {
 
                     } else {
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
-                                                      contentItemIdsSelected: contentItemIdsSelected)
+                                                      contentItemIdsSelected: visibleItemIdsSelected)
                     }
                 })
         }
 
         private let winId: Int
         @Binding private var sideBarFilterSelected: SidebarFilterOpt
-        @Binding private var contentItemIdsSelected: Set<UUID>
+        @Binding private var visibleItemIdsSelected: Set<UUID>
         @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
         private let content: Content
         @Environment(\.openWindow) private var openWindow
