@@ -12,10 +12,10 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 
 extension Main {
     enum WindowGroupRoutingOpt: Hashable, Codable {
-        case showItems(sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
+        case showItems(openNewWindow: Bool, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
         case newItem(sideBarFilterSelected: SidebarFilterOpt)
     }
-    
+
     struct WindowGroupRouteView<Content: View>: View {
         @EnvironmentObject var appModel: AppModel
         init(
@@ -41,7 +41,7 @@ extension Main {
 
         func routeWindow(_ route: WindowGroupRoutingOpt) {
             switch route {
-            case let .showItems(sideBarFilterSelected: filter, contentItemIdsSelected: items):
+            case let .showItems(openNewWindow: newWin, sideBarFilterSelected: filter, contentItemIdsSelected: items):
                 sideBarFilterSelected = filter
                 contentItemIdsSelected = items
 
@@ -56,7 +56,6 @@ extension Main {
             content
                 .onAppear {
                     if let route: WindowGroupRoutingOpt = windowGroupRoute {
-//                        print("Route opened for \(winId)")
                         routeWindow(route)
                     }
                 }
@@ -64,9 +63,9 @@ extension Main {
                 .onChange(of: contentItemIdsSelected, perform: { newValue in
                     if let route = windowGroupRoute {
                         switch route {
-                        case let .showItems(filterSelected, _):
-//                            print("Is UPDATING route for window = \(winId)   because of seletction")
-                            $windowGroupRoute.wrappedValue = .showItems(sideBarFilterSelected: filterSelected,
+                        case let .showItems(_, filterSelected, _):
+//                            print("Is UPDATING route for window = \(winId)   because of selection")
+                            $windowGroupRoute.wrappedValue = .showItems(openNewWindow: false, sideBarFilterSelected: filterSelected,
                                                                         contentItemIdsSelected: newValue)
                         case .newItem(sideBarFilterSelected: _):
                             // Don't care because on arrival will create new and change route type
@@ -74,16 +73,16 @@ extension Main {
                         }
 
                     } else {
-                        windowGroupRoute = .showItems(sideBarFilterSelected: sideBarFilterSelected,
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
                                                       contentItemIdsSelected: contentItemIdsSelected)
                     }
                 })
                 .onChange(of: sideBarFilterSelected, perform: { newValue in
                     if let route = windowGroupRoute {
                         switch route {
-                        case let .showItems(_, contentItemIdsSelected):
+                        case let .showItems(_, _, contentItemIdsSelected):
 //                            print("Is UPDATING route for window = \(winId)  with  because of filter")
-                            $windowGroupRoute.wrappedValue = .showItems(sideBarFilterSelected: newValue,
+                            $windowGroupRoute.wrappedValue = .showItems(openNewWindow: false, sideBarFilterSelected: newValue,
                                                                         contentItemIdsSelected: contentItemIdsSelected)
                         case .newItem(sideBarFilterSelected: _):
                             // Don't care because on arrival will create new and change route type
@@ -91,38 +90,50 @@ extension Main {
                         }
 
                     } else {
-                        windowGroupRoute = .showItems(sideBarFilterSelected: sideBarFilterSelected,
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
                                                       contentItemIdsSelected: contentItemIdsSelected)
                     }
                 })
                 .onOpenURL(perform: { url in
                     // Decode the URL into a RoutingOpt (only runs on the keyWindow)
                     print("onOpenURL handling \(url) for windowId = \(winId)")
-                    if let decodedWinGrpRoute = Main.urlDecode(url) {
-                        if windowGroupRoute != nil { // => User has made +ve routing choices that should not be overriden
-//                            print("Using openWindow to indirect route")
 
-                            DispatchQueue.main.async { // <- Without this it will not make the new window the keyWindow, i.e. raise it
-                                openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: decodedWinGrpRoute)
-                            }
+                    let defaultWinGrpRoute: WindowGroupRoutingOpt = .showItems(
+                        openNewWindow: false,
+                        sideBarFilterSelected: .waiting, contentItemIdsSelected: []
+                    )
 
-                        } else {
-//                            print("Routing directly")
-                            routeWindow(decodedWinGrpRoute)
-                            windowGroupRoute = decodedWinGrpRoute
+                    let decodedWinGrpRoute: WindowGroupRoutingOpt = Main.urlDecode(url)
+                        ?? {
+                            log.warning("Unable to fully decode URL, using default window route")
+                            return defaultWinGrpRoute
+                        }()
+
+                    if windowGroupRoute != nil {
+                        print("Using openWindow to indirect route")
+
+                        DispatchQueue.main.async { // <- Without this it will not make the new window the keyWindow, i.e. raise it
+                            openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: decodedWinGrpRoute)
                         }
 
                     } else {
-                        print("TODO: Handle the default case")
+                        print("Routing directly")
+                        routeWindow(decodedWinGrpRoute)
+                        windowGroupRoute = decodedWinGrpRoute
                     }
                 })
                 .onChange(of: windowUM) { newValue in
+                    // Has nothing really to do with windowUM, but detecting when SWiftUI defines it is a convenient place
+                    // to detect when both the View has appeared AND the @SwiftUI state has been injected and is ready
+                    // for processings.
+
                     guard let windowUM = newValue else {
                         return
                     }
 
                     switch windowGroupRoute {
                     case let .newItem(sideBarFilterSelected: filter):
+                        log.debug("Creating a new Item and a route to it")
                         withAnimation {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: windowUM,
@@ -131,11 +142,13 @@ extension Main {
                             )
                             contentItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter
-                            // Twiddle the route so that the old one is avaiable again
-                            windowGroupRoute = .showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+                            // Update the route so that the newItem route can be triggered again if required.
+                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
                         }
 
                     default:
+                        log.debug("Creating a default route")
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
                         return
                     }
                 }

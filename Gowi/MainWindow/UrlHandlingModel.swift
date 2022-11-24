@@ -10,7 +10,8 @@ import os
 
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
-extension Main { /// URL defs
+// URL defs
+extension Main {
     ///
     ///
 
@@ -21,10 +22,7 @@ extension Main { /// URL defs
 
     enum UrlPath: String {
         case showItems = "/v1/showitems"
-//        case all = "/v1/all"
-//        case waiting = "/v1/waiting"
-//        case done = "/v1/done"
-//        case getEmpty = "/v1/getnew"
+        case newItem = "/v1/newItem"
     }
 
     enum UrlQuery: String {
@@ -45,7 +43,7 @@ extension Main { /// URL defs
         components.host = UrlHost.mainWindow.rawValue
 
         switch routingOpts {
-        case let .showItems(sideBarFilterSelected, contentItemIdsSelected):
+        case let .showItems(_, sideBarFilterSelected, contentItemIdsSelected):
 
             components.path = UrlPath.showItems.rawValue
 
@@ -93,6 +91,8 @@ extension Main { /// URL defs
             switch components.path {
             case UrlPath.showItems.rawValue:
                 return decodeShowItems(queryItems: components.queryItems)
+            case UrlPath.newItem.rawValue:
+                return .newItem(sideBarFilterSelected: .waiting)
             default:
                 log.warning("Failed URL decode; received request for unknown route path (\(components.path))")
                 return nil
@@ -134,6 +134,6 @@ extension Main { /// URL defs
             }
         }
 
-        return WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sidebarSelected, contentItemIdsSelected: itemsSelected)
+        return .showItems(openNewWindow: false, sideBarFilterSelected: sidebarSelected, contentItemIdsSelected: itemsSelected)
     }
 }

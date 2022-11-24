@@ -54,6 +54,7 @@ extension Main {
 
                     Button("Open in New Window") {
                         let route = Main.WindowGroupRoutingOpt.showItems(
+                            openNewWindow: true,
                             sideBarFilterSelected: stateView.sideBarFilterSelected,
                             contentItemIdsSelected: [rhClickItem.ourIdS]
                         )

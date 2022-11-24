@@ -27,7 +27,7 @@ struct ItemView: View {
     }
 
     private var itemURL: URL {
-        let routingOpts: Main.WindowGroupRoutingOpt = .showItems(sideBarFilterSelected: stateView.sideBarFilterSelected, contentItemIdsSelected: [item.ourIdS])
+        let routingOpts: Main.WindowGroupRoutingOpt = .showItems(openNewWindow: false, sideBarFilterSelected: stateView.sideBarFilterSelected, contentItemIdsSelected: [item.ourIdS])
         return Main.urlEncode(routingOpts)!
     }
 

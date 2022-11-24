@@ -36,7 +36,7 @@ extension Main { // Window level intents
 
     static func itemsDelete(
         appModel: AppModel, windoUM: UndoManager?,
-        currentlyShowing: Array<Item>,  //<- Use this to determine where to shift the List highlighted selection to after deletion
+        currentlyShowing: Array<Item>, // <- Use this to determine where to shift the List highlighted selection to after deletion
         previousListSelectionsGoingDown: Bool,
         deleteItems: Array<Item>
     ) -> Set<UUID> {
@@ -87,7 +87,7 @@ extension Main { // Window level intents
     // MARK: Window control
 
     static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>) {
-        let route = WindowGroupRoutingOpt.showItems(sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+        let route = WindowGroupRoutingOpt.showItems(openNewWindow: true, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
 
         if let intialWindow = NSApplication.shared.keyWindow {
             withAnimation {

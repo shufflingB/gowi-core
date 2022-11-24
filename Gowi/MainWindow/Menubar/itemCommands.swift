@@ -50,6 +50,7 @@ extension Menubar {
                         return
                     }
                     let route = Main.WindowGroupRoutingOpt.showItems(
+                        openNewWindow: true,
                         sideBarFilterSelected: sideBarFilterSelected,
                         contentItemIdsSelected: contentItemIdsSelected
                     )
