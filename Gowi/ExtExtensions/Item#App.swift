@@ -117,7 +117,7 @@ extension Item {
         get { notes ?? "" }
 
         set(nv) {
-            if nv != title {
+            if nv != notes {
 //            print("Notes being set")
                 notes = nv
             }

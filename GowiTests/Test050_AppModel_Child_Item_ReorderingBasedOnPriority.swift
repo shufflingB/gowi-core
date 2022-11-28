@@ -32,7 +32,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([1])
         let tgtIdx = 0
 
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -56,7 +56,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         let srcIndices = IndexSet([0])
         let tgtIdx = 2 // <- When dragging down, Apple expects to add +1 to expected final location
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -80,7 +80,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         let srcIndices = IndexSet([numTestItems - 1])
         let tgtIdx = numTestItems - 2
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -105,7 +105,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([numTestItems - 2])
         let tgtIdx = numTestItems // <- When dragging down, Apple expects to add +1 to expected final location
 
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -130,7 +130,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 1
 
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -155,7 +155,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 4 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -179,7 +179,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([2, 4])
         let tgtIdx = 0
 
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -207,7 +207,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([1, 3])
         let tgtIdx = 5 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx)
+        AppModel.reOrderUsingPriority(items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 
@@ -240,7 +240,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
             items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-            sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
+            sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
 
         let afterMoveList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
@@ -285,7 +285,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
             items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-            sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
+            sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
         let afterFirstList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print("After 1st move list = \(afterFirstList.map({ $0.titleS }))")
@@ -297,7 +297,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
             items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-            sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
+            sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
 
         let afterSecondList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
@@ -309,7 +309,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
             items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-            sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
+            sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
         let afterThirdList: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         print("After 3rd move list = \(afterThirdList.map({ $0.titleS }))")
@@ -341,7 +341,7 @@ final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         appModel.reOrderUsingPriority(
             externalUM: undoMgr,
             items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-            sourceIndices: srcIndices, tgtIdxsEdge: tgtIdx
+            sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
         let afterFirstReorder: Array<Item> = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
 

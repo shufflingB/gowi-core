@@ -15,44 +15,29 @@ extension Main {
     ///
     ///
 
-    // This maps to the Window scene to open
-    enum UrlHost: String {
-        case mainWindow = "main"
-    }
-
-    enum UrlPath: String {
-        case showItems = "/v1/showitems"
-        case newItem = "/v1/newItem"
-    }
-
-    enum UrlQuery: String {
-        case itemId = "id"
-        case filterId = "fid"
-    }
-
     static let UrlRoot: URL = {
         var components = URLComponents()
         components.scheme = AppDefs.URLScheme
-        components.host = UrlHost.mainWindow.rawValue
+        components.host = AppDefs.UrlHost.mainWindow.rawValue
         return components.url!
     }()
 
     static func urlEncode(_ routingOpts: WindowGroupRoutingOpt) -> URL? {
         var components = URLComponents()
         components.scheme = AppDefs.URLScheme
-        components.host = UrlHost.mainWindow.rawValue
+        components.host = AppDefs.UrlHost.mainWindow.rawValue
 
         switch routingOpts {
         case let .showItems(_, sideBarFilterSelected, contentItemIdsSelected):
 
-            components.path = UrlPath.showItems.rawValue
+            components.path = AppDefs.MainUrlPath.showItems.rawValue
 
             let queryFilterSelected = URLQueryItem(
-                name: UrlQuery.filterId.rawValue, value: sideBarFilterSelected.rawValue
+                name: AppDefs.MainUrlQuery.filterId.rawValue, value: sideBarFilterSelected.rawValue
             )
 
             let queryItems: Array<URLQueryItem> = contentItemIdsSelected.map { id in
-                URLQueryItem(name: UrlQuery.itemId.rawValue, value: id.uuidString)
+                URLQueryItem(name: AppDefs.MainUrlQuery.itemId.rawValue, value: id.uuidString)
             }
 
             let query = [queryFilterSelected] + queryItems
@@ -83,15 +68,15 @@ extension Main {
             return nil
         }
 
-        if components.host != UrlHost.mainWindow.rawValue {
+        if components.host != AppDefs.UrlHost.mainWindow.rawValue {
             log.warning("Failed URL decode; received request for unknown host window type (\(components.host ?? "nil"))")
             return nil
 
         } else {
             switch components.path {
-            case UrlPath.showItems.rawValue:
+            case AppDefs.MainUrlPath.showItems.rawValue:
                 return decodeShowItems(queryItems: components.queryItems)
-            case UrlPath.newItem.rawValue:
+            case AppDefs.MainUrlPath.newItem.rawValue:
                 return .newItem(sideBarFilterSelected: .waiting)
             default:
                 log.warning("Failed URL decode; received request for unknown route path (\(components.path))")
@@ -111,7 +96,7 @@ extension Main {
 
         queryItems.forEach { (qi: URLQueryItem) in
             switch qi.name {
-            case UrlQuery.filterId.rawValue:
+            case AppDefs.MainUrlQuery.filterId.rawValue:
                 let qiVal: String? = qi.value
 
                 switch qiVal {
@@ -125,7 +110,7 @@ extension Main {
                 default:
                     sidebarSelected = .all
                 }
-            case UrlQuery.itemId.rawValue:
+            case AppDefs.MainUrlQuery.itemId.rawValue:
                 if let qiVal = qi.value, let id = UUID(uuidString: qiVal) {
                     itemsSelected.insert(id)
                 }

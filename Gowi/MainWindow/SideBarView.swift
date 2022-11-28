@@ -28,6 +28,7 @@ extension Main {
             var body: some View {
                 List(listOfAvailableFilters, id: \.self, selection: $listSelected) { filterByItem in
                     Text(filterByItem.rawValue)
+                        .accessibilityIdentifier(filterByItem.rawValue)
                 }
             }
         }

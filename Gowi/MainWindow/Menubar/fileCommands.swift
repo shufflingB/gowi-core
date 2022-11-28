@@ -30,7 +30,7 @@ extension Menubar {
                     }
                 }
                 .disabled(appModel.hasUnPushedChanges == false)
-                .accessibilityIdentifier(AccessId.FileMenuSave.rawValue)
+                .accessibilityIdentifier(AccessId.FileMenuRevert.rawValue)
 //                .keyboardShortcut(KbShortcuts.fileSaveChanges)
             }
         }

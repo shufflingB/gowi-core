@@ -28,7 +28,6 @@ extension Menubar {
                         openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
                     }
                 }
-//                .disabled(sideBarFilterSelected == nil)
                 .accessibilityIdentifier(AccessId.ItemsMenuNewItem.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsNew)
             }
@@ -98,7 +97,7 @@ extension Menubar {
                             print("Nudge up Idxs = \(Array(sourceIndices)), to tgtIdxsEdge. \(tgtIdxsEdge). Total items = \(contentWaitingItems.count)")
                             withAnimation {
                                 appModel.reOrderUsingPriority(
-                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
                             }
                         }
                     }
@@ -122,7 +121,7 @@ extension Menubar {
                             print("Nudge down Idxs = \(Array(sourceIndices)), to tgtIdxsEdge. \(tgtIdxsEdge). Total items = \(contentWaitingItems.count)")
                             withAnimation {
                                 appModel.reOrderUsingPriority(
-                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
                             }
                         }
                     }

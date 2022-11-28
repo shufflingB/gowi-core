@@ -13,14 +13,12 @@ struct ItemView: View {
     let stateView: Main
     @ObservedObject var item: Item
 
-    @Environment(\.undoManager) private var windowUM: UndoManager?
+//    @Environment(\.undoManager) private var windowUM: UndoManager?
 
     var body: some View {
         Layout(item: item, urlForItem: itemURL, itemSetCompletionDate: { nv in
             withAnimation {
-                stateView.appModel.itemsSetCompletionDate(externalUM: windowUM, items: [item], date: nv)
-//                item.completed = nv
-//                stateView.appModel.objectWillChange.send()
+                stateView.appModel.itemsSetCompletionDate(externalUM: stateView.windowUM, items: [item], date: nv)
             }
 
         })
@@ -36,8 +34,9 @@ struct ItemView: View {
         @FocusState var focus: FocusField?
         let urlForItem: URL
         let itemSetCompletionDate: (Date?) -> Void
+
         @FocusedValue(\.undoWfa) var wfa: Main.UndoWorkFocusArea?
-        
+        @Environment(\.undoManager) private var windowUM: UndoManager?
         enum FocusField {
             case title
         }
@@ -73,7 +72,6 @@ struct ItemView: View {
                     .onExitCommand {
                         focus = .title
                     }
-                    
             }
             .shadow(radius: 2)
             .frame(alignment: .leading)

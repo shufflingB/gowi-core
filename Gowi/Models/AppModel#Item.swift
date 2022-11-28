@@ -87,7 +87,7 @@ extension AppModel {
             ? priorities.belowEdge + priorityStep
             : priorities.aboveEdge - priorityStep
 
-        return itemAddNewTo(externalUM: externalUM, parents: [parent], title: "New item", priority: insertPriority, complete: nil, notes: "", children: [])
+        return itemAddNewTo(externalUM: externalUM, parents: [parent], title: title, priority: insertPriority, complete: nil, notes: notes, children: children)
     }
 
     func itemsDelete(
@@ -127,51 +127,59 @@ extension AppModel {
         }
     }
 
-    static func itemPriorityPair(forEdgeIdx tgtIdxsEdge: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
+    static func itemPriorityPair(forEdgeIdx tgtEdgeIdx: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
         guard items.count > 0 else {
             return (aboveEdge: SideBarDefaultOffset, belowEdge: -SideBarDefaultOffset)
         }
 
-        let itemPriorityAboveTgtEdge = tgtIdxsEdge == 0
+        let itemPriorityAboveTgtEdge = tgtEdgeIdx == 0
             ? items[0].priority + SideBarDefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
-            : items[tgtIdxsEdge - 1].priority
+            : items[tgtEdgeIdx - 1].priority
 
-        let itemPriorityBelowTgtEdge = tgtIdxsEdge == items.count
+        let itemPriorityBelowTgtEdge = tgtEdgeIdx == items.count
             ? items[items.count - 1].priority - SideBarDefaultOffset /// Dragging to tail, no Item below so have to special case
-            : items[tgtIdxsEdge].priority
+            : items[tgtEdgeIdx].priority
 
         return (aboveEdge: itemPriorityAboveTgtEdge, belowEdge: itemPriorityBelowTgtEdge)
     }
 
     func reOrderUsingPriority(
         externalUM: UndoManager?,
-        items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int
+        items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int
     ) {
         //
         Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Move") {
-            AppModel.reOrderUsingPriority(items: items, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+            AppModel.reOrderUsingPriority(items: items, sourceIndices: sourceIndices, tgtEdgeIdx: tgtEdgeIdx)
         }
     }
 
-    static func reOrderUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtIdxsEdge: Int) {
-        // i.e. those sorted by Item priority
-        /// just use what we've already worked out for the detail.
-        /// E.g. for 3 item list
-        ///
-        /// --------------- tgtIdxEdge = 0
-        /// sourceItem  0
-        /// --------------- tgtIdxEdge = 1
-        /// source Idx = 1
-        /// -------------- tgtIdxEdge = 2
-        /// source Idx =2
-        /// -------------- tgtIdxEdge = 3
+    /**
+       Items in a list have their movement controlled by the specification relative to the original List of
+          1) A set of the indices of the source Items to be moved
+          2) A target Item edge where the Items that are to be moved are to be inserted.
 
+       For a list of N items, normally the list will have these laid out as follows from top to bottom
+
+      ------------------- tgt edge idx = 0
+      src Item idx = 0
+      ------------------- tgt edge idx = 1
+      src Item Idx = 1
+      ------------------- tgt edge idx = 2
+      src Item Idx = 2
+      ------------------- tgt edge idx= 3
+      ...
+      ------------------- tgt edge idx = N - 1
+      src Item Idx = N - 1
+      ------------------- tgt edge idx = N
+
+     */
+    static func reOrderUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int) {
         guard let sourceIndicesFirstIdx = sourceIndices.first, let sourceIndicesLastIdx = sourceIndices.last else {
             return
         }
 
         let notMovingEdges = (sourceIndicesFirstIdx ... sourceIndicesLastIdx + 1)
-        guard notMovingEdges.contains(tgtIdxsEdge) == false else {
+        guard notMovingEdges.contains(tgtEdgeIdx) == false else {
             // print("Not moving because trying to move within the range of the existing items")
             return
         }
@@ -183,10 +191,10 @@ extension AppModel {
 
         let itemsSelected: Array<Item> = sourceIndices.map({ items[$0] })
 
-        let movingUp: Bool = sourceIndicesFirstIdx > tgtIdxsEdge ? true : false
+        let movingUp: Bool = sourceIndicesFirstIdx > tgtEdgeIdx ? true : false
         // print("sourceIndixe.first =\(sourceIndicesFirstIdx),  last = \(sourceIndices.last!) tgtEdge = \(tgtIdxsEdge), Moving up \(movingUp)")
 
-        let itemPriorities = itemPriorityPair(forEdgeIdx: tgtIdxsEdge, items: items)
+        let itemPriorities = itemPriorityPair(forEdgeIdx: tgtEdgeIdx, items: items)
 
         let priorityStepSize = (itemPriorities.aboveEdge - itemPriorities.belowEdge) / Double(itemsSelected.count + 1)
 

@@ -73,6 +73,6 @@ extension Main { // Content specific Intents
     }
 
     internal func contentOnMoveOfWaitingItems(_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        appModel.reOrderUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtIdxsEdge: tgtIdxsEdge)
+        appModel.reOrderUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
     }
 }

@@ -26,7 +26,7 @@ extension Main { // Window level intents
         let newItem = appModel.itemNewInsertInPriority(
             externalUM: windowUM,
             parent: parent, list: items, where: 0,
-            title: "New Item", complete: nil, notes: "", children: []
+            title: "", complete: nil, notes: "", children: []
         )
 
         let newTabSelected: SidebarFilterOpt = tabSelected == .done ? .waiting : tabSelected

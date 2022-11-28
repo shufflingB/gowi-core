@@ -33,7 +33,7 @@ extension Main {
         // Have to use the hack bc we're using FocusedValue to indicate the area of the UI
         // that the user is working with. The problem is that with the DatePicker (and possibly
         // others), it triggers a pop-up. And it's not possible to assign the same WFA focused value
-        // to the pop-up. So without the hack, evertime we get the pop-up appear or dissaper, the
+        // to the pop-up. So without the hack, everytime we get the pop-up appear or dissaper, the
         // undo stack gets cleared, which given it gets triggered very easily, would utterly
         // negate most of the the point of having undoable date changes.
         @State private var hackedWFA: UndoWorkFocusArea? = nil

@@ -11,9 +11,6 @@ import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
 extension Main {
-
-
-    
     /// `WindowGroupRoutingOpt` defines the routes that this Window (Group) supports
     ///  Options available:
     ///     - `showItem(openNewWindow:sideBarFilterSelected: contentItemIdsSelected)`:  A route to a window that if possible, displays the `Item` specified.
@@ -25,7 +22,7 @@ extension Main {
         case showItems(openNewWindow: Bool, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
         case newItem(sideBarFilterSelected: SidebarFilterOpt)
     }
-    
+
     /// Handles routing for the `Main` window `View`.
     ///
     /// ## Dependencies
@@ -147,7 +144,6 @@ extension Main {
                     default:
                         log.debug("onChange(of: windowUM): Creating a default route")
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
-                        return
                     }
                 }
                 .onOpenURL(perform: { url in

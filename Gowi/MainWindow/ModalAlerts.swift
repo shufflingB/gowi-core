@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 extension Main {
     /// Runs an `NSAlert` modal dialogue that asks the user to confirm that they would like to revert any unsaved data.
     /// - Returns: `true` if the user wishes to proceed with reversion, `false` otherwise.

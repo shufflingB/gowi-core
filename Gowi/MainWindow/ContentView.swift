@@ -28,6 +28,25 @@ extension Main {
             }
 
             return Group {
+                Button("Open in New Tab") {
+                    Main.openNewTab(
+                        openWindow: stateView.openWindow,
+                        sideBarFilterSelected: stateView.sideBarFilterSelected,
+                        contentItemIdsSelected: itemIdsToActOn
+                    )
+                }
+                .accessibilityIdentifier(AccessId.MainWindowContentContextOpenInNewTab.rawValue)
+
+                Button("Open in New Window") {
+                    let route = Main.WindowGroupRoutingOpt.showItems(
+                        openNewWindow: true,
+                        sideBarFilterSelected: stateView.sideBarFilterSelected,
+                        contentItemIdsSelected: itemIdsToActOn
+                    )
+                    stateView.openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
+                }
+                .accessibilityIdentifier(AccessId.MainWindowContentContextOpenInNewWindow.rawValue)
+
                 Button(
                     "Delete",
                     action: {
@@ -42,23 +61,7 @@ extension Main {
                         }
                     }
                 )
-
-                Button("Open in New Tab") {
-                    Main.openNewTab(
-                        openWindow: stateView.openWindow,
-                        sideBarFilterSelected: stateView.sideBarFilterSelected,
-                        contentItemIdsSelected: itemIdsToActOn
-                    )
-                }
-
-                Button("Open in New Window") {
-                    let route = Main.WindowGroupRoutingOpt.showItems(
-                        openNewWindow: true,
-                        sideBarFilterSelected: stateView.sideBarFilterSelected,
-                        contentItemIdsSelected: itemIdsToActOn
-                    )
-                    stateView.openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
-                }
+                .accessibilityIdentifier(AccessId.MainWindowContentContextDelete.rawValue)
             }
         }
     }
@@ -93,6 +96,7 @@ extension Main.ContentView {
                         "",
                         text: $item.titleS
                     )
+                    .accessibilityIdentifier(AccessId.MainWindowContentTitleField.rawValue)
                 }
             }
         }
