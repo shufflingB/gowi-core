@@ -33,6 +33,9 @@ struct GowiApp: App {
         .handlesExternalEvents(matching: [Main.UrlRoot.absoluteString])
         .commands {
             Menubar(appModel: appModel)
+            TextEditingCommands()
+            SidebarCommands()
+            ToolbarCommands()
         }
     }
 }
