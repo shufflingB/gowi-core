@@ -94,6 +94,7 @@
 		FF86E89528F76E3F0098A335 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF99805B2934E403003F343E /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		FF99805D2934E42A003F343E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FF99805E29350B40003F343E /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		FF9F22B928F5832C0046D72D /* ContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentModel.swift; sourceTree = "<group>"; };
 		FF9F22BB28F583D30046D72D /* DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModel.swift; sourceTree = "<group>"; };
 		FFA62B7F28EC7B8100868F77 /* Gowi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gowi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				FF99805D2934E42A003F343E /* README.md */,
+				FF99805E29350B40003F343E /* LICENSE */,
 				FF99805B2934E403003F343E /* Credits.rtf */,
 				FFA62B8128EC7B8100868F77 /* Gowi */,
 				FFA62B9828EC7B8300868F77 /* GowiTests */,
