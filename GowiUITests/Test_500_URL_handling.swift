@@ -1,8 +1,8 @@
 //
-//  UrlHandling.swift
-//  macOSToDoUITests
+//  Test_500_URL_handling.swift
+//  GowiUITests
 //
-//  Created by Jonathan Hume on 27/04/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import Darwin

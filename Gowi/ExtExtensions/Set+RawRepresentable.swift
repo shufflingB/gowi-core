@@ -1,8 +1,8 @@
 //
 //  Set+RawRepresentable.swift
-//  Set+RawRepresentable
+//  Gowi
 //
-//  Created by Jonathan Hume on 07/10/2021.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import Foundation

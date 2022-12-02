@@ -1,8 +1,8 @@
 //
-//  Detail.swift
-//  macOSToDoUITests
+//  Test_060_ItemInformationInUI.swift
+//  GowiUITests
 //
-//  Created by Jonathan Hume on 12/05/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import XCTest

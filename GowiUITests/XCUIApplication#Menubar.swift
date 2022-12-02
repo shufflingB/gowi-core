@@ -1,8 +1,8 @@
 //
-//  XCUIApplication_Menubar.swift
+//  XCUIApplication#Menubar.swift
 //  GowiUITests
 //
-//  Created by Jonathan Hume on 01/07/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import SwiftUI

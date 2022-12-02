@@ -1,8 +1,8 @@
 //
-//  App+ContentViewCommands.swift
-//  App+ContentViewCommands
+//  Menubar.swift
+//  Gowi
 //
-//  Created by Jonathan Hume on 23/08/2021.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import AppKit

@@ -1,8 +1,8 @@
 //
-//  Test_WaitingItemsReordering.swift
+//  Test050_AppModel_Child_Item_ReorderingBasedOnPriority.swift
 //  GowiTests
 //
-//  Created by Jonathan Hume on 05/10/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import XCTest
@@ -11,7 +11,6 @@ import XCTest
 
 final class Test050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     var appModel = AppModel(inMemory: true)
-    
 
     var rootItem: Item {
         appModel.systemRootItem

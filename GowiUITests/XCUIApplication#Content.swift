@@ -1,8 +1,8 @@
 //
-//  XCUIApplication_Sidebar.swift
-//  macOSToDoUITests
+//  XCUIApplication#Content.swift
+//  GowiUITests
 //
-//  Created by Jonathan Hume on 01/07/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import SwiftUI
@@ -78,11 +78,11 @@ extension XCUIApplication {
 
 //    func contentContextMenuDelete(
 
-
     func contentContextMenuDelete(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
         let winS: XCUIElement = win == nil ? win1 : win!
         return winS.tables.menuItems[AccessId.MainWindowContentContextDelete.rawValue]
     }
+
     func contentContextMenuOpenInNewTab(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
         let winS: XCUIElement = win == nil ? win1 : win!
         return winS.tables.menuItems[AccessId.MainWindowContentContextOpenInNewTab.rawValue]
@@ -92,7 +92,4 @@ extension XCUIApplication {
         let winS: XCUIElement = win == nil ? win1 : win!
         return winS.tables.menuItems[AccessId.MainWindowContentContextOpenInNewWindow.rawValue]
     }
-
-
-
 }

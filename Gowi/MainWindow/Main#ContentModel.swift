@@ -1,8 +1,8 @@
 //
-//  Main_Model_Window.swift
+//  Main#ContentModel.swift
 //  Gowi
 //
-//  Created by Jonathan Hume on 11/10/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import SwiftUI

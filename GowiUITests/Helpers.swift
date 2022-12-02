@@ -1,8 +1,8 @@
 //
 //  Helpers.swift
-//  macOSToDoUITests
+//  GowiUITests
 //
-//  Created by Jonathan Hume on 03/06/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import Foundation

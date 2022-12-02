@@ -1,8 +1,8 @@
 //
-//  ToolbarMenu.swift
-//  macOSToDoUITests
+//  Test_070_ItemDeletion.swift
+//  GowiUITests
 //
-//  Created by Jonathan Hume on 27/04/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import XCTest

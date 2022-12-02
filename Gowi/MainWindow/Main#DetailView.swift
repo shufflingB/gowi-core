@@ -1,15 +1,14 @@
 //
-//  Detail.swift
-//  tabViewPlay
+//  Main#DetailView.swift
+//  Gowi
 //
-//  Created by Jonathan Hume on 27/09/2022.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import SwiftUI
 
 struct DetailView: View {
     let stateView: Main
-    
 
     var body: some View {
         Layout(stateView: stateView, items: stateView.detailItems)

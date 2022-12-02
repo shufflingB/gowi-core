@@ -1,8 +1,8 @@
 //
-//  Item.swift
-//  Item
+//  AppModel#Item.swift
+//  Gowi
 //
-//  Created by Jonathan Hume on 11/08/2021.
+//  Created by Jonathan Hume on 02/12/2022.
 //
 
 import Combine
