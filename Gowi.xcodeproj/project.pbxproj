@@ -34,11 +34,11 @@
 		FF99805C2934E403003F343E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = FF99805B2934E403003F343E /* Credits.rtf */; };
 		FF998060293520A9003F343E /* Test_000_TestingEssentialsWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF99805F293520A9003F343E /* Test_000_TestingEssentialsWork.swift */; };
 		FF99806F29352292003F343E /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */; };
-		FF9980732935288B003F343E /* XCUIApplication_Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9980722935288B003F343E /* XCUIApplication_Sidebar.swift */; };
-		FF9980752935311B003F343E /* XCUIApplication_Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9980742935311B003F343E /* XCUIApplication_Content.swift */; };
-		FF9980772935371E003F343E /* XCUIApplication_Menubar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9980762935371E003F343E /* XCUIApplication_Menubar.swift */; };
-		FF998079293537B6003F343E /* XCUIApplication_Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF998078293537B6003F343E /* XCUIApplication_Toolbar.swift */; };
-		FF99807B29356342003F343E /* XCUIApplication_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF99807A29356342003F343E /* XCUIApplication_App.swift */; };
+		FF9980732935288B003F343E /* XCUIApplication#Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9980722935288B003F343E /* XCUIApplication#Sidebar.swift */; };
+		FF9980752935311B003F343E /* XCUIApplication#Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9980742935311B003F343E /* XCUIApplication#Content.swift */; };
+		FF9980772935371E003F343E /* XCUIApplication#Menubar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9980762935371E003F343E /* XCUIApplication#Menubar.swift */; };
+		FF998079293537B6003F343E /* XCUIApplication#Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF998078293537B6003F343E /* XCUIApplication#Toolbar.swift */; };
+		FF99807B29356342003F343E /* XCUIApplication#App.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF99807A29356342003F343E /* XCUIApplication#App.swift */; };
 		FF9F22BA28F5832C0046D72D /* ContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22B928F5832C0046D72D /* ContentModel.swift */; };
 		FF9F22BC28F583D30046D72D /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9F22BB28F583D30046D72D /* DetailModel.swift */; };
 		FFA62B8328EC7B8100868F77 /* GowiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA62B8228EC7B8100868F77 /* GowiApp.swift */; };
@@ -50,8 +50,7 @@
 		FFB015E1292D0E2C0064289A /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
 		FFB015E2292D0E2D0064289A /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
 		FFB7DCD72936139100A0DACA /* Test_050_ItemCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCD62936139100A0DACA /* Test_050_ItemCreation.swift */; };
-		FFB7DCD92936148500A0DACA /* XCUIApplication_Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCD82936148500A0DACA /* XCUIApplication_Detail.swift */; };
-		FFB7DCDB2936178100A0DACA /* XCUIElement_Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCDA2936178100A0DACA /* XCUIElement_Helpers.swift */; };
+		FFB7DCD92936148500A0DACA /* XCUIApplication#Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCD82936148500A0DACA /* XCUIApplication#Detail.swift */; };
 		FFB7DCDD293617A300A0DACA /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCDC293617A300A0DACA /* Helpers.swift */; };
 		FFB7DCDF29368D8000A0DACA /* Test_060_ItemInformationInUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCDE29368D7F00A0DACA /* Test_060_ItemInformationInUI.swift */; };
 		FFB7DCE129375F2F00A0DACA /* Test_070_ItemDeletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCE029375F2E00A0DACA /* Test_070_ItemDeletion.swift */; };
@@ -116,11 +115,11 @@
 		FF99805D2934E42A003F343E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FF99805E29350B40003F343E /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		FF99805F293520A9003F343E /* Test_000_TestingEssentialsWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_000_TestingEssentialsWork.swift; sourceTree = "<group>"; };
-		FF9980722935288B003F343E /* XCUIApplication_Sidebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIApplication_Sidebar.swift; sourceTree = "<group>"; };
-		FF9980742935311B003F343E /* XCUIApplication_Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIApplication_Content.swift; sourceTree = "<group>"; };
-		FF9980762935371E003F343E /* XCUIApplication_Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIApplication_Menubar.swift; sourceTree = "<group>"; };
-		FF998078293537B6003F343E /* XCUIApplication_Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIApplication_Toolbar.swift; sourceTree = "<group>"; };
-		FF99807A29356342003F343E /* XCUIApplication_App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIApplication_App.swift; sourceTree = "<group>"; };
+		FF9980722935288B003F343E /* XCUIApplication#Sidebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIApplication#Sidebar.swift"; sourceTree = "<group>"; };
+		FF9980742935311B003F343E /* XCUIApplication#Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIApplication#Content.swift"; sourceTree = "<group>"; };
+		FF9980762935371E003F343E /* XCUIApplication#Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIApplication#Menubar.swift"; sourceTree = "<group>"; };
+		FF998078293537B6003F343E /* XCUIApplication#Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIApplication#Toolbar.swift"; sourceTree = "<group>"; };
+		FF99807A29356342003F343E /* XCUIApplication#App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIApplication#App.swift"; sourceTree = "<group>"; };
 		FF9F22B928F5832C0046D72D /* ContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentModel.swift; sourceTree = "<group>"; };
 		FF9F22BB28F583D30046D72D /* DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModel.swift; sourceTree = "<group>"; };
 		FFA62B7F28EC7B8100868F77 /* Gowi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gowi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,8 +133,7 @@
 		FFA62B9F28EC7B8300868F77 /* GowiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GowiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFB015DF292BC4470064289A /* WindowGroupUndoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowGroupUndoView.swift; sourceTree = "<group>"; };
 		FFB7DCD62936139100A0DACA /* Test_050_ItemCreation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_050_ItemCreation.swift; sourceTree = "<group>"; };
-		FFB7DCD82936148500A0DACA /* XCUIApplication_Detail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIApplication_Detail.swift; sourceTree = "<group>"; };
-		FFB7DCDA2936178100A0DACA /* XCUIElement_Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCUIElement_Helpers.swift; sourceTree = "<group>"; };
+		FFB7DCD82936148500A0DACA /* XCUIApplication#Detail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIApplication#Detail.swift"; sourceTree = "<group>"; };
 		FFB7DCDC293617A300A0DACA /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		FFB7DCDE29368D7F00A0DACA /* Test_060_ItemInformationInUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_060_ItemInformationInUI.swift; sourceTree = "<group>"; };
 		FFB7DCE029375F2E00A0DACA /* Test_070_ItemDeletion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_070_ItemDeletion.swift; sourceTree = "<group>"; };
@@ -285,13 +283,12 @@
 				FFB7DCE82937DD6500A0DACA /* Test_260_UpdatingItemTodoPriorities.swift */,
 				FF215E5E293A17700021D936 /* Test_500_URL_handling.swift */,
 				FF215E62293A5B940021D936 /* Test_800_WindowsAndTabs.swift */,
-				FF99807A29356342003F343E /* XCUIApplication_App.swift */,
-				FF9980762935371E003F343E /* XCUIApplication_Menubar.swift */,
-				FF998078293537B6003F343E /* XCUIApplication_Toolbar.swift */,
-				FF9980722935288B003F343E /* XCUIApplication_Sidebar.swift */,
-				FF9980742935311B003F343E /* XCUIApplication_Content.swift */,
-				FFB7DCD82936148500A0DACA /* XCUIApplication_Detail.swift */,
-				FFB7DCDA2936178100A0DACA /* XCUIElement_Helpers.swift */,
+				FF99807A29356342003F343E /* XCUIApplication#App.swift */,
+				FF9980762935371E003F343E /* XCUIApplication#Menubar.swift */,
+				FF998078293537B6003F343E /* XCUIApplication#Toolbar.swift */,
+				FF9980722935288B003F343E /* XCUIApplication#Sidebar.swift */,
+				FF9980742935311B003F343E /* XCUIApplication#Content.swift */,
+				FFB7DCD82936148500A0DACA /* XCUIApplication#Detail.swift */,
 				FFB7DCDC293617A300A0DACA /* Helpers.swift */,
 			);
 			path = GowiUITests;
@@ -511,14 +508,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFB7DCD92936148500A0DACA /* XCUIApplication_Detail.swift in Sources */,
-				FFB7DCDB2936178100A0DACA /* XCUIElement_Helpers.swift in Sources */,
-				FF9980772935371E003F343E /* XCUIApplication_Menubar.swift in Sources */,
+				FFB7DCD92936148500A0DACA /* XCUIApplication#Detail.swift in Sources */,
+				FF9980772935371E003F343E /* XCUIApplication#Menubar.swift in Sources */,
 				FF215E63293A5B940021D936 /* Test_800_WindowsAndTabs.swift in Sources */,
 				FF215E61293A1C7A0021D936 /* AppDefs.swift in Sources */,
-				FF99807B29356342003F343E /* XCUIApplication_App.swift in Sources */,
+				FF99807B29356342003F343E /* XCUIApplication#App.swift in Sources */,
 				FFB015E2292D0E2D0064289A /* KbShortcuts.swift in Sources */,
-				FF9980752935311B003F343E /* XCUIApplication_Content.swift in Sources */,
+				FF9980752935311B003F343E /* XCUIApplication#Content.swift in Sources */,
 				FFB7DCE129375F2F00A0DACA /* Test_070_ItemDeletion.swift in Sources */,
 				FF998060293520A9003F343E /* Test_000_TestingEssentialsWork.swift in Sources */,
 				FFB7DCE329379D2600A0DACA /* Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges.swift in Sources */,
@@ -527,9 +523,9 @@
 				FFB7DCDD293617A300A0DACA /* Helpers.swift in Sources */,
 				FFB7DCDF29368D8000A0DACA /* Test_060_ItemInformationInUI.swift in Sources */,
 				FFB7DCD72936139100A0DACA /* Test_050_ItemCreation.swift in Sources */,
-				FF9980732935288B003F343E /* XCUIApplication_Sidebar.swift in Sources */,
+				FF9980732935288B003F343E /* XCUIApplication#Sidebar.swift in Sources */,
 				FF99806F29352292003F343E /* AccessibilityIdentifiers.swift in Sources */,
-				FF998079293537B6003F343E /* XCUIApplication_Toolbar.swift in Sources */,
+				FF998079293537B6003F343E /* XCUIApplication#Toolbar.swift in Sources */,
 				FFB7DCE52937B62B00A0DACA /* Test_250_UpdatingItemDetails.swift in Sources */,
 				FF215E5D293916270021D936 /* Test_255_UpdatingItemCompletionDates.swift in Sources */,
 			);

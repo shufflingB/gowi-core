@@ -10,6 +10,10 @@ import XCTest
 
 // App level extension
 extension XCUIApplication {
+    func isKeyFrontWindow(_ ele: XCUIElement) -> Bool {
+        ele.identifier == windows.firstMatch.identifier
+    }
+
     /// The SwiftUI framework persists information about window config across launches using the identifiers for windows that it had
     /// when the app was termintated. Then when the app restarts tt:
     /// 1. Reopen those previous windows
@@ -26,7 +30,7 @@ extension XCUIApplication {
     func launchAndSanitiseWindowsAndIdentifiers() {
         launch()
 
-        if win1.exists == false ||  windows.firstMatch.identifier != win1.identifier || windows.count > 1 {
+        if win1.exists == false || windows.firstMatch.identifier != win1.identifier || windows.count > 1 {
             shortcutWindowsCloseAll()
             shortcutAppQuit()
             launch()
@@ -69,6 +73,7 @@ extension XCUIApplication {
         let m = KeyModifierFlags([.command])
         typeKey(k, modifierFlags: m)
     }
+
     func shortcutItemsMarkComplete() { typeKeyboardShortcut(KbShortcuts.itemsMarkComplete) }
     func shortcutItemsMarkOpen() { typeKeyboardShortcut(KbShortcuts.itemsMarkOpen) }
     func shortcutSelectedItemsMoveUpInList() { typeKeyboardShortcut(KbShortcuts.itemsSelectedNudgePriorityUp) }
@@ -102,13 +107,12 @@ extension XCUIApplication {
         let modifier = XCUIElement.KeyModifierFlags(rawValue: UInt(shortcut.modifiers.rawValue))
         typeKey(key, modifierFlags: modifier)
     }
-    
+
     var dialogueConfirmRevertOK: XCUIElement {
         dialogs["alert"].buttons["Revert"]
     }
+
     var dialogueConfirmRevertCancel: XCUIElement {
         dialogs["alert"].buttons["Cancel"]
     }
-    
-    
 }

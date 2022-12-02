@@ -1,6 +1,6 @@
 //
 //  XCUIApplication_Menubar.swift
-//  macOSToDoUITests
+//  GowiUITests
 //
 //  Created by Jonathan Hume on 01/07/2022.
 //

@@ -1,9 +1,4 @@
-//
-//  MenuBar_ItemMenu_Windows.swift
-//  macOSToDoUITests
-//
-//  Created by Jonathan Hume on 19/05/2022.
-//
+
 
 import XCTest
 
