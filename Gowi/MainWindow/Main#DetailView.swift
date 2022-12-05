@@ -42,13 +42,3 @@ struct DetailView: View {
         }
     }
 }
-
-// struct Previews_Detail: PreviewProvider {
-//    @StateObject static var am = AppModel(items: Test_Data)
-//
-//    static var previews: some View {
-//        let items: Array<Item> = Main.detailItems(contenList: Array(am.items), contentSelected: [am.items.first!.id])
-//
-//        Detail.Layout(items: items, onItemCompletes: { _ in am.objectWillChange.send() })
-//    }
-// }

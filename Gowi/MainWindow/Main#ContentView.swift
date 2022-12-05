@@ -102,16 +102,3 @@ extension Main.ContentView {
         }
     }
 }
-
-// struct Content_Previews: PreviewProvider {
-//    @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
-//    @State static var selections: Set<UUID> = [AppModel.testingMode1ourIdPresent]
-//
-//    static var previews: some View {
-//        Main.ContentView.Layout(
-//            selections: $selections,
-//            items: Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet),
-//            onMovePerform: { _, _ in }, contextMenu: {Text("Hello") }
-//        )
-//    }
-// }

@@ -35,21 +35,10 @@ extension Main {
     }
 }
 
-// struct Sidebar_Previews: PreviewProvider {
-//    @StateObject static var am = AppModel.sharedInMemoryWithTestData
-//    @State static var itemsSelected: Set<UUID> = []
-//    @State static var tabSelected: SideBar.TabOption = .waiting
-//
-//
-//
-//    static var previews: some View {
-//        SideBar.Layout(
-//            tabSelected: $tabSelected,
-//            itemsSelected: $itemsSelected,
-//            itemsWaiting: Main.sideBarItemsListWaiting(am.systemRootItem.childrenListAsSet),
-//            itemsDone: Main.sideBarItemsListDone(am.systemRootItem.childrenListAsSet),
-//            itemsAll: Main.sideBarItemsListAll(am.systemRootItem.childrenListAsSet),
-//            onMoveOfWaitingItems: {_,_,_ in}
-//        )
-//    }
-// }
+struct Sidebar_Previews: PreviewProvider {
+    @State static var tabSelected: Main.SidebarFilterOpt = .waiting
+
+    static var previews: some View {
+        Main.SidebarView.Layout(listSelected: $tabSelected, listOfAvailableFilters: Array(Main.SidebarFilterOpt.allCases))
+    }
+}

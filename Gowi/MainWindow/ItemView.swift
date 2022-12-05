@@ -12,15 +12,13 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 struct ItemView: View {
     let stateView: Main
     @ObservedObject var item: Item
-
-//    @Environment(\.undoManager) private var windowUM: UndoManager?
+    @Environment(\.undoManager) private var windowUM: UndoManager?
 
     var body: some View {
         Layout(item: item, urlForItem: itemURL, itemSetCompletionDate: { nv in
             withAnimation {
-                stateView.appModel.itemsSetCompletionDate(externalUM: stateView.windowUM, items: [item], date: nv)
+                stateView.appModel.itemsSetCompletionDate(externalUM: windowUM, items: [item], date: nv)
             }
-
         })
     }
 
@@ -28,7 +26,9 @@ struct ItemView: View {
         let routingOpts: Main.WindowGroupRoutingOpt = .showItems(openNewWindow: false, sideBarFilterSelected: stateView.sideBarFilterSelected, contentItemIdsSelected: [item.ourIdS])
         return Main.urlEncode(routingOpts)!
     }
+}
 
+extension ItemView {
     struct Layout: View {
         @ObservedObject var item: Item
         @FocusState var focus: FocusField?
@@ -36,7 +36,7 @@ struct ItemView: View {
         let itemSetCompletionDate: (Date?) -> Void
 
         @FocusedValue(\.undoWfa) var wfa: Main.UndoWorkFocusArea?
-        @Environment(\.undoManager) private var windowUM: UndoManager?
+
         enum FocusField {
             case title
         }
@@ -166,5 +166,23 @@ struct ItemView: View {
             .overlay(RoundedRectangle(cornerRadius: 4)
                 .stroke(Color.secondary, lineWidth: 0.5))
         }
+    }
+}
+
+struct ItemView_Previews: PreviewProvider {
+    @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
+    @StateObject static var item: Item = appModel.systemRootItem.childrenListAsSet.first!
+    @Environment(\.undoManager) static var windowUm: UndoManager?
+
+    static let url = Main.urlEncode(
+        .showItems(openNewWindow: false, sideBarFilterSelected: .waiting, contentItemIdsSelected: [item.ourIdS])
+    )!
+
+    static var previews: some View {
+        ItemView.Layout(item: item, urlForItem: url, itemSetCompletionDate: { nv in
+            withAnimation {
+                appModel.itemsSetCompletionDate(externalUM: windowUm, items: [item], date: nv)
+            }
+        })
     }
 }

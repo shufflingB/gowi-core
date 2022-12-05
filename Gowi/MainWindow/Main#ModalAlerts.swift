@@ -25,3 +25,11 @@ extension Main {
         }
     }
 }
+
+struct Main_ModalAlerts_Previews: PreviewProvider {
+    static var previews: some View {
+        Button("In Live view; click this button to show modal") {
+            Main.modalUserConfirmsRevert()
+        }
+    }
+}
