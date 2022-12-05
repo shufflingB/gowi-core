@@ -10,75 +10,95 @@ import SwiftUI
 import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
+// Routing for the Main Window
 extension Main {
-    /// `WindowGroupRoutingOpt` defines the routes that this Window (Group) supports
-    ///  Options available:
-    ///     - `showItem(openNewWindow:sideBarFilterSelected: contentItemIdsSelected)`:  A route to a window that if possible, displays the `Item` specified.
-    ///         When `openNewWindow` is
-    ///         `false` -  it will only create a new window if there no existing app windows visibly rendering that route.
-    ///         `true` - it will always open a new window, regardless of any existing windows displaying the app.
-    ///
+    /**
+     Defines the routes that the Main window supports
+
+     Options available:
+        1. `showItem(openNewWindow:sideBarFilterSelected: contentItemIdsSelected)`:  A route to a window that displays the `Item` specified.
+            If `openNewWindow` is
+                1. `false` -  it will only create a new window if there no existing app windows visibly rendering the route requested.
+                2. `true` - it will always open a new window, regardless of if any existing window is displaying the route in the app.
+        2. `newItem(sideBarFilterSelected: SidebarFilterOpt)` -  a new empty Item  in a new Window.
+     */
     enum WindowGroupRoutingOpt: Hashable, Codable {
         case showItems(openNewWindow: Bool, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
         case newItem(sideBarFilterSelected: SidebarFilterOpt)
     }
 
-    /// Handles routing for the `Main` window `View`.
-    ///
-    /// ## Dependencies
-    ///
-    /// 1. `WindowGroup(id:for:content:)` view factory in `@main` must be used to inject routing options  into the view.
-    /// 2. `WindowGroup`s `content`  needs to  have `.handlesExternalEvents(preferring: allowing:)` specified to send all external events to the view (rather
-    ///  than forking off its own new windows (this view handles that itself if necessary)
-    ///
-    /// ## Overview
-    ///
-    /// - `WindowGroupRoutingOpt` defines the available routes that this (main) window knows how to handle.
-    ///
-    /// - `WindowGroup(id:for:content:)` factory view maintains for the duration of the application's runtime a list of the routes in its window group.
-    ///     -  Requests for routes  are routed to the relevant `WindowGroup` and then if there is a View:
-    ///         - That  `WindowGroup` believes  is rendering the route it will raise (make `keyWindow`) that Window (and not create a new window)
-    ///         - Otherwise, it will:
-    ///             a. Create a new window.
-    ///             b. Render the top-level view
-    ///             c. Passing a binding to the route that it asked the view to render.
-    ///
-    /// - `WindowGroupRouteView`  handles routing and URL open requests
-    ///     - receives the binding to its `WindowGroup`routing information.
-    ///     - handles setting the window up as requested by new routing informat.
-    ///     - keeps the binding to the `WindowGroup`routing information up to date with what is actually being displayed in the window.
-    ///     - handles turning open by URL requests into app `WindowGroup` routing requests i.e. routing via URL and internal mechanisms endeavour to share a common
-    ///     code paths.
-    ///
-    /// ## Content modifiers
-    ///
-    /// - `onAppear`
-    ///     - Is the first thing that runs for the `View`
-    ///     - If the View has been:
-    ///         - Instantiated by the WindowGroup mechanism, say as the result of `openWindow`  or via the homebrewed openTab mechanism then the `View` will have been
-    ///         passed a route for the Window AND we need to update the contents of the Window to be in alignment with that route. NB: Does not handle new window routing
-    ///         requests, bc no access to the Window's `UndoManager` when this runs (see next comment for more on that).
-    ///         - Created via the Window restore mechanism, say as a result on being started, then it may  have no  route assigned to it and in that case we do nothing here and
-    ///         instead create a route for the window when the `@State` vars  become available for use, as proxied by  the `onChange(of: SwiftUIsWindowUndoManager)`
-    ///
-    /// - `onChange(of: windowUM)`
-    ///     - Gets run after `onAppear` when the window's `UndoManager` has been setup and is injected into the `View`
-    ///     - Used to handle:
-    ///         1. New item routing requests  that can't be done  in the onAppear handler because the `UndoManager` is not available.
-    ///         2. Setting up the route for any window that has been restored on restart.
-    ///
-    /// - `onOpenURL`
-    ///     - Only gets run on one of the app's Windows (keyWindow?) to handle a URL request.
-    ///     - Handles decoding the routing information from the URL or if that fails sets up a sensible default
-    ///     - Then:
-    ///         - If there is no route configured for the current window; it will directly route the window itself.
-    ///         - Else, it will use openWindow to either raise a different existing  window  from the app that contains the desired route.  Or create a new one if no existing window
-    ///         in the app matches the route requested.
-    ///
-    /// - Other onChange(of:) ...
-    ///     Used to keep the window's route up to date.
+    /**
+      Handles routing for the `Main` window.
+
+      ## Dependencies
+
+      1. `WindowGroup(id:for:content:)` view factory in `@main` must be used to inject routing options  into the view.
+      2. `WindowGroup`s `content`  needs to  have `.handlesExternalEvents(preferring: allowing:)` specified to send all external events
+      to the view (rather than forking off its own new windows (this view handles that itself if necessary)
+
+      ## Overview of how routing in this app window works
+
+      - `WindowGroup(id:for:content:)` view.
+         - Routes URL handling matching the URLRoot to an instance of this window (which it will create iff necessary)
+         - Creates and curates for the duration of the application, a set of routes to all windows of the type it handling
+         - Handles request for new routes  for the window type, by examining if the route is current being rendered in and existing window or not.
+             - If the route exists it will raise the window.
+             - Otherwise, it will:
+                 a. Create a new window.
+                 b. Render the top-level view.
+                 c. And passing a binding to the route that it asked the view to render.
+
+     - `WindowGroupRoutingOpt` defines the available routes that this (Main)  window knows how to handle.
+
+     - `WindowGroupRouteView`  handles routing and URL open requests
+         - receives the binding to its `WindowGroup`routing information.
+         - handles setting the window up as requested by any new routing informat.
+         - keeps the binding to the `WindowGroup`routing information up to date with what is actually being displayed in the window.
+         - handles turning open-by-URL requests into the correct app `WindowGroup` routing i.e. routing via URL and internal mechanisms endeavour to share a common code paths.
+      */
+
     struct WindowGroupRouteView<Content: View>: View {
+        /*
+         ## What each of the content modifiers are used to handle
+
+          - `onAppear`
+            - Is the first thing that runs for the `View`
+            - If the View has been:
+                - Instantiated by the `WindowGroup` mechanism, say as the result of `openWindow`  or via the homebrewed `openTab` mechanism then the `View` will
+                have been passed a route for the Window AND it  updates the contents of the Window to be in alignment with that route. NB: Does not handle new window
+                routing requests, bc there is no access to the Window's `UndoManager` when `onAppear`runs (see next comment for more on that).
+            - Created via the Window restore mechanism, say as a result on being started and has picked up its initial settings from `@SceneStorage` then it will have a default  route
+            assigned to it that does not reflect the windows actual route state. And in that case we do nothing here and instead create an updated route for the window when the `@State` vars
+            become available for use, as signalled to the app  through the conveniece proxy of detecting `onChange(of: SwiftUIsWindowUndoManager)`
+
+         - `onChange(of: windowUM)`
+            - Gets run after `onAppear` when the window's `UndoManager` has been setup and is injected into the `View`
+            - Used to handle:
+                1. New item routing requests  that can't be done  in the onAppear handler because the `UndoManager` is not available.
+                2. Setting up the route for any window that has been restored on restart.
+
+         - `onOpenURL`
+            - Only gets run on one of the app's Windows (keyWindow?) to handle a URL request.
+            - Handles decoding the routing information from the URL or if that fails sets up a sensible default
+            - Then:
+                - If there is no route configured for the current window; it will directly route the window itself.
+                - Else, it will use openWindow to either raise a different existing  window  from the app that contains the desired route.  Or create a new one if no existing window
+                in the app matches the route requested.
+
+         - Other onChange(of:) ...
+            Used to update individual attributes of the `WindowGroup`'s  route up to date.
+         */
+
+        /// App's `AppModel` shared instance
         @EnvironmentObject var appModel: AppModel
+
+        /// Handles all routing for Main window view.
+        /// - Parameters:
+        ///   - winId: unique id to associate with the route to this window.
+        ///   - sideBarFilterSelected: currently selected filter
+        ///   - visibleItemIdsSelected: the filtered for visibility set of selected `Item#ourId`s
+        ///   - route: binding to the route assigned to  the view  by `WindowGroup(id:for:content)`
+        ///   - content: some View ...
         init(
             winId: Int,
             sideBarFilterSelected: Binding<SidebarFilterOpt>,
@@ -93,6 +113,8 @@ extension Main {
             self.content = content()
         }
 
+        /// Update the view to be in alignment with the suppliedrouting options.
+        /// - Parameter route: routing options to update the view with.
         private func routeWindow(_ route: WindowGroupRoutingOpt) {
             switch route {
             case let .showItems(openNewWindow: _, sideBarFilterSelected: filter, contentItemIdsSelected: items):
@@ -100,7 +122,7 @@ extension Main {
                 visibleItemIdsSelected = items
 
             case .newItem(sideBarFilterSelected: _):
-                // This gets handled when we have a window undo mananager, as want to make it undoable, and when
+                // This gets handled when we have the window's undo mananager available, as want to make it undoable, and when
                 // onAppear runs that undoManager is defined as nil
                 break
             }
@@ -118,9 +140,9 @@ extension Main {
                 }
 
                 .onChange(of: windowUM) { newValue in
-                    // Has nothing really to do with windowUM, but detecting when SWiftUI defines it is a convenient place
+                    // Has nothing really to do with windowUM per-se, but detecting when SWiftUI defines it is a convenient place
                     // to detect when both the View has appeared AND the SwiftUI @State has been injected and is ready
-                    // for processings.
+                    // for processings. And since we new need the window's `UndoManager` we'll use that point.
 
                     guard let windowUM = newValue else {
                         return
@@ -132,8 +154,8 @@ extension Main {
                         withAnimation {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: windowUM,
-                                tabSelected: filter, parent: appModel.systemRootItem,
-                                list: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                                filterSelected: filter, parent: appModel.systemRootItem,
+                                filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
                             )
                             visibleItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter
@@ -147,7 +169,7 @@ extension Main {
                     }
                 }
                 .onOpenURL(perform: { url in
-                    // Decode the URL into a RoutingOpt (only runs on the keyWindow)
+                    // Decode the URL into a RoutingOpt (only runs on the keyWindow and the @Main's setup )
                     log.debug("onOpenURL: winId = \(winId) is handling \(url)  ")
 
                     let defaultWinGrpRoute: WindowGroupRoutingOpt = .showItems(
@@ -212,12 +234,21 @@ extension Main {
                 })
         }
 
-        private let winId: Int
+        /// The sideBar filter being applied
         @Binding private var sideBarFilterSelected: SidebarFilterOpt
+
+        /// The filtered for visibility set of selected `Item#ourId`s
         @Binding private var visibleItemIdsSelected: Set<UUID>
+
+        /// Binding to the route assigned to  the view in `@main` by `WindowGroup(id:for:content)`
         @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
-        private let content: Content
+
         @Environment(\.openWindow) private var openWindow
+
+        /// SwiftUI's per-window instance default `UndoManager`
         @Environment(\.undoManager) private var windowUM: UndoManager?
+
+        private let winId: Int
+        private let content: Content
     }
 }

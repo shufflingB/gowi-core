@@ -7,21 +7,18 @@
 
 import Foundation
 
+/// `Set` extended with `RawRepresentable` so that the set of ID's selected by the content view can be persisted in `@SceneStorage`
 extension Set: RawRepresentable where Element == UUID {
     public init?(rawValue: String) {
         self = Set(rawValue.components(separatedBy: ",").compactMap { str in
             guard let id: UUID = UUID(uuidString: str) else {
-//                print("Failing to restore id from ")
                 return nil
             }
-
-//            print("Restoring as id = \(id)")
             return id
         })
     }
 
     public var rawValue: String {
-//        print("\(self)")
         let val = map({ "\($0.uuidString)" }).joined(separator: ",")
         return val
     }

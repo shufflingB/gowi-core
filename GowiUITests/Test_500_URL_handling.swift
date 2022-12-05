@@ -31,8 +31,8 @@ class Test_500_URL_handling: XCTestCase {
 
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
             return components.url!
         }()
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
@@ -48,10 +48,10 @@ class Test_500_URL_handling: XCTestCase {
         app.shortcutWindowsCloseAll()
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
-            components.path = AppDefs.MainUrlPath.showItems.rawValue
-            components.queryItems = [URLQueryItem(name: AppDefs.MainUrlQuery.filterId.rawValue, value: "Waiting")]
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
+            components.path = AppMainUrlPath.showItems.rawValue
+            components.queryItems = [URLQueryItem(name: AppMainUrlQuery.filterId.rawValue, value: "Waiting")]
             return components.url!
         }()
 
@@ -68,10 +68,10 @@ class Test_500_URL_handling: XCTestCase {
         app.shortcutWindowsCloseAll()
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
-            components.path = AppDefs.MainUrlPath.showItems.rawValue
-            components.queryItems = [URLQueryItem(name: AppDefs.MainUrlQuery.filterId.rawValue, value: "Done")]
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
+            components.path = AppMainUrlPath.showItems.rawValue
+            components.queryItems = [URLQueryItem(name: AppMainUrlQuery.filterId.rawValue, value: "Done")]
             return components.url!
         }()
 
@@ -88,10 +88,10 @@ class Test_500_URL_handling: XCTestCase {
         app.shortcutWindowsCloseAll()
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
-            components.path = AppDefs.MainUrlPath.showItems.rawValue
-            components.queryItems = [URLQueryItem(name: AppDefs.MainUrlQuery.filterId.rawValue, value: "All")]
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
+            components.path = AppMainUrlPath.showItems.rawValue
+            components.queryItems = [URLQueryItem(name: AppMainUrlQuery.filterId.rawValue, value: "All")]
             return components.url!
         }()
 
@@ -112,12 +112,12 @@ class Test_500_URL_handling: XCTestCase {
 
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
-            components.path = AppDefs.MainUrlPath.showItems.rawValue
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
+            components.path = AppMainUrlPath.showItems.rawValue
             components.queryItems = [
-                URLQueryItem(name: AppDefs.MainUrlQuery.filterId.rawValue, value: "All"),
-                URLQueryItem(name: AppDefs.MainUrlQuery.itemId.rawValue, value: itemId),
+                URLQueryItem(name: AppMainUrlQuery.filterId.rawValue, value: "All"),
+                URLQueryItem(name: AppMainUrlQuery.itemId.rawValue, value: itemId),
             ]
             return components.url!
         }()
@@ -142,12 +142,12 @@ class Test_500_URL_handling: XCTestCase {
 
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
-            components.path = AppDefs.MainUrlPath.showItems.rawValue
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
+            components.path = AppMainUrlPath.showItems.rawValue
             components.queryItems = [
-                URLQueryItem(name: AppDefs.MainUrlQuery.filterId.rawValue, value: "All"),
-                URLQueryItem(name: AppDefs.MainUrlQuery.itemId.rawValue, value: itemId),
+                URLQueryItem(name: AppMainUrlQuery.filterId.rawValue, value: "All"),
+                URLQueryItem(name: AppMainUrlQuery.itemId.rawValue, value: itemId),
             ]
             return components.url!
         }()
@@ -174,9 +174,9 @@ class Test_500_URL_handling: XCTestCase {
 
         let url: URL = {
             var components = URLComponents()
-            components.scheme = AppDefs.URLScheme
-            components.host = AppDefs.UrlHost.mainWindow.rawValue
-            components.path = AppDefs.MainUrlPath.newItem.rawValue
+            components.scheme = AppUrlScheme
+            components.host = AppUrlHost.mainWindow.rawValue
+            components.path = AppMainUrlPath.newItem.rawValue
             return components.url!
         }()
 

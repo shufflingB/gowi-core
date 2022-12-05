@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension Menubar {
+    /// Builds the App specific parts of the Main window's  Menubar File menu.
     var fileCommands: some Commands {
         CommandGroup(replacing: CommandGroupPlacement.newItem) {
             Section {

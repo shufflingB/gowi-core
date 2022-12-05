@@ -7,6 +7,12 @@
 
 import Foundation
 
+/**
+ App level  UI element `AccessibilityIdentifiers`
+ 
+ These are attached to controls and data fields in the app's UI to make finding and interacting with them easier during when automated testing
+ and similar.
+ */
 enum AccessId: String {
     // MARK: Main AppMenu File
 

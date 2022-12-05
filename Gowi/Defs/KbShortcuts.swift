@@ -8,23 +8,22 @@
 import SwiftUI
 
 /*
- The default keybindings used in this app.
+ The aim with the shortcut definitions is for to try and adopt shortcuts that many people are familiar
+ with.
 
- The aim here is to setup definitions for the App what most people are familiar with, dropping back to adopting
- shortcuts from more specialised apps that I admire for their usability, before finally falling back to fully
- bespoke.
- 
- More concretely this shapes up as:
- - Finder do
- - Notes, Reminders,
- - Xcode, Mail
- - Things
- - bespoke concoction
+ Concretely, they've been determined by examining in order how:
+     1. Finder
+     2. Notes, Reminders,
+     3. Xcode, Mail
+     4. Things
 
- For the less obivous shortcut definitions, where it originates from is marked in a comment.
- 
+ ... do things for suitability before turning to bespoke creation.
+
+ For future reference; where the origin of the shortcut is, is denoted alongside the shortcut
+ iff it is not fairly obvious.
  */
 
+/// The default `KeyboardShortcut`s used in by app.
 struct KbShortcuts {
     static let fileSaveChanges = KeyboardShortcut("s", modifiers: .command)
 
@@ -48,11 +47,13 @@ struct KbShortcuts {
 }
 
 /*
- This extension contains kShortcuts that are  built in to SwiftUI default configuration but that are not used in app,
- i.e. deleting them will not cause the app to stop compiling (it may break the compilation of the tests though).
+ This extension contains kShortcuts that are built in to SwiftUI default configuration but that
+ are not explicity used in app, i.e. deleting them will not cause the app to stop compiling
+ (it may break the compilation of the tests though).
 
- They're I've definied here as shared dependency between the app and its tests because in my judgement the small
- increase in the app's code size is outweighed by the reduced risk of wtf moments occuring in the future from accidentally defining conflicting shortcuts in the app and
+ They're definied here as shared dependency between the app and its tests because the judgement
+ call is that the small increase in the app's code size is outweighed by the reduced risk of wtf
+ moments occuring in the future from accidentally defining conflicting shortcuts in the app and/or
  testing code bases.
  */
 extension KbShortcuts { // Apple default defined shortcuts - only used in the UI testing

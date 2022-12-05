@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+
+/// Convenience extension of `String`  
 extension String {
     static let pasteboard = NSPasteboard.general
     

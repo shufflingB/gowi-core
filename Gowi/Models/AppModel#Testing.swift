@@ -9,7 +9,12 @@ import Foundation
 import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
+// AppModel public functionallity specifically associated with setting up test data
 extension AppModel {
+    
+    /// Available data test modes
+    /// - options:
+    ///
     enum TestModeData {
         case one
     }
@@ -22,7 +27,10 @@ extension AppModel {
         }
     }
 
+    /// The `UUID`  of an `Item#ourId` that will always be present in `GOWI_TESTMODE == 1` test data.
     static let testingMode1ourIdPresent = UUID(uuidString: "70BF1680-CA95-48B5-BD0E-FCEAF7FEC4DD")!
+
+    /// Adds `GOWI_TESTMODE == 1` test data to the system.
     fileprivate func testMode1() {
         let root = systemRootItem
         log.debug("\(#function) adding test data")

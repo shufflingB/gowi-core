@@ -13,7 +13,24 @@ import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
 final class AppModel: ObservableObject, Identifiable {
-    /// Create a shared AppModel that the app will use.  Optionally do using one of the the inMemory test modes intended for automated UI testing.
+    /// Root parent `Item` from which all other `Item` in the system are descended.
+    let systemRootItem: Item
+
+    /// Indicates if there are changes in the system that have not been persisted to the backend
+    @Published private(set) var hasUnPushedChanges: Bool = false
+
+    /// App's default `NSManagedObjectContext`
+    var viewContext: NSManagedObjectContext {
+        container.viewContext
+    }
+
+    /**
+     Creates a shared instance of the `AppModel`.
+
+     If the Environmental variable are set before:
+        - `GOWI_TESTMODE` == `0` - create the shared instance in memory only with no test data, i.e. not live data.
+        - `GOWI_TESTMODE` == `1` - create the shared instance in memory only but with some test data, i.e. not live data.
+     */
     static let shared: AppModel = {
         if let testMode = ProcessInfo.processInfo.environment["GOWI_TESTMODE"] {
             switch testMode {
@@ -35,35 +52,15 @@ final class AppModel: ObservableObject, Identifiable {
     /// Create a shared instance for unit testing - don't worry about this extra defn bc `static var` is `lazy` by default
     static var sharedInMemoryNoTestData: AppModel = AppModel(inMemory: true)
 
+    /// Create a shared instance for unit testing - again don't worry about this extra defn bc `static var` is `lazy` by default
     static var sharedInMemoryWithTestData: AppModel = {
         let am = AppModel(inMemory: true)
         am.addTestData(.one)
         return am
     }()
-    
-    func resetInMemShared() {
-        Self.sharedInMemoryNoTestData =  AppModel(inMemory: true)
-        let am = AppModel(inMemory: true)
-        am.addTestData(.one)
-        Self.sharedInMemoryWithTestData = am
-    }
-//        let am = AppModel(inMemory: true)
-////        am.addTestData(.one)
-//
-//
-//
-//
-//    }
 
-    let systemRootItem: Item
-    let container: NSPersistentCloudKitContainer
-    @Published private(set) var hasUnPushedChanges: Bool = false
-
-    var viewContext: NSManagedObjectContext {
-        container.viewContext
-    }
-    
-
+    /// Initialise the `AppModel`
+    /// - Parameter inMemory: Specify if the app should run with a non-persistent,  in-memory only backend db (useful for testing)
     init(inMemory: Bool = false) {
         // Suggested by https://www.hackingwithswift.com/forums/macos/app-sometimes-crashes-on-launch-since-monterey/10918/15476
         // and https://developer.apple.com/forums/thread/711122
@@ -79,7 +76,6 @@ final class AppModel: ObservableObject, Identifiable {
         let vcUM = UndoManager()
         vcUM.groupsByEvent = false
         container.viewContext.undoManager = vcUM
-        
 
         let dbgTitle = inMemory ? Self.RootInMemoryTitle : Self.RootNormalTitle
 
@@ -91,10 +87,16 @@ final class AppModel: ObservableObject, Identifiable {
         .store(in: &anyCancellable)
     }
 
+    private let container: NSPersistentCloudKitContainer
     private static let RootInMemoryTitle = "InMemory root safe to delete" // Should never persist anyway
     private static let RootNormalTitle = "Normal system root."
     private var anyCancellable: Set<AnyCancellable> = []
 
+    /// Initialise the app's  `NSPersistentCloudKitContainer`
+    /// - Parameters:
+    ///   - name: to identify instances in iCloud
+    ///   - inMemory: whether to in memory, non-live data or not
+    /// - Returns: The initiallised `NSPersistentCloudKitContainer`
     private static func CKContainerGet(name: String, inMemory: Bool) -> NSPersistentCloudKitContainer {
         let ckc = NSPersistentCloudKitContainer(name: name)
 
@@ -116,26 +118,13 @@ final class AppModel: ObservableObject, Identifiable {
         return ckc
     }
 
-    private static func rootItemCreate(_ moc: NSManagedObjectContext, dbgTitle: String?) -> Item {
-        log.debug("\(#function) creating root item")
-        let item: Item = moc.performAndWait {
-            let rootItem = Item(context: moc)
-            rootItem.ourIdS = UUID()
-            rootItem.created = Date()
-            rootItem.root = true
-
-            rootItem.title = dbgTitle
-            return rootItem
-        }
-        do {
-            try moc.save()
-        } catch {
-            let nserror = error as NSError
-            fatalError("Unable to create root Item \(nserror), \(nserror.userInfo)")
-        }
-        return item
-    }
-
+    /**
+     Fetch the existing system root `Item` if it exists, or create a new one if it does not.
+        - Parameters:
+            - moc: the managed object context to query/create on
+            - dbgTitle: A title to assign to root `Item`s title field as an aid to debugging.
+        - Returns: The system root `Item` for the context.
+     */
     private static func rootItemGet(_ moc: NSManagedObjectContext, dbgTitle: String?) -> Item {
         let rootsRequest: NSFetchRequest<Item> = {
             let entityName = String(describing: Item.self)
@@ -174,17 +163,6 @@ final class AppModel: ObservableObject, Identifiable {
                     log.warning("Using idx = \(idx), id = \(item.ourIdS), title = \(item.title ?? ""), created = \(dateStr)")
                 } else {
                     houseKeepingHackToCleanUpInMemoryProblem(moc, bogusRoot: item)
-
-//
-//
-//                    if item.childrenList?.count == 0 {
-//                        log.warning("Deleting idx = \(idx), id = \(item.idS), title = \(item.titleS), created = \(dateStr), children = \(item.childrenList?.count ?? 0)")
-//                        moc.delete(item)
-//                        Self.saveToCoreData(moc)
-//                    } else {
-//                        log.warning("Not sure to delete, save moc to kill, idx = \(idx), id = \(item.idS), title = \(item.titleS), created = \(dateStr), children = \(item.childrenList?.count ?? 0)")
-//                        moc.delete(item)
-//                    }
                 }
             }
 
@@ -192,15 +170,40 @@ final class AppModel: ObservableObject, Identifiable {
         }
     }
 
-    static func houseKeepingHackToCleanUpInMemoryProblem(_ moc: NSManagedObjectContext, bogusRoot badRoot: Item) {
+    /// Create a system rootItem
+    /// - Parameters:
+    ///   - moc: The managed object context to create on.
+    ///   - dbgTitle: A title to assign to root `Item`s title field as an aid to debugging.
+    /// - Returns: The new system root `Item` for the context.
+    private static func rootItemCreate(_ moc: NSManagedObjectContext, dbgTitle: String?) -> Item {
+        log.debug("\(#function) creating root item")
+        let item: Item = moc.performAndWait {
+            let rootItem = Item(context: moc)
+            rootItem.ourIdS = UUID()
+            rootItem.created = Date()
+            rootItem.root = true
+
+            rootItem.title = dbgTitle
+            return rootItem
+        }
+        do {
+            try moc.save()
+        } catch {
+            let nserror = error as NSError
+            fatalError("Unable to create root Item \(nserror), \(nserror.userInfo)")
+        }
+        return item
+    }
+
+    private static func houseKeepingHackToCleanUpInMemoryProblem(_ moc: NSManagedObjectContext, bogusRoot badRoot: Item) {
         // TODO: Check if can remove this hack to fix buggy CloudKit/CoreData creation of persisted InMemory items.
         // To recreate issue:
         // 1) Run app with InMemory /dev/nul back end storage at least once -> creates an InMemory root item
         // 2) Fire up the app in normal mode, get normal, correctly picks up single, normal root item from backend.
         // 3) Fire up the ap a second time in _normal_ mode and it (wtf) detects two root items. First one is correct one, second one
         // is the it should not be persisting, inMemory only one.
-        // Best I can figure is that it is the CloudKit syn that is not pushing inMemory one back around to us, i.e. doesn't know how to handle
-        // properly.
+        // Best I can figure is that it is the CloudKit syn that is not pushing inMemory one back around to us, i.e. doesn't know how to
+        // handle properly.
         guard badRoot.root == true else {
             log.warning("\(#function) erroneously called on a non-root item \n \(badRoot)")
             return
@@ -229,5 +232,4 @@ final class AppModel: ObservableObject, Identifiable {
             }
         }
     }
-
 }

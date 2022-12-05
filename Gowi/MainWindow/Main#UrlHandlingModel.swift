@@ -10,41 +10,46 @@ import os
 
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
-// URL defs
-extension Main {
-    ///
-    ///
+/*
+ Defines how URL's for the Main window are:
+    1) mapped from incomming URLs to their actions and routes. As well as how
+    2) created for existing routes.
+ */
 
+extension Main {
+    /// Default root URL for the Main window view.
     static let UrlRoot: URL = {
         var components = URLComponents()
-        components.scheme = AppDefs.URLScheme
-        components.host = AppDefs.UrlHost.mainWindow.rawValue
+        components.scheme = AppUrlScheme
+        components.host = AppUrlHost.mainWindow.rawValue
         return components.url!
     }()
 
+    /// Encodes the window routing options for the apps Main window as a corresponding URL
+    /// - Parameter routingOpts: options that need encoding
+    /// - Returns: URL containing the encoded data
     static func urlEncode(_ routingOpts: WindowGroupRoutingOpt) -> URL? {
         var components = URLComponents()
-        components.scheme = AppDefs.URLScheme
-        components.host = AppDefs.UrlHost.mainWindow.rawValue
+        components.scheme = AppUrlScheme
+        components.host = AppUrlHost.mainWindow.rawValue
 
         switch routingOpts {
         case let .showItems(_, sideBarFilterSelected, contentItemIdsSelected):
 
-            components.path = AppDefs.MainUrlPath.showItems.rawValue
+            components.path = AppMainUrlPath.showItems.rawValue
 
             let queryFilterSelected = URLQueryItem(
-                name: AppDefs.MainUrlQuery.filterId.rawValue, value: sideBarFilterSelected.rawValue
+                name: AppMainUrlQuery.filterId.rawValue, value: sideBarFilterSelected.rawValue
             )
 
             let queryItems: Array<URLQueryItem> = contentItemIdsSelected.map { id in
-                URLQueryItem(name: AppDefs.MainUrlQuery.itemId.rawValue, value: id.uuidString)
+                URLQueryItem(name: AppMainUrlQuery.itemId.rawValue, value: id.uuidString)
             }
 
             let query = [queryFilterSelected] + queryItems
 
             components.queryItems = query.count > 0 ? query : nil
         case .newItem(sideBarFilterSelected: _):
-            // TODO: Add new item URL encoding
             break
         }
 
@@ -55,6 +60,9 @@ extension Main {
         return url
     }
 
+    /// Entry point for decoding  a URL for the Main window into the app's equivalent routing information.
+    /// - Parameter url: url for decoding
+    /// - Returns: decoded routing options.
     static func urlDecode(_ url: URL) -> WindowGroupRoutingOpt? {
         // log.debug("\(#function) -   url = \(url)")
 
@@ -63,20 +71,20 @@ extension Main {
             return nil
         }
 
-        guard components.scheme == AppDefs.URLScheme else {
-            log.warning("Failed URL decode; received unknowm scheme name (\(components.scheme ?? "nil"))  does not match that supported (\(AppDefs.URLScheme)) ")
+        guard components.scheme == AppUrlScheme else {
+            log.warning("Failed URL decode; received unknowm scheme name (\(components.scheme ?? "nil"))  does not match that supported (\(AppUrlScheme)) ")
             return nil
         }
 
-        if components.host != AppDefs.UrlHost.mainWindow.rawValue {
+        if components.host != AppUrlHost.mainWindow.rawValue {
             log.warning("Failed URL decode; received request for unknown host window type (\(components.host ?? "nil"))")
             return nil
 
         } else {
             switch components.path {
-            case AppDefs.MainUrlPath.showItems.rawValue:
+            case AppMainUrlPath.showItems.rawValue:
                 return decodeShowItems(queryItems: components.queryItems)
-            case AppDefs.MainUrlPath.newItem.rawValue:
+            case AppMainUrlPath.newItem.rawValue:
                 return .newItem(sideBarFilterSelected: .waiting)
             default:
                 log.warning("Failed URL decode; received request for unknown route path (\(components.path))")
@@ -85,6 +93,7 @@ extension Main {
         }
     }
 
+    /// Decodes URL requests to showItems
     private static func decodeShowItems(queryItems: [URLQueryItem]?) -> WindowGroupRoutingOpt? {
         guard let queryItems = queryItems else {
             log.warning("Failed URL decode; received request with no info about filter to use or items to show")
@@ -96,7 +105,7 @@ extension Main {
 
         queryItems.forEach { (qi: URLQueryItem) in
             switch qi.name {
-            case AppDefs.MainUrlQuery.filterId.rawValue:
+            case AppMainUrlQuery.filterId.rawValue:
                 let qiVal: String? = qi.value
 
                 switch qiVal {
@@ -110,7 +119,7 @@ extension Main {
                 default:
                     sidebarSelected = .all
                 }
-            case AppDefs.MainUrlQuery.itemId.rawValue:
+            case AppMainUrlQuery.itemId.rawValue:
                 if let qiVal = qi.value, let id = UUID(uuidString: qiVal) {
                     itemsSelected.insert(id)
                 }

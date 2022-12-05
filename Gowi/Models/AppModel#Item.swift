@@ -12,11 +12,14 @@ import SwiftUI
 import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
+// AppModel public functionallity specifically associated with the handling of `Item`s
 extension AppModel {
+    /// Persists changes made against `AppModel#viewContext`
     func saveToCoreData() {
         Self.saveToCoreData(viewContext)
     }
 
+    /// Persist changes made against an arbitray moc
     static func saveToCoreData(_ moc: NSManagedObjectContext) {
         if moc.hasChanges {
             do {
@@ -34,6 +37,16 @@ extension AppModel {
         }
     }
 
+    /// Adds a new `Item` to the parent in the current `AppModel#viewContext` in an undoalbe way
+    /// - Parameters:
+    ///   - externalUM: Add an entry to undo the creation of the `Item` with this `UndoManager`
+    ///   - parents: Parent `Item`s for the new `Item`
+    ///   - title: Title to assign to the new `Item`
+    ///   - priority: Priority to assign to the new `Item`
+    ///   - complete: A completion `Date` to assign, or not.
+    ///   - notes: Notes to assign.
+    ///   - children: The set of child `Item`s to assign to the new `Item`
+    /// - Returns: The newly created, and as yet, unpersisted `Item`
     func itemAddNewTo(
         externalUM: UndoManager?,
         parents: Set<Item>, title: String, priority: Double, complete: Date?, notes: String, children: Set<Item>
@@ -46,6 +59,7 @@ extension AppModel {
         return item!
     }
 
+    /// As per `AppModel#itemAddNewTo`, except not undoable and works with arbitrary moc
     static func itemAddNewTo(
         _ moc: NSManagedObjectContext,
         parents: Set<Item>, title: String, priority: Double, complete: Date?, children: Set<Item>, notes: String?
@@ -65,19 +79,30 @@ extension AppModel {
         return newItem
     }
 
+    /// Creates and inserts and new `Item` into a list organised by priority on the `AppModel#viewContext` in an undoable way.
+    /// - Parameters:
+    ///   - externalUM: Add an entry to undo the creation the and insertion of the new `Item` with this `UndoManager`
+    ///   - parent: A single parent `Item` which owns the priortiy list.
+    ///   - items: The priority sorted array of `Items` in that list
+    ///   - tgtIdxsEdge: The edge where the new `Item` is to be inserted at. Insert __Above__ item @ idx = n use `tgtIdxsEdge` = n, __Below__  idx = n use `tgtIdxsEdge` = n + 1
+    ///   - title: The title for the new `Item`
+    ///   - complete: The `Date` for the new `Item`
+    ///   - notes: The notes for the new `Item`
+    ///   - children: The list of child `Items` to assign to the new `Item`
+    /// - Returns: he newly created, and as yet, unpersisted `Item`
     func itemNewInsertInPriority(
         externalUM: UndoManager?,
         parent: Item, list items: Array<Item>, where tgtIdxsEdge: Int,
         title: String, complete: Date?, notes: String, children: Set<Item>
     ) -> Item {
-        /// --------------- tgtIdxEdge = 0
-        /// sourceItem  0
-        /// --------------- tgtIdxEdge = 1
-        /// source Idx = 1
-        /// -------------- tgtIdxEdge = 2
-        /// source Idx =2
-        /// -------------- tgtIdxEdge = 3
-        /// ...
+        // --------------- tgtIdxEdge = 0
+        //  sourceItem  0
+        // --------------- tgtIdxEdge = 1
+        // source Idx = 1
+        // -------------- tgtIdxEdge = 2
+        // source Idx =2
+        // -------------- tgtIdxEdge = 3
+        // ...
 
         let priorities = AppModel.itemPriorityPair(forEdgeIdx: tgtIdxsEdge, items: items)
 
@@ -90,6 +115,10 @@ extension AppModel {
         return itemAddNewTo(externalUM: externalUM, parents: [parent], title: title, priority: insertPriority, complete: nil, notes: notes, children: children)
     }
 
+    /// Deletes a list of `Items` from the `AppModel#viewContext` in an undoable way
+    /// - Parameters:
+    ///   - externalUM: Add an entry to undo the deletion of the `Item`s with this `UndoManager`
+    ///   - items: List of `Items` to delete
     func itemsDelete(
         externalUM: UndoManager?,
         list items: Array<Item>
@@ -100,6 +129,7 @@ extension AppModel {
         }
     }
 
+    /// As `AppModel#itemsDelete`, except not undoable and works with arbitrary moc
     static func itemsDelete(_ moc: NSManagedObjectContext, items: Array<Item>) {
         items.forEach { item in
             item.parentList = nil /// Just deleting the item is not enough as it doesn't get removed  from  the parent's children lists until after the moc is saved
@@ -107,6 +137,11 @@ extension AppModel {
         }
     }
 
+    /// Sets a completed `Date` for a list of `Item`s on the `AppModel#viewContext` in an undoable way.
+    /// - Parameters:
+    ///   - externalUM: Add an entry to undo the setting of the completion `Date` for these `Item`s with this `UndoManager`
+    ///   - items: The list of a `Item` to assign the completion `Date` to.
+    ///   - date: The `Date` to assign to the `Item`s
     func itemsSetCompletionDate(
         externalUM: UndoManager?,
         items: Array<Item>,
@@ -120,6 +155,7 @@ extension AppModel {
         objectWillChange.send()
     }
 
+    /// As `AppModel#itemsSetCompletionDate`, except not undoable and works with arbitrary moc
     static func itemsSetCompletionDate(_ moc: NSManagedObjectContext, items: Array<Item>, date: Date?) {
         items.forEach { item in
             item.completed = date
@@ -127,53 +163,62 @@ extension AppModel {
         }
     }
 
-    static func itemPriorityPair(forEdgeIdx tgtEdgeIdx: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
+    /// Computes priority values for above and below a desired `tgtEdgeIdx`.
+    private static func itemPriorityPair(forEdgeIdx tgtEdgeIdx: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
         guard items.count > 0 else {
-            return (aboveEdge: SideBarDefaultOffset, belowEdge: -SideBarDefaultOffset)
+            return (aboveEdge: DefaultOffset, belowEdge: -DefaultOffset)
         }
 
         let itemPriorityAboveTgtEdge = tgtEdgeIdx == 0
-            ? items[0].priority + SideBarDefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
+            ? items[0].priority + DefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
             : items[tgtEdgeIdx - 1].priority
 
         let itemPriorityBelowTgtEdge = tgtEdgeIdx == items.count
-            ? items[items.count - 1].priority - SideBarDefaultOffset /// Dragging to tail, no Item below so have to special case
+            ? items[items.count - 1].priority - DefaultOffset /// Dragging to tail, no Item below so have to special case
             : items[tgtEdgeIdx].priority
 
         return (aboveEdge: itemPriorityAboveTgtEdge, belowEdge: itemPriorityBelowTgtEdge)
     }
 
-    func reOrderUsingPriority(
+    /**
+      Rearranges a priortiy list on `AppModel#viewContext` in an undoable way
+      - Parameters:
+         -  externalUM: Add an entry to undo the reorder of the priority list with this `UndoManager`
+         - items: Current sorted priortiy list
+         - sourceIndices: The set of indices in the `Items` current priortiy list
+         - tgtEdgeIdx: The edge where the `Items` at `sourceIndices` at to be insert __Above__ item @ idx = n use `tgtIdxsEdge` = n, __Below__  idx = n use `tgtIdxsEdge` = n + 1
+
+      Items in a list have their movement controlled by the specification relative to the original List by:
+         1) A set of the indices of the source Items to be moved
+         2) A target Item edge where the Items that are to be moved are to be inserted.
+
+      For a list of N items, normally the list will have these laid out as follows from top to bottom
+
+     ------------------- tgt edge idx = 0
+     src Item idx = 0
+     ------------------- tgt edge idx = 1
+     src Item Idx = 1
+     ------------------- tgt edge idx = 2
+     src Item Idx = 2
+     ------------------- tgt edge idx= 3
+     ...
+     ------------------- tgt edge idx = N - 1
+     src Item Idx = N - 1
+     ------------------- tgt edge idx = N
+
+      */
+    func rearrangeUsingPriority(
         externalUM: UndoManager?,
         items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int
     ) {
         //
         Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Move") {
-            AppModel.reOrderUsingPriority(items: items, sourceIndices: sourceIndices, tgtEdgeIdx: tgtEdgeIdx)
+            AppModel.rearrangeUsingPriority(items: items, sourceIndices: sourceIndices, tgtEdgeIdx: tgtEdgeIdx)
         }
     }
 
-    /**
-       Items in a list have their movement controlled by the specification relative to the original List of
-          1) A set of the indices of the source Items to be moved
-          2) A target Item edge where the Items that are to be moved are to be inserted.
-
-       For a list of N items, normally the list will have these laid out as follows from top to bottom
-
-      ------------------- tgt edge idx = 0
-      src Item idx = 0
-      ------------------- tgt edge idx = 1
-      src Item Idx = 1
-      ------------------- tgt edge idx = 2
-      src Item Idx = 2
-      ------------------- tgt edge idx= 3
-      ...
-      ------------------- tgt edge idx = N - 1
-      src Item Idx = N - 1
-      ------------------- tgt edge idx = N
-
-     */
-    static func reOrderUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int) {
+    ///  Re-arrange an arbitray list of `Item`s according to the their priortiy.
+    static func rearrangeUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int) {
         guard let sourceIndicesFirstIdx = sourceIndices.first, let sourceIndicesLastIdx = sourceIndices.last else {
             return
         }
@@ -216,8 +261,11 @@ extension AppModel {
         }
     }
 
-    private static let SideBarDefaultOffset = 100.0
+    /// The default priority offset to use when inserting an `Item` where either as the result of moving (or creation) the insertion point is happening at the end or beginning of the the
+    /// list i.e. there is no priortiy value above or below to use for the calculation so we need a default.
+    private static let DefaultOffset = 100.0
 
+    /// Pass-through undo operations boiler-plate
     private static func undoPreFlight(externalUM: UndoManager?, contextUM: UndoManager?)
         -> (externalUM: UndoManager, contextUM: UndoManager)? {
         guard let externalUM = externalUM else {
@@ -231,6 +279,16 @@ extension AppModel {
         }
         return (externalUM, contextUM)
     }
+
+    /**
+     Registers a pass-through undo from one external undo manager that triggers an undo with another.
+     - Parameters:
+     - externalUM: The external `UndoManager` that the pass-through is to be registered with
+     - undoableTgtUM: The  `UndoManager` (usually`AppModel#viewContext` (and possibly needs to be))  that will actually perform the undo and redo operations.
+     - withTarget:  ..
+     - actionName: The base action name to assign (shows up in the `Undo` and `Redo` App Menubar entries).
+     - action: A closure containing the action tthat is to be made undoable by the `undoableTgtUM`
+      */
 
     private static func registerPassThroughUndo(
         with externalUM: UndoManager?, passingTo undoableTgtUM: UndoManager?, withTarget: AnyObject,

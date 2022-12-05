@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-extension Main { // Content specific Intents
+// The Main window's intents for its NavigationSplitView Content
+extension Main {
+    /// List of `Items` that the content should display
     internal var contentItems: Array<Item> {
         withAnimation {
             switch sideBarFilterSelected {
@@ -21,14 +23,21 @@ extension Main { // Content specific Intents
         }
     }
 
+    /// List of `Items` that have been selected from the **visible** content list
     internal var contentItemsSelected: Array<Item> {
-        contentItems.filter({ contentItemIdsSelected.contains($0.ourIdS) })
+        contentItems.filter({ itemIdsSelected.contains($0.ourIdS) })
     }
 
+    ///  The `onMove` method  to use  (depending on what filter is being used for the content list)
+    // Currently can only rearrange the waiting list by priority. This open the door to
+    // say rearranging lists by other criteria, such as perhaps changing completion dates
+    // if wanted to use for the "done" list.
     internal var contentOnMovePerform: (IndexSet, Int) -> Void {
         switch sideBarFilterSelected {
         case .waiting:
-            return withAnimation { contentOnMoveOfWaitingItems }
+            return withAnimation {
+                contentOnMoveOfWaitingItems
+            }
         case .done:
             /// Could use movement to adjust completion date but currently just do nothing
             return { _, _ in }
@@ -38,6 +47,7 @@ extension Main { // Content specific Intents
         }
     }
 
+    /// content list filtered for waiting `Item`s
     internal var contentItemsListWaiting: Array<Item> {
         Self.contentItemsListWaiting(itemsAll)
     }
@@ -47,6 +57,7 @@ extension Main { // Content specific Intents
         items.filter({ $0.completed == nil }).sorted { $0.priority > $1.priority }
     }
 
+    /// content list filtered for done `Item`s
     internal var contentItemsListDone: Array<Item> {
         Self.contentItemsListDone(itemsAll)
     }
@@ -62,6 +73,7 @@ extension Main { // Content specific Intents
         }
     }
 
+    /// content list filtered for all `Item`s
     internal var contentItemsListAll: Array<Item> {
         // Want  [0] to have largest priority value, [end] to have lowest
         Self.contentItemsListAll(itemsAll)
@@ -72,7 +84,10 @@ extension Main { // Content specific Intents
         items.sorted { $0.priority > $1.priority }
     }
 
-    internal func contentOnMoveOfWaitingItems(_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
-        appModel.reOrderUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
+    /// `onMove` function to use for rearranging the waiting items list
+    private func contentOnMoveOfWaitingItems(_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
+        withAnimation {
+            appModel.rearrangeUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
+        }
     }
 }

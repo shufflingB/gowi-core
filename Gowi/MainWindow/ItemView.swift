@@ -9,6 +9,7 @@ import os
 import SwiftUI
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
+/// A component for displaying and updating the details for an `Item`
 struct ItemView: View {
     let stateView: Main
     @ObservedObject var item: Item
@@ -29,13 +30,13 @@ struct ItemView: View {
 }
 
 extension ItemView {
-    struct Layout: View {
+    fileprivate struct Layout: View {
         @ObservedObject var item: Item
-        @FocusState var focus: FocusField?
         let urlForItem: URL
         let itemSetCompletionDate: (Date?) -> Void
 
-        @FocusedValue(\.undoWfa) var wfa: Main.UndoWorkFocusArea?
+        @FocusState private var focus: FocusField?
+        @FocusedValue(\.undoWfa) private var wfa: Main.UndoWorkFocusArea?
 
         enum FocusField {
             case title
@@ -154,8 +155,8 @@ extension ItemView {
                 .help("Copy the Item's completion date to the the clipboard")
 
                 OptionalDatePickerView(
+                    ourId: item.ourIdS,
                     setLabel: "Done:",
-                    id: item.ourIdS,
                     externalDate: item.completed,
                     externalDateUpdate: { nv in
                         itemSetCompletionDate(nv)
@@ -169,7 +170,7 @@ extension ItemView {
     }
 }
 
-struct ItemView_Previews: PreviewProvider {
+struct _ItemView_Previews: PreviewProvider {
     @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
     @StateObject static var item: Item = appModel.systemRootItem.childrenListAsSet.first!
     @Environment(\.undoManager) static var windowUm: UndoManager?

@@ -5,13 +5,11 @@
 //  Created by Jonathan Hume on 02/12/2022.
 //
 
+import Foundation
 import SwiftUI
 
 extension Main {
-    enum SidebarFilterOpt: String, CaseIterable, Codable {
-        case waiting = "Waiting", done = "Done", all = "All"
-    }
-
+    /// Creates the Sidebar view component of the Main Window's `NavigationSplitView`
     struct SidebarView: View {
         let stateView: Main
 
@@ -35,7 +33,7 @@ extension Main {
     }
 }
 
-struct Sidebar_Previews: PreviewProvider {
+struct _Sidebar_Previews: PreviewProvider {
     @State static var tabSelected: Main.SidebarFilterOpt = .waiting
 
     static var previews: some View {

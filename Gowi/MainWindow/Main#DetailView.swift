@@ -7,38 +7,96 @@
 
 import SwiftUI
 
-struct DetailView: View {
-    let stateView: Main
-
-    var body: some View {
-        Layout(stateView: stateView, items: stateView.detailItems)
-    }
-
-    struct Layout: View {
+extension Main {
+    /// Creates the Content view component of the Main Window's `NavigationSplitView`
+    struct DetailView: View {
         let stateView: Main
-        let items: Array<Item>
 
         var body: some View {
-            if items.count == 0 {
-                Text("No items selected")
-                    .background(.background)
-            } else {
-                ZStack {
-                    ForEach(items.indices, id: \.self) { idx in
-                        if items.count == 1 {
-                            ItemView(stateView: stateView, item: items[idx])
-                                .background(.background)
-                        } else {
-                            ItemView(stateView: stateView, item: items[idx])
-                                .background(.background)
-                                .border(Color.accentColor)
-                                .padding(.all)
-                                .zIndex(-Double(idx))
-                                .rotationEffect(.degrees(Double(idx) * 2.0))
+            Layout(items: stateView.detailItems,
+                   nothingSelectedView: {
+                       VStack {
+                           Text("No items selected")
+                               .background(.background)
+                       }
+                   },
+                   itemView: { (item: Item) in
+                       ItemView(stateView: stateView, item: item)
+                   }
+            )
+        }
+
+        fileprivate struct Layout<NSContent: View, IContent: View>: View {
+            let items: Array<Item>
+            @ViewBuilder let nothingSelectedView: NSContent
+            @ViewBuilder let itemView: (_: Item) -> IContent
+
+            var body: some View {
+                if items.count == 0 {
+                    nothingSelectedView
+                } else {
+                    ZStack { // Use the ZStack to show if the user has multiple Items selected
+                        ForEach(items.indices, id: \.self) { idx in
+                            if items.count == 1 {
+                                itemView(items[idx])
+                                    .background(.background)
+                            } else {
+                                itemView(items[idx])
+                                    .background(.background)
+                                    .border(Color.accentColor)
+                                    .padding(.all)
+                                    .zIndex(-Double(idx))
+                                    .rotationEffect(.degrees(Double(idx) * 2.0))
+                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+struct _Detail_Previews: PreviewProvider {
+    @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
+
+    static func noItemMockView() -> some View {
+        Text("No items selected")
+            .frame(width: 200, height: 200)
+    }
+
+    static func itemMockView(_ item: Item) -> some View {
+        VStack(alignment: .leading) {
+            Text("ItemView Mock")
+                .font(.title3)
+                .padding(.bottom)
+            Text("Title: \"\(item.titleS)\"")
+            Text("Notes: \"\(item.notesS)\"")
+        }
+        .padding()
+        .frame(width: 200, height: 200)
+    }
+
+    static var previews: some View {
+        Main.DetailView.Layout(
+            items: [],
+            nothingSelectedView: noItemMockView,
+            itemView: itemMockView
+        )
+        .previewDisplayName("No Items selected")
+
+        Main.DetailView.Layout(
+            items: Array(appModel.systemRootItem.childrenListAsSet).dropLast(7),
+            nothingSelectedView: noItemMockView,
+            itemView: itemMockView
+        )
+
+        .previewDisplayName("Multiple Items selected")
+
+        Main.DetailView.Layout(
+            items: [appModel.systemRootItem.childrenListAsSet.first!],
+            nothingSelectedView: noItemMockView,
+            itemView: itemMockView
+        )
+        .previewDisplayName("Single Item selected")
     }
 }

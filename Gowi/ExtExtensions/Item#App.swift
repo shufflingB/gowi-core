@@ -12,6 +12,7 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 
 import SwiftUI
 
+// App level extension of `Item`
 extension Item {
     var ourIdS: UUID {
         get { ourId ?? UUID() }
@@ -24,11 +25,7 @@ extension Item {
 
         set(nv) {
             if nv != title {
-//                log.debug("Title being set to \(nv)")
                 title = nv
-                /// Need this to workaround  "Binding<String> action tried to update multiple times per frame" bug and to ensure the title  displayed in the Sidebar
-                /// and Detail stay properly in sync. See  macOSToDo://main/v1/all?id=08C85195-4871-4011-867A-23E8CF2415B2 for more on that.
-                objectWillChange.send()
             }
         }
     }
@@ -38,7 +35,6 @@ extension Item {
 
         set(nv) {
             if nv != notes {
-//            print("Notes being set")
                 notes = nv
             }
         }
