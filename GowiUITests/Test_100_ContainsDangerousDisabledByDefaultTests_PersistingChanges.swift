@@ -13,7 +13,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     // OK_TO_RUN_DANGEROUS Enables tests that need to run against the live backend data to do so.
     // WARNING:
     // WARNING: Only enable if okay with risk of any live data that the app has getting scrambled if the tests go wrong
-    let OK_TO_RUN_DANGEROUS_TESTS = true
+    let OK_TO_RUN_DANGEROUS_TESTS = false
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
