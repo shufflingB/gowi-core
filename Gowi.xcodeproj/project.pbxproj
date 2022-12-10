@@ -150,6 +150,8 @@
 		FFDF93AC29129ABE00B83CB8 /* Menubar#fileCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Menubar#fileCommands.swift"; sourceTree = "<group>"; };
 		FFDF93AE29129B4400B83CB8 /* Menubar#windowCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Menubar#windowCommands.swift"; sourceTree = "<group>"; };
 		FFDF93B02912AA4600B83CB8 /* Main#WindowGroupRouteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Main#WindowGroupRouteView.swift"; sourceTree = "<group>"; };
+		FFF85F412944D42F00E498F2 /* ModelStateViewViewDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ModelStateViewViewDiagram.png; sourceTree = "<group>"; };
+		FFF85F422944D45000E498F2 /* GowiRunningOnMacOSScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GowiRunningOnMacOSScreenshot.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 			children = (
 				FF99805D2934E42A003F343E /* README.md */,
 				FF99805E29350B40003F343E /* LICENSE */,
+				FFF85F402944D3E800E498F2 /* DevAssets */,
 				FF99805B2934E403003F343E /* Credits.rtf */,
 				FFA62B8128EC7B8100868F77 /* Gowi */,
 				FFA62B9828EC7B8300868F77 /* GowiTests */,
@@ -324,6 +327,15 @@
 				FFDF93AE29129B4400B83CB8 /* Menubar#windowCommands.swift */,
 			);
 			path = Menubars;
+			sourceTree = "<group>";
+		};
+		FFF85F402944D3E800E498F2 /* DevAssets */ = {
+			isa = PBXGroup;
+			children = (
+				FFF85F412944D42F00E498F2 /* ModelStateViewViewDiagram.png */,
+				FFF85F422944D45000E498F2 /* GowiRunningOnMacOSScreenshot.png */,
+			);
+			path = DevAssets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
