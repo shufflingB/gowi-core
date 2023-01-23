@@ -5,8 +5,10 @@ Gowi (*Get On With It*) is a feature complete(ish) implementation in SwiftUI of 
 The goals of the project are to:
 
 1. Determine and document how to:
+
     2. Achieve established platform norms using SwiftUI.
     2. Test that it does.
+    
 2. Form a usable \* and scalable basis for future experimentation and development, e.g. add `iPadOS` version, work 
 sharing, time estimation, richer text editing ...
 
