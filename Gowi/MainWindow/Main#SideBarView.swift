@@ -33,10 +33,11 @@ extension Main {
     }
 }
 
-struct _Sidebar_Previews: PreviewProvider {
-    @State static var tabSelected: Main.SidebarFilterOpt = .waiting
+#Preview {
+    @Previewable @State var tabSelected: Main.SidebarFilterOpt = .waiting
+    
+    Main.SidebarView.Layout(
+        listSelected: $tabSelected,
+        listOfAvailableFilters: Array(Main.SidebarFilterOpt.allCases))
 
-    static var previews: some View {
-        Main.SidebarView.Layout(listSelected: $tabSelected, listOfAvailableFilters: Array(Main.SidebarFilterOpt.allCases))
-    }
 }

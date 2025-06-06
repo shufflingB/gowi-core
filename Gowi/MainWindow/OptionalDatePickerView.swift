@@ -145,10 +145,19 @@ extension OptionalDatePickerView {
     }
 }
 
-struct _OptionalDatePicker_Layout_Previews: PreviewProvider {
-    static var previews: some View {
-        OptionalDatePickerView.Layout(setLabel: "iSet", date: .constant(Date()), isDone: .constant(false))
 
-        OptionalDatePickerView.Layout(setLabel: "iSet", date: .constant(Date()), isDone: .constant(true))
-    }
+#Preview("Not Done") {
+    OptionalDatePickerView.Layout(
+        setLabel: "iSet",
+        date: .constant(Date()),
+        isDone: .constant(false)
+    )
+}
+
+#Preview("Done") {
+    OptionalDatePickerView.Layout(
+        setLabel: "iSet",
+        date: .constant(Date()),
+        isDone: .constant(true)
+    )
 }

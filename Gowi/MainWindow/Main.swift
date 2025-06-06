@@ -7,6 +7,8 @@
 
 import CoreData
 import SwiftUI
+import os
+fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
 /*
  Creates the app's Main window top-level structure, links in the `@SwiftUI` state  and defines the Intents for all component
@@ -46,6 +48,7 @@ struct Main: View {
         let visibleContentItemIdsSelected: Binding<Set<UUID>> = Binding {
             Set(contentItemsSelected.map({ $0.ourIdS }))
         } set: { nv in
+            log.debug("Selection binding called with: \(nv)")
             itemIdsSelected = nv
         }
 

@@ -56,47 +56,53 @@ extension Main {
     }
 }
 
-struct _Detail_Previews: PreviewProvider {
-    @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
+import SwiftUI
 
-    static func noItemMockView() -> some View {
-        Text("No items selected")
-            .frame(width: 200, height: 200)
-    }
+// MARK: - Mock Views
 
-    static func itemMockView(_ item: Item) -> some View {
-        VStack(alignment: .leading) {
-            Text("ItemView Mock")
-                .font(.title3)
-                .padding(.bottom)
-            Text("Title: \"\(item.titleS)\"")
-            Text("Notes: \"\(item.notesS)\"")
-        }
-        .padding()
+private func noItemMockView() -> some View {
+    Text("No items selected")
         .frame(width: 200, height: 200)
+}
+
+private func itemMockView(_ item: Item) -> some View {
+    VStack(alignment: .leading) {
+        Text("ItemView Mock")
+            .font(.title3)
+            .padding(.bottom)
+        Text("Title: \"\(item.titleS)\"")
+        Text("Notes: \"\(item.notesS)\"")
     }
+    .padding()
+    .frame(width: 200, height: 200)
+}
 
-    static var previews: some View {
-        Main.DetailView.Layout(
-            items: [],
-            nothingSelectedView: noItemMockView,
-            itemView: itemMockView
-        )
-        .previewDisplayName("No Items selected")
+// MARK: - Previews
 
-        Main.DetailView.Layout(
-            items: Array(appModel.systemRootItem.childrenListAsSet).dropLast(7),
-            nothingSelectedView: noItemMockView,
-            itemView: itemMockView
-        )
+#Preview("No Items selected") {
+    Main.DetailView.Layout(
+        items: [],
+        nothingSelectedView: noItemMockView,
+        itemView: itemMockView
+    )
+}
 
-        .previewDisplayName("Multiple Items selected")
+#Preview("Multiple Items selected") {
+    @Previewable @StateObject var appModel = AppModel.sharedInMemoryWithTestData
 
-        Main.DetailView.Layout(
-            items: [appModel.systemRootItem.childrenListAsSet.first!],
-            nothingSelectedView: noItemMockView,
-            itemView: itemMockView
-        )
-        .previewDisplayName("Single Item selected")
-    }
+    Main.DetailView.Layout(
+        items: Array(appModel.systemRootItem.childrenListAsSet).dropLast(7),
+        nothingSelectedView: noItemMockView,
+        itemView: itemMockView
+    )
+}
+
+#Preview("Single Item selected") {
+    @Previewable @StateObject var appModel = AppModel.sharedInMemoryWithTestData
+
+    Main.DetailView.Layout(
+        items: [appModel.systemRootItem.childrenListAsSet.first!],
+        nothingSelectedView: noItemMockView,
+        itemView: itemMockView
+    )
 }
