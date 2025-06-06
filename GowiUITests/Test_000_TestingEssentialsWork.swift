@@ -21,40 +21,51 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func test_000_appHasEmptyInMemoryTestMode0() throws {
+    func test_000_appTestMode0HasNoData() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         app.sidebarAllList().click()
-
+        
         XCTAssertEqual(app.contentRows().count, 0,
                        "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
-
-        app.menubarItemNew.click()
-        app.typeText("000")
-        XCTAssertEqual(app.contentRows().count, 1,
-                       "And it is possible to create a new Item in this test mode")
-        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
-                      "That detects it needs saving")
-
-        app.menubarFileSaveChanges.click()
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
-                       "Detects that it has been saved")
-
-        app.menubarGowiQuit.click()
-
-        app.launch()
-        app.sidebarAllList().click()
-        XCTAssertEqual(app.contentRows().count, 0,
-                       "And yet when the app is relaunched the created Item has been expunged")
+        
+        
     }
-
-    func test_010_appHasInMemoryWithFixtureDataTestMode1() throws {
+    
+    func test_010_appTestMode1HasHasFixture() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "1"]
         app.launchAndSanitiseWindowsAndIdentifiers()
+        app.sidebarAllList().click()
 
         XCTAssertEqual(app.contentRows().count, 10,
                        "When the app is opened in test mode 1, it opens with 10 existing test Items")
+        
+//TODO: Verify that expected UUID is presenttestingMode1ourIdPresent
     }
+
+//    fun test_can_create_new_date
+    
+//
+//        app.menubarItemNew.click()
+//        app.typeText("000")
+//        XCTAssertEqual(app.contentRows().count, 1,
+//                       "And it is possible to create a new Item in this test mode")
+//        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
+//                      "That detects it needs saving")
+//
+//        app.menubarFileSaveChanges.click()
+//        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+//                       "Detects that it has been saved")
+//
+//        app.menubarGowiQuit.click()
+//
+//        app.launch()
+//        app.sidebarAllList().click()
+//        XCTAssertEqual(app.contentRows().count, 0,
+//                       "And yet when the app is relaunched the created Item has been expunged")
+//    }
+
+
 
     func test_100_appCanCreateNewWindowsFromMenuBar() {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]

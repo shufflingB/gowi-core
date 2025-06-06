@@ -35,10 +35,10 @@ final class AppModel: ObservableObject, Identifiable {
         if let testMode = ProcessInfo.processInfo.environment["GOWI_TESTMODE"] {
             switch testMode {
             case "0": // inMemory only
-                log.debug("AppModel.shared, detected Env 'GOWI_TESTMODE' mode 0")
+                log.debug("AppModel.shared, detected Env 'GOWI_TESTMODE' mode 0: in memory no test data")
                 return AppModel.sharedInMemoryNoTestData
             case "1": // inMemory + add default test data
-                log.debug("AppModel.shared, detected Env 'GOWI_TESTMODE' mode 1")
+                log.debug("AppModel.shared, detected Env 'GOWI_TESTMODE' mode 1: in memory 10 items with one of them with id = \(testingMode1ourIdPresent)")
                 return AppModel.sharedInMemoryWithTestData
             default:
                 log.debug("AppModel.shared, detected Env 'GOWI_TESTMODE', unknown mode \(testMode), defaulting to mode 0 ")
