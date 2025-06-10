@@ -23,6 +23,24 @@ final class AppModel: ObservableObject, Identifiable {
     var viewContext: NSManagedObjectContext {
         container.viewContext
     }
+    
+    /// DEBUG: Print all item data to console
+    func debugPrintAllItems() {
+        let allItems = Array(systemRootItem.childrenListAsSet)
+        print("=== DEBUG: All Items Data ===")
+        print("Total items: \(allItems.count)")
+        
+        for (index, item) in allItems.enumerated() {
+            print("Item \(index + 1):")
+            print("  Title: '\(item.titleS)'")
+            print("  ourId: \(item.ourId?.uuidString ?? "NIL")")
+            print("  completed: \(item.completed?.description ?? "NIL")")
+            print("  created: \(item.created?.description ?? "NIL")")
+            print("  priority: \(item.priority)")
+            print("  ---")
+        }
+        print("=== End Debug ===")
+    }
 
     /**
      Creates a shared instance of the `AppModel`.

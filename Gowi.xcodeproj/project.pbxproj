@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -140,6 +140,7 @@
 		FFB7DCE229379D2500A0DACA /* Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges.swift; sourceTree = "<group>"; };
 		FFB7DCE42937B62B00A0DACA /* Test_250_UpdatingItemDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_250_UpdatingItemDetails.swift; sourceTree = "<group>"; };
 		FFB7DCE82937DD6500A0DACA /* Test_260_UpdatingItemTodoPriorities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_260_UpdatingItemTodoPriorities.swift; sourceTree = "<group>"; };
+		FFB7E0E52DF8A02700553A40 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		FFDE6CDC28EF109E009736E3 /* Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menubar.swift; sourceTree = "<group>"; };
 		FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KbShortcuts.swift; sourceTree = "<group>"; };
 		FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
@@ -157,24 +158,18 @@
 /* Begin PBXFrameworksBuildPhase section */
 		FFA62B7C28EC7B8100868F77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFA62B9228EC7B8300868F77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFA62B9C28EC7B8300868F77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -216,6 +211,7 @@
 			children = (
 				FF99805D2934E42A003F343E /* README.md */,
 				FF99805E29350B40003F343E /* LICENSE */,
+				FFB7E0E52DF8A02700553A40 /* CLAUDE.md */,
 				FFF85F402944D3E800E498F2 /* DevAssets */,
 				FF99805B2934E403003F343E /* Credits.rtf */,
 				FFA62B8128EC7B8100868F77 /* Gowi */,
@@ -351,8 +347,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = Gowi;
 			productName = Gowi;
 			productReference = FFA62B7F28EC7B8100868F77 /* Gowi.app */;
@@ -418,7 +412,6 @@
 				};
 			};
 			buildConfigurationList = FFA62B7A28EC7B8100868F77 /* Build configuration list for PBXProject "Gowi" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -426,6 +419,7 @@
 				Base,
 			);
 			mainGroup = FFA62B7628EC7B8100868F77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = FFA62B8028EC7B8100868F77 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -440,34 +434,27 @@
 /* Begin PBXResourcesBuildPhase section */
 		FFA62B7D28EC7B8100868F77 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FFA62B8A28EC7B8300868F77 /* Preview Assets.xcassets in Resources */,
 				FF99805C2934E403003F343E /* Credits.rtf in Resources */,
 				FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFA62B9328EC7B8300868F77 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFA62B9D28EC7B8300868F77 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FFA62B7B28EC7B8100868F77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FF23068E28F7265700EE103B /* Main#UrlHandlingModel.swift in Sources */,
 				FFA62B8528EC7B8100868F77 /* Main.swift in Sources */,
@@ -502,11 +489,9 @@
 				FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */,
 				FF4E112529153D67002BEC74 /* OptionalDatePickerView.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFA62B9128EC7B8300868F77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FF09FC4E28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift in Sources */,
 				FF1A944C28EC9598008303B8 /* Test010_AppModel_Item_Creation.swift in Sources */,
@@ -514,11 +499,9 @@
 				FFB015E1292D0E2C0064289A /* KbShortcuts.swift in Sources */,
 				FFDE6CE728F02945009736E3 /* Test000_System_Init.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FFA62B9B28EC7B8300868F77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FFB7DCD92936148500A0DACA /* XCUIApplication#Detail.swift in Sources */,
 				FF9980772935371E003F343E /* XCUIApplication#Menubar.swift in Sources */,
@@ -541,7 +524,6 @@
 				FFB7DCE52937B62B00A0DACA /* Test_250_UpdatingItemDetails.swift in Sources */,
 				FF215E5D293916270021D936 /* Test_255_UpdatingItemCompletionDates.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -559,7 +541,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		FFA62BA728EC7B8300868F77 /* Debug */ = {
+		FFA62BA728EC7B8300868F77 /* Debug configuration for PBXProject "Gowi" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -620,7 +602,7 @@
 			};
 			name = Debug;
 		};
-		FFA62BA828EC7B8300868F77 /* Release */ = {
+		FFA62BA828EC7B8300868F77 /* Release configuration for PBXProject "Gowi" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -674,7 +656,7 @@
 			};
 			name = Release;
 		};
-		FFA62BAA28EC7B8300868F77 /* Debug */ = {
+		FFA62BAA28EC7B8300868F77 /* Debug configuration for PBXNativeTarget "Gowi" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -707,7 +689,7 @@
 			};
 			name = Debug;
 		};
-		FFA62BAB28EC7B8300868F77 /* Release */ = {
+		FFA62BAB28EC7B8300868F77 /* Release configuration for PBXNativeTarget "Gowi" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -739,7 +721,7 @@
 			};
 			name = Release;
 		};
-		FFA62BAD28EC7B8300868F77 /* Debug */ = {
+		FFA62BAD28EC7B8300868F77 /* Debug configuration for PBXNativeTarget "GowiTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -759,7 +741,7 @@
 			};
 			name = Debug;
 		};
-		FFA62BAE28EC7B8300868F77 /* Release */ = {
+		FFA62BAE28EC7B8300868F77 /* Release configuration for PBXNativeTarget "GowiTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -779,7 +761,7 @@
 			};
 			name = Release;
 		};
-		FFA62BB028EC7B8300868F77 /* Debug */ = {
+		FFA62BB028EC7B8300868F77 /* Debug configuration for PBXNativeTarget "GowiUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -797,7 +779,7 @@
 			};
 			name = Debug;
 		};
-		FFA62BB128EC7B8300868F77 /* Release */ = {
+		FFA62BB128EC7B8300868F77 /* Release configuration for PBXNativeTarget "GowiUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -821,37 +803,33 @@
 		FFA62B7A28EC7B8100868F77 /* Build configuration list for PBXProject "Gowi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FFA62BA728EC7B8300868F77 /* Debug */,
-				FFA62BA828EC7B8300868F77 /* Release */,
+				FFA62BA728EC7B8300868F77 /* Debug configuration for PBXProject "Gowi" */,
+				FFA62BA828EC7B8300868F77 /* Release configuration for PBXProject "Gowi" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FFA62BA928EC7B8300868F77 /* Build configuration list for PBXNativeTarget "Gowi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FFA62BAA28EC7B8300868F77 /* Debug */,
-				FFA62BAB28EC7B8300868F77 /* Release */,
+				FFA62BAA28EC7B8300868F77 /* Debug configuration for PBXNativeTarget "Gowi" */,
+				FFA62BAB28EC7B8300868F77 /* Release configuration for PBXNativeTarget "Gowi" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FFA62BAC28EC7B8300868F77 /* Build configuration list for PBXNativeTarget "GowiTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FFA62BAD28EC7B8300868F77 /* Debug */,
-				FFA62BAE28EC7B8300868F77 /* Release */,
+				FFA62BAD28EC7B8300868F77 /* Debug configuration for PBXNativeTarget "GowiTests" */,
+				FFA62BAE28EC7B8300868F77 /* Release configuration for PBXNativeTarget "GowiTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FFA62BAF28EC7B8300868F77 /* Build configuration list for PBXNativeTarget "GowiUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FFA62BB028EC7B8300868F77 /* Debug */,
-				FFA62BB128EC7B8300868F77 /* Release */,
+				FFA62BB028EC7B8300868F77 /* Debug configuration for PBXNativeTarget "GowiUITests" */,
+				FFA62BB128EC7B8300868F77 /* Release configuration for PBXNativeTarget "GowiUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

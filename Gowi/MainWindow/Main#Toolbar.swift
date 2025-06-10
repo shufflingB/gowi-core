@@ -64,5 +64,15 @@ extension Main {
             .font(.title2)
             .help("Save changes")
         }
+        
+        ToolbarItem(id: "tbar.debug") {
+            Button(action: {
+                appModel.debugPrintAllItems()
+            }) {
+                Label("Debug Print Items", systemImage: "ladybug")
+            }
+            .font(.title2)
+            .help("Print all item data to console (for debugging)")
+        }
     }
 }
