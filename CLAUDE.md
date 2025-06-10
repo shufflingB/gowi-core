@@ -98,3 +98,6 @@ Add launch argument in Xcode scheme: `-com.apple.CoreData.SQLDebug 1`
 
 ### Test Data Inspection
 Use `AppModel.debugPrintAllItems()` to inspect current data state during development.
+
+## Git Commit Guidelines
+- Git commit messages should just state changes and not add credit information.
