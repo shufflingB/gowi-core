@@ -129,6 +129,8 @@ final class AppModel: ObservableObject, Identifiable {
 
         if inMemory {
             ckc.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+            // Disable CloudKit for in-memory testing
+            ckc.persistentStoreDescriptions.first!.cloudKitContainerOptions = nil
         } else {
             // Configure CloudKit container for persistent stores
             if let storeDescription = ckc.persistentStoreDescriptions.first {
