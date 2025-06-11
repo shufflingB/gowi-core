@@ -17,7 +17,7 @@ extension XCUIApplication {
 
         let winS: XCUIElement = win == nil ? win1 : win!
 //
-        let query: XCUIElementQuery = winS.tables.children(matching: .tableRow)
+        let query: XCUIElementQuery = winS.outlines.children(matching: .outlineRow)
             .textFields
             .matching(identifier: AccessId.MainWindowContentTitleField.rawValue)
 
@@ -28,7 +28,7 @@ extension XCUIApplication {
 
     private func contentRow(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
         let winS: XCUIElement = win == nil ? win1 : win!
-        return winS.tables.children(matching: .tableRow).element(boundBy: row)
+        return winS.outlines.children(matching: .outlineRow).element(boundBy: row)
     }
 
     func contentRowTextField(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
@@ -80,16 +80,16 @@ extension XCUIApplication {
 
     func contentContextMenuDelete(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
         let winS: XCUIElement = win == nil ? win1 : win!
-        return winS.tables.menuItems[AccessId.MainWindowContentContextDelete.rawValue]
+        return winS.outlines.menuItems[AccessId.MainWindowContentContextDelete.rawValue]
     }
 
     func contentContextMenuOpenInNewTab(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
         let winS: XCUIElement = win == nil ? win1 : win!
-        return winS.tables.menuItems[AccessId.MainWindowContentContextOpenInNewTab.rawValue]
+        return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewTab.rawValue]
     }
 
     func contentContextMenuOpenInNewWindow(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
         let winS: XCUIElement = win == nil ? win1 : win!
-        return winS.tables.menuItems[AccessId.MainWindowContentContextOpenInNewWindow.rawValue]
+        return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewWindow.rawValue]
     }
 }
