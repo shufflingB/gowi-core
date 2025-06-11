@@ -69,7 +69,7 @@ struct Main: View {
                         DetailView(stateView: self)
                     }
                 )
-                .toolbar(id: "mainWindowToolBar", content: toolbar)
+                .toolbar(content: toolbar)
                 .navigationTitle(Text(navigationTitleBlurb))
                 .navigationSubtitle(Text(navigationSubtitleBlurb))
             }
