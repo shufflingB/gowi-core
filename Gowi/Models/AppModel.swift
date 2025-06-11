@@ -88,7 +88,8 @@ final class AppModel: ObservableObject, Identifiable {
         _ = NSApplication.shared
 
         container = Self.CKContainerGet(
-            name: "Gowi",
+            modelName: "Gowi",
+            cloudKitContainerName: Self.cloudKitContainerName(),
             inMemory: inMemory
         )
         let vcUM = UndoManager()
@@ -109,19 +110,32 @@ final class AppModel: ObservableObject, Identifiable {
     private static let RootInMemoryTitle = "InMemory root safe to delete" // Should never persist anyway
     private static let RootNormalTitle = "Normal system root."
     private var anyCancellable: Set<AnyCancellable> = []
+    
+    /// Get CloudKit container name from generated config
+    private static func cloudKitContainerName() -> String {
+        return CloudKitConfig.containerName
+    }
 
     /// Initialise the app's  `NSPersistentCloudKitContainer`
     /// - Parameters:
-    ///   - name: to identify instances in iCloud
+    ///   - modelName: The CoreData model file name
+    ///   - cloudKitContainerName: The CloudKit container identifier
     ///   - inMemory: whether to in memory, non-live data or not
     /// - Returns: The initiallised `NSPersistentCloudKitContainer`
-    private static func CKContainerGet(name: String, inMemory: Bool) -> NSPersistentCloudKitContainer {
-        let ckc = NSPersistentCloudKitContainer(name: name)
+    private static func CKContainerGet(modelName: String, cloudKitContainerName: String, inMemory: Bool) -> NSPersistentCloudKitContainer {
+        let ckc = NSPersistentCloudKitContainer(name: modelName)
 
-        log.debug("\(#function) using inMemory \(inMemory)")
+        log.debug("\(#function) using modelName: \(modelName), cloudKitContainerName: \(cloudKitContainerName), inMemory: \(inMemory)")
 
         if inMemory {
             ckc.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            // Configure CloudKit container for persistent stores
+            if let storeDescription = ckc.persistentStoreDescriptions.first {
+                storeDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+                storeDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+                storeDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.\(cloudKitContainerName)")
+            }
         }
 
         ckc.loadPersistentStores(completionHandler: { (_: NSPersistentStoreDescription, error: Error?) in

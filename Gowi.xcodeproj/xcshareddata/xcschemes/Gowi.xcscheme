@@ -82,7 +82,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "GOWI_TESTMODE"
-            value = "1"
+            value = "0"
             isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>

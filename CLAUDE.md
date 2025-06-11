@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Gowi is a SwiftUI-based todo application for macOS that demonstrates comprehensive macOS platform integration and serves as a reference implementation for SwiftUI best practices. It uses a "Model StateView View" (MSV) architecture pattern and integrates CoreData with CloudKit for data persistence and sync.
 
+## Guidelines
+
+- **Code Guidance**: Must always let the user know if the approach they have, or are implementing is not idiomatic, deprecated, or there are better, more modern approaches becoming popular unless they specifically instructed not to for a particular implementation. If instructed not to do so then must suggest adding developer documentation containing an explanation for future development entities as to the rational for the deviation.
+
 ## Build and Test Commands
 
 This is an Xcode project. Common development commands:

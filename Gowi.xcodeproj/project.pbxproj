@@ -57,6 +57,8 @@
 		FFB7DCE329379D2600A0DACA /* Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCE229379D2500A0DACA /* Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges.swift */; };
 		FFB7DCE52937B62B00A0DACA /* Test_250_UpdatingItemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCE42937B62B00A0DACA /* Test_250_UpdatingItemDetails.swift */; };
 		FFB7DCE92937DD6500A0DACA /* Test_260_UpdatingItemTodoPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7DCE82937DD6500A0DACA /* Test_260_UpdatingItemTodoPriorities.swift */; };
+		FFB7E0EA2DF8B4DB00553A40 /* generate-cloudkit-config.sh in Resources */ = {isa = PBXBuildFile; fileRef = FFB7E0E82DF8B4DB00553A40 /* generate-cloudkit-config.sh */; };
+		FFB7E0EC2DF8B7AB00553A40 /* CloudKitConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB7E0EB2DF8B7AB00553A40 /* CloudKitConfig.swift */; };
 		FFDE6CDD28EF109E009736E3 /* Menubar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDC28EF109E009736E3 /* Menubar.swift */; };
 		FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
 		FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */; };
@@ -141,6 +143,8 @@
 		FFB7DCE42937B62B00A0DACA /* Test_250_UpdatingItemDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_250_UpdatingItemDetails.swift; sourceTree = "<group>"; };
 		FFB7DCE82937DD6500A0DACA /* Test_260_UpdatingItemTodoPriorities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test_260_UpdatingItemTodoPriorities.swift; sourceTree = "<group>"; };
 		FFB7E0E52DF8A02700553A40 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		FFB7E0E82DF8B4DB00553A40 /* generate-cloudkit-config.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "generate-cloudkit-config.sh"; sourceTree = "<group>"; };
+		FFB7E0EB2DF8B7AB00553A40 /* CloudKitConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitConfig.swift; sourceTree = "<group>"; };
 		FFDE6CDC28EF109E009736E3 /* Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menubar.swift; sourceTree = "<group>"; };
 		FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KbShortcuts.swift; sourceTree = "<group>"; };
 		FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
@@ -209,6 +213,7 @@
 		FFA62B7628EC7B8100868F77 = {
 			isa = PBXGroup;
 			children = (
+				FFB7E0E92DF8B4DB00553A40 /* DevScripts */,
 				FF99805D2934E42A003F343E /* README.md */,
 				FF99805E29350B40003F343E /* LICENSE */,
 				FFB7E0E52DF8A02700553A40 /* CLAUDE.md */,
@@ -234,6 +239,7 @@
 		FFA62B8128EC7B8100868F77 /* Gowi */ = {
 			isa = PBXGroup;
 			children = (
+				FFB7E0EB2DF8B7AB00553A40 /* CloudKitConfig.swift */,
 				FF86E89528F76E3F0098A335 /* Info.plist */,
 				FFA62B8228EC7B8100868F77 /* GowiApp.swift */,
 				FF61397E293E6AB60048130B /* GowiApp#AppDelegate.swift */,
@@ -293,6 +299,14 @@
 			path = GowiUITests;
 			sourceTree = "<group>";
 		};
+		FFB7E0E92DF8B4DB00553A40 /* DevScripts */ = {
+			isa = PBXGroup;
+			children = (
+				FFB7E0E82DF8B4DB00553A40 /* generate-cloudkit-config.sh */,
+			);
+			path = DevScripts;
+			sourceTree = "<group>";
+		};
 		FFDE6CDE28EF1478009736E3 /* Defs */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +355,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FFA62BA928EC7B8300868F77 /* Build configuration list for PBXNativeTarget "Gowi" */;
 			buildPhases = (
+				FFB7E0E72DF8B38D00553A40 /* Generate CloudKit Config */,
 				FFA62B7B28EC7B8100868F77 /* Sources */,
 				FFA62B7C28EC7B8100868F77 /* Frameworks */,
 				FFA62B7D28EC7B8100868F77 /* Resources */,
@@ -437,6 +452,7 @@
 			files = (
 				FFA62B8A28EC7B8300868F77 /* Preview Assets.xcassets in Resources */,
 				FF99805C2934E403003F343E /* Credits.rtf in Resources */,
+				FFB7E0EA2DF8B4DB00553A40 /* generate-cloudkit-config.sh in Resources */,
 				FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */,
 			);
 		};
@@ -452,6 +468,20 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		FFB7E0E72DF8B38D00553A40 /* Generate CloudKit Config */ = {
+			isa = PBXShellScriptBuildPhase;
+			name = "Generate CloudKit Config";
+			shellPath = /bin/sh;
+			shellScript = (
+				"# Type a script or drag a script file from your workspace to insert its path.",
+				"$SRCROOT/DevScripts/generate-cloudkit-config.sh",
+				"",
+				"",
+			);
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FFA62B7B28EC7B8100868F77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -460,6 +490,7 @@
 				FFA62B8528EC7B8100868F77 /* Main.swift in Sources */,
 				FFDF93AB2912991700B83CB8 /* Menubar#itemCommands.swift in Sources */,
 				FF1A944828EC8A9B008303B8 /* AppModel#Item.swift in Sources */,
+				FFB7E0EC2DF8B7AB00553A40 /* CloudKitConfig.swift in Sources */,
 				FF1A946F28ED85A9008303B8 /* Main#SideBarView.swift in Sources */,
 				FFDF93B12912AA4600B83CB8 /* Main#WindowGroupRouteView.swift in Sources */,
 				FF1A944628EC8A04008303B8 /* AppModel#Testing.swift in Sources */,
@@ -731,7 +762,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5NZZ2G4JD4;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = self.GowiTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -751,7 +782,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5NZZ2G4JD4;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = self.GowiTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -770,6 +801,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5NZZ2G4JD4;
 				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = self.GowiUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -788,6 +820,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 5NZZ2G4JD4;
 				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = self.GowiUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
