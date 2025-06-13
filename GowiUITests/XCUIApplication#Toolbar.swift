@@ -10,20 +10,20 @@ import XCTest
 
 // MARK: Extension for Main Window toolbar items
 extension XCUIApplication {
-    var toolbarItemNew: XCUIElement { win1.buttons[AccessId.MainWindowToolbarCreateItemButton.rawValue].firstMatch }
+    var toolbarItemNew_NON_THROWING: XCUIElement { win1_NON_THROWING.buttons[AccessId.MainWindowToolbarCreateItemButton.rawValue].firstMatch }
 
-    var toolbarSaveChangesPending: XCUIElement { win1.buttons[AccessId.MainWindowToolbarSaveChangesPending.rawValue].firstMatch }
-    var toolbarSaveChangesNone: XCUIElement { win1.buttons[AccessId.MainWindowToolbarSaveChangesNone.rawValue].firstMatch }
+    var toolbarSaveChangesPending_NON_THROWING: XCUIElement { win1_NON_THROWING.buttons[AccessId.MainWindowToolbarSaveChangesPending.rawValue].firstMatch }
+    var toolbarSaveChangesNone_NON_THROWING: XCUIElement { win1_NON_THROWING.buttons[AccessId.MainWindowToolbarSaveChangesNone.rawValue].firstMatch }
 
-    var toolbarSaveChangesIsShowingPending: Bool {
-        toolbarSaveChangesPending.exists
+    var toolbarSaveChangesIsShowingPending_NON_THROWING: Bool {
+        toolbarSaveChangesPending_NON_THROWING.exists
     }
 
-    var toolbarRevertChangesPending: XCUIElement { buttons[AccessId.MainWindowToolbarRevertChangesPending.rawValue].firstMatch }
-    var toolbarRevertChangesNone: XCUIElement { buttons[AccessId.MainWindowToolbarRevertChangesNone.rawValue].firstMatch }
+    var toolbarRevertChangesPending_NON_THROWING: XCUIElement { buttons[AccessId.MainWindowToolbarRevertChangesPending.rawValue].firstMatch }
+    var toolbarRevertChangesNone_NON_THROWING: XCUIElement { buttons[AccessId.MainWindowToolbarRevertChangesNone.rawValue].firstMatch }
 
 
-    var toolbarRevertChangesIsShowing: Bool {
-        toolbarRevertChangesPending.exists
+    var toolbarRevertChangesIsShowing_NON_THROWING: Bool {
+        toolbarRevertChangesPending_NON_THROWING.exists
     }
 }

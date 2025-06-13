@@ -15,13 +15,13 @@ extension XCUIApplication {
 
     // MARK: Gowi
 
-    var menubarGowiQuit: XCUIElement {
+    var menubarGowiQuit_NON_THROWING: XCUIElement {
         return menuBars.menuItems["Quit Gowi"]
     }
 
     // MARK: File
 
-    var menubarFileMenu: XCUIElement {
+    var menubarFileMenu_NON_THROWING: XCUIElement {
         _ = menuBars.menuBarItems["File"].waitForExistence(timeout: 2)
         return menuBars.menuBarItems["File"]
     }
@@ -41,72 +41,72 @@ extension XCUIApplication {
 //        return menuBars.menuItems["Import Items"]
 //    }
 
-    var menubarFileSaveChanges: XCUIElement {
+    var menubarFileSaveChanges_NON_THROWING: XCUIElement {
         return menuBars.menuItems["Save Changes"]
     }
 
-    var menubarFileRevertChanges: XCUIElement {
+    var menubarFileRevertChanges_NON_THROWING: XCUIElement {
         return menuBars.menuItems["Revert Changes"]
     }
 
     // MARK: Edit
 
-    var menubarEditMenu: XCUIElement {
+    var menubarEditMenu_NON_THROWING: XCUIElement {
         _ = menuBars.menuBarItems["Edit"].waitForExistence(timeout: 2)
         return menuBars.menuBarItems["Edit"]
     }
 
-    var menubarUndo: XCUIElement {
+    var menubarUndo_NON_THROWING: XCUIElement {
         let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Undo")
         return menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
     }
 
-    var menubarRedo: XCUIElement {
+    var menubarRedo_NON_THROWING: XCUIElement {
         let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Redo")
         return menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
     }
 
     // MARK: Item
 
-    var menuBarItemsMenu: XCUIElement {
+    var menuBarItemsMenu_NON_THROWING: XCUIElement {
 //        _ = menuBars.menuBarItems["Items"].waitForExistence(timeout: 2)
         return menuBars.menuBarItems["Items"]
     }
 
-    var menubarItemNew: XCUIElement {
+    var menubarItemNew_NON_THROWING: XCUIElement {
         return menuBars.menuBarItems["Items"].menuItems["New Item"]
     }
 
-    var menubarItemDelete: XCUIElement {
+    var menubarItemDelete_NON_THROWING: XCUIElement {
         return menuBars.menuBarItems["Items"].menuItems["Delete"]
     }
 
-    var menubarItemOpenInNewWindow: XCUIElement {
+    var menubarItemOpenInNewWindow_NON_THROWING: XCUIElement {
         return menuBars.menuBarItems["Items"].menuItems["Open in New Window"]
     }
 
-    var menubarItemOpenInNewTab: XCUIElement {
+    var menubarItemOpenInNewTab_NON_THROWING: XCUIElement {
         return menuBars.menuBarItems["Items"].menuItems["Open in New Tab"]
     }
 
     // MARK: Window operations ...
 
-    var menubarWindowMenu: XCUIElement {
+    var menubarWindowMenu_NON_THROWING: XCUIElement {
         _ = menuBars.menuBarItems["Window"].waitForExistence(timeout: 2)
         return menuBars.menuBarItems["Window"]
     }
 
-    var menubarWindowNew: XCUIElement {
-        menubarWindowMenu.click()
+    var menubarWindowNew_NON_THROWING: XCUIElement {
+        menubarWindowMenu_NON_THROWING.click()
         return menuBars.menuItems["New Window"]
     }
 
-    var menubarWindowClose: XCUIElement {
-        menubarFileMenu.click()
+    var menubarWindowClose_NON_THROWING: XCUIElement {
+        menubarFileMenu_NON_THROWING.click()
         return menuBars.menuItems["Close"]
     }
 
-    var menubarWindowsCloseAll: XCUIElement {
+    var menubarWindowsCloseAll_NON_THROWING: XCUIElement {
         return menuBars.menuItems["closeAll:"] // Has to be used with XCUIElement.perform ( ... most of time just use the shortcut instead
     }
 }

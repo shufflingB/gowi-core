@@ -8,14 +8,14 @@
 import SwiftUI
 import XCTest
 extension XCUIApplication {
-    func contentRows(win: XCUIElement? = nil) -> Array<XCUIElement> {
+    func contentRows_NON_THROWING(win: XCUIElement? = nil) -> Array<XCUIElement> {
         /** NB: When the contents of the sidebar is larger than the height of the window then the contents of the returned query is incomplete (suspect this is
          because the app is is lazily loading only what's visible).  The least PITA approach to work around this is to make what is use below of what should  strictly be a redundant query on
          the last element in the list that forces the loading of everything.
          (Other options might include ensuring smaller amounts of fixture data so as to ensure window always contains it, using a shortcut to jump to end of list to force loading of contents )
          */
 
-        let winS: XCUIElement = win == nil ? win1 : win!
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
 //
         let query: XCUIElementQuery = winS.outlines.children(matching: .outlineRow)
             .textFields
@@ -26,21 +26,21 @@ extension XCUIApplication {
         return query.allElementsBoundByIndex
     }
 
-    private func contentRow(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    private func contentRow_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.outlines.children(matching: .outlineRow).element(boundBy: row)
     }
 
-    func contentRowTextField(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        return contentRow(win: win, row).textFields[AccessId.MainWindowContentTitleField.rawValue]
+    func contentRowTextField_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
+        return contentRow_NON_THROWING(win: win, row).textFields[AccessId.MainWindowContentTitleField.rawValue]
     }
 
-    func contentRowTextFieldValue(win: XCUIElement? = nil, _ row: Int) -> String {
-        contentRowTextField(win: win, row).value as! String
+    func contentRowTextFieldValue_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> String {
+        contentRowTextField_NON_THROWING(win: win, row).value as! String
     }
 
     func contentRowsSelect(win: XCUIElement? = nil, indices itemIdxs: Array<Int>) throws {
-        let currentRows = contentRows(win: win)
+        let currentRows = contentRows_NON_THROWING(win: win)
 
         // Check what's being requested to select is sane
         itemIdxs.forEach { idx in
@@ -78,18 +78,18 @@ extension XCUIApplication {
 
 //    func contentContextMenuDelete(
 
-    func contentContextMenuDelete(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func contentContextMenuDelete_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.outlines.menuItems[AccessId.MainWindowContentContextDelete.rawValue]
     }
 
-    func contentContextMenuOpenInNewTab(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func contentContextMenuOpenInNewTab_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewTab.rawValue]
     }
 
-    func contentContextMenuOpenInNewWindow(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func contentContextMenuOpenInNewWindow_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewWindow.rawValue]
     }
 }

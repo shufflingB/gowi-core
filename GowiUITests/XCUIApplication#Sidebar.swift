@@ -11,20 +11,20 @@ import XCTest
 // MARK: Extension for Main window Sidebar testing items
 
 extension XCUIApplication {
-    func sidebarList(win: XCUIElement? = nil, identifier: String) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func sidebarList_NON_THROWING(win: XCUIElement? = nil, identifier: String) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.outlines.cells.containing(.staticText, identifier: identifier).element
     }
 
-    func sidebarWaitingList(win: XCUIElement? = nil) -> XCUIElement {
-        sidebarList(win: win, identifier: "Waiting")
+    func sidebarWaitingList_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        sidebarList_NON_THROWING(win: win, identifier: "Waiting")
     }
 
-    func sidebarDoneList(win: XCUIElement? = nil) -> XCUIElement {
-        sidebarList(win: win, identifier: "Done")
+    func sidebarDoneList_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        sidebarList_NON_THROWING(win: win, identifier: "Done")
     }
 
-    func sidebarAllList(win: XCUIElement? = nil) -> XCUIElement {
-        sidebarList(win: win, identifier: "All")
+    func sidebarAllList_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        sidebarList_NON_THROWING(win: win, identifier: "All")
     }
 }

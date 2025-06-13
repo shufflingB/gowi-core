@@ -26,7 +26,7 @@ class Test_250_UpdatingItemDetails: XCTestCase {
     }
 
     func test_000_theItemsTitleIsEditableInBothTheContentListAndDetailAreas() throws {
-        app.menubarItemNew.click()
+        app.menubarItemNew_NON_THROWING.click()
 
         /**
          Verify linkage between sidebar and detail view.
@@ -35,17 +35,17 @@ class Test_250_UpdatingItemDetails: XCTestCase {
           */
         /// Sidebar => Detail
         let sidebarEnteredTitle = "sidebar entered test title"
-        app.contentRowTextField(0).click()
-        app.contentRowTextField(0).typeText(sidebarEnteredTitle)
-        XCTAssertEqual(app.detailTitleValue(), sidebarEnteredTitle,
+        app.contentRowTextField_NON_THROWING(0).click()
+        app.contentRowTextField_NON_THROWING(0).typeText(sidebarEnteredTitle)
+        XCTAssertEqual(app.detailTitleValue_NON_THROWING(), sidebarEnteredTitle,
                        "The same title entered in the SideBar area should be present in the window's Detail area")
 
         /// Detail => Sidebar
         let additionalDetailEnteredTitle = " plus some more from detail"
-        app.detailTitle().click()
-        app.detailTitle().typeKey(.rightArrow, modifierFlags: [.command])
-        app.detailTitle().typeText(additionalDetailEnteredTitle)
-        XCTAssertEqual(app.contentRowTextFieldValue(0), sidebarEnteredTitle + additionalDetailEnteredTitle,
+        app.detailTitle_NON_THROWING().click()
+        app.detailTitle_NON_THROWING().typeKey(.rightArrow, modifierFlags: [.command])
+        app.detailTitle_NON_THROWING().typeText(additionalDetailEnteredTitle)
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), sidebarEnteredTitle + additionalDetailEnteredTitle,
                        "Changes made to the item's title information in the Detail area should show up in its SideBar entry area")
     }
 
@@ -54,15 +54,15 @@ class Test_250_UpdatingItemDetails: XCTestCase {
     func test_600_whenEditingTheItemsNotesUsesATextSpecificUndoAndRedoProcess() throws {
         /// ...  And not single characters
         app.shortcutItemNew()
-        let notesAtStart = app.detailNotesValue()
+        let notesAtStart = app.detailNotesValue_NON_THROWING()
         let lorem = "Some test text to be removed by a single undo"
-        app.detailNotes().click()
+        app.detailNotes_NON_THROWING().click()
         app.typeText(lorem)
-        XCTAssertEqual(app.detailNotesValue(), lorem,
+        XCTAssertEqual(app.detailNotesValue_NON_THROWING(), lorem,
                        "When I type in the Notes area it should that should be added to Item")
 
         app.shortcutUndo()
-        XCTAssertEqual(app.detailNotesValue(), notesAtStart,
+        XCTAssertEqual(app.detailNotesValue_NON_THROWING(), notesAtStart,
                        "And after using the Undo Shortcut it should be removed")
     }
 }

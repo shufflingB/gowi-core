@@ -24,96 +24,96 @@ extension XCUIApplication {
         return displayedPickerDateFmt
     }
 
-    func detailTitle(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailTitle_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.textFields[AccessId.MainWindowDetailTitleField.rawValue].firstMatch
     }
 
-    func detailTitleValue(win: XCUIElement? = nil) -> String {
-        return detailTitle(win: win).value as! String
+    func detailTitleValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+        return detailTitle_NON_THROWING(win: win).value as! String
     }
 
-    func detailIDButtonCopyToPasteBoard(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailIDButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.buttons[AccessId.MainWindowDetailId.rawValue].firstMatch
     }
 
-    func detailIDValue(win: XCUIElement? = nil) -> String? {
+    func detailIDValue_NON_THROWING(win: XCUIElement? = nil) -> String? {
 //        _ = detailIDButtonCopyToPasteBoard(win: win).waitForExistence(timeout: 2)
-        detailIDButtonCopyToPasteBoard(win: win).click()
+        detailIDButtonCopyToPasteBoard_NON_THROWING(win: win).click()
         return NSPasteboard.general.string(forType: .string)
     }
 
-    func detailItemURLButtonCopyToPasteBoard(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailItemURLButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.buttons[AccessId.MainWindowDetailItemURL.rawValue]
     }
 
-    func detailItemURLValue(win: XCUIElement? = nil) -> String? {
+    func detailItemURLValue_NON_THROWING(win: XCUIElement? = nil) -> String? {
 //        _ = detailItemURLButtonCopyToPasteBoard.waitForExistence(timeout: 2)
-        detailItemURLButtonCopyToPasteBoard(win: win).click()
+        detailItemURLButtonCopyToPasteBoard_NON_THROWING(win: win).click()
         return NSPasteboard.general.string(forType: .string)
     }
 
-    func detailCreateDateButtonToCopyToPasteBoard(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailCreateDateButtonToCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.buttons[AccessId.MainWindowDetailCreatedDate.rawValue]
     }
 
-    func detailCreateDateValue(win: XCUIElement? = nil) -> String {
+    func detailCreateDateValue_NON_THROWING(win: XCUIElement? = nil) -> String {
 //        _ = detailCreateDateButtonToCopyToPasteBoard().waitForExistence(timeout: 2)
-        detailCreateDateButtonToCopyToPasteBoard(win: win).click()
+        detailCreateDateButtonToCopyToPasteBoard_NON_THROWING(win: win).click()
         return NSPasteboard.general.string(forType: .string)!
     }
 
-    func detailCreateDateValueAsDate(win: XCUIElement? = nil) -> Date {
-        let buttonDateValue: String = detailCreateDateValue(win: win)
+    func detailCreateDateValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
+        let buttonDateValue: String = detailCreateDateValue_NON_THROWING(win: win)
         return Self.detailDateFormatter.date(from: buttonDateValue)!
     }
 
-    func detailCompletedDateButtonToCopyToPasteBoard(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.buttons[AccessId.MainWindowDetailCompletedDate.rawValue]
     }
 
-    func detailCompletedDateValue(win: XCUIElement? = nil) -> String {
+    func detailCompletedDateValue_NON_THROWING(win: XCUIElement? = nil) -> String {
 //        _ = detailCompletedDateButtonToCopyToPasteBoard.waitForExistence(timeout: 2)
-        detailCompletedDateButtonToCopyToPasteBoard(win: win).click()
+        detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING(win: win).click()
         return NSPasteboard.general.string(forType: .string)!
     }
 
-    func detailCompletedValueAsDate(win: XCUIElement? = nil) -> Date {
-        let buttonDateValue: String = detailCompletedDateValue(win: win)
+    func detailCompletedValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
+        let buttonDateValue: String = detailCompletedDateValue_NON_THROWING(win: win)
 
         return Self.detailDateFormatter.date(from: buttonDateValue)!
     }
 
-    func detailCompletionCheckBox(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailCompletionCheckBox_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.checkBoxes[AccessId.OptionalDatePickerDoneToggle.rawValue]
     }
 
-    func detailCompletionCheckBoxValue(win: XCUIElement? = nil) -> Bool {
+    func detailCompletionCheckBoxValue_NON_THROWING(win: XCUIElement? = nil) -> Bool {
 //        _ = detailCompletionCheckBox.waitForExistence(timeout: 2)
-        return detailCompletionCheckBox(win: win).value as! Bool
+        return detailCompletionCheckBox_NON_THROWING(win: win).value as! Bool
     }
 
     /// Returns the outter element of the picker.
     ///
-    func detailCompletedDatePicker(win: XCUIElement? = nil) -> XCUIElement {
+    func detailCompletedDatePicker_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
         // Don't appear to be able to select components of the date
         // individually on macOS. Seems to always land on YYYY
-        let winS: XCUIElement = win == nil ? win1 : win!
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
 
         return winS.datePickers.element
     }
 
-    func detailCompletedDatePickerValue(win: XCUIElement? = nil) -> String {
-        return detailCompletedDatePicker(win: win).value as! String
+    func detailCompletedDatePickerValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+        return detailCompletedDatePicker_NON_THROWING(win: win).value as! String
     }
 
-    func detailCompletedDatePickerValueAsDate(win: XCUIElement? = nil) -> Date {
-        let pickerVal: String = detailCompletedDatePickerValue(win: win)
+    func detailCompletedDatePickerValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
+        let pickerVal: String = detailCompletedDatePickerValue_NON_THROWING(win: win)
 
         /// PickerVal comes back with e.g. "Unsafe value, description '1945-12-25 12:12:27 +0000''"
         let pattern = #"(\d+-\d+-\d+ \d+:\d+)"#
@@ -124,8 +124,8 @@ extension XCUIApplication {
         return detailCompletedDateFormatter.date(from: capturedDateStr)!
     }
 
-    func detailCompletedDatePickerOpenDialogue(win: XCUIElement? = nil) -> XCUIElement {
-        detailCompletedDatePicker(win: win).steppers.children(matching: .decrementArrow).element
+    func detailCompletedDatePickerOpenDialogue_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        detailCompletedDatePicker_NON_THROWING(win: win).steppers.children(matching: .decrementArrow).element
     }
 
     func detailCompletedDatePickerSet(win: XCUIElement? = nil, _ date: Date) {
@@ -138,9 +138,9 @@ extension XCUIApplication {
         // Adjust date from left to right in the UI display as normally happens when user works on.
         // Select day part ...
         // Opens the mouse driven date selection dialogue
-        detailCompletedDatePickerOpenDialogue(win: win).click()
+        detailCompletedDatePickerOpenDialogue_NON_THROWING(win: win).click()
         // Close it so can use keyboard entry
-        detailCompletedDatePickerOpenDialogue(win: win).click()
+        detailCompletedDatePickerOpenDialogue_NON_THROWING(win: win).click()
         typeKey(.tab, modifierFlags: [.shift]) // onto MM
         typeKey(.tab, modifierFlags: [.shift]) // once more to put on dd
 
@@ -185,12 +185,12 @@ extension XCUIApplication {
         typeKey(.return, modifierFlags: []) // close picker diaglogue
     }
 
-    func detailNotes(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1 : win!
+    func detailNotes_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
         return winS.scrollViews[AccessId.MainWindowDetailTextEditor.rawValue].children(matching: .textView).element
     }
 
-    func detailNotesValue(win: XCUIElement? = nil) -> String {
-        detailNotes(win: win).value as! String
+    func detailNotesValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+        detailNotes_NON_THROWING(win: win).value as! String
     }
 }

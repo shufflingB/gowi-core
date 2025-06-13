@@ -26,61 +26,61 @@ class Test_800_WindowsAndTabs: XCTestCase {
     }
 
     func test_100_canOpenANewWindowDisplayingAnItemFromTheMenubar() throws {
-        app.sidebarWaitingList().click()
-        app.contentRowTextField(4).click()
-        let itemId = app.detailIDValue()
+        app.sidebarWaitingList_NON_THROWING().click()
+        app.contentRowTextField_NON_THROWING(4).click()
+        let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.menubarItemOpenInNewWindow.click()
+        app.menubarItemOpenInNewWindow_NON_THROWING.click()
         XCTAssertEqual(app.windows.count, windowCount + 1,
                        "When the app menubar item open in new window is clicked the app opens a new window"
         )
-        XCTAssertEqual(app.detailIDValue(win: app.win2), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
                        "And shows the same item as the one in the original window")
     }
 
     func test_110_canOpenANewWindowDisplayingAnItemFromTheContentContextMenu() throws {
-        app.sidebarWaitingList().click()
-        app.contentRowTextField(4).click()
-        let itemId = app.detailIDValue()
+        app.sidebarWaitingList_NON_THROWING().click()
+        app.contentRowTextField_NON_THROWING(4).click()
+        let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.contentRowTextField(4).rightClick()
-        app.contentContextMenuOpenInNewWindow(4).click()
+        app.contentRowTextField_NON_THROWING(4).rightClick()
+        app.contentContextMenuOpenInNewWindow_NON_THROWING(4).click()
 
         XCTAssertEqual(app.windows.count, windowCount + 1,
                        "When the app menubar item open in new window is clicked the app opens a new window"
         )
-        XCTAssertEqual(app.detailIDValue(win: app.win2), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
                        "And shows the same item as the one in the original window")
     }
 
     func test_150_canOpenANewTabDisplayingAnItemFromTheMenubar() throws {
-        app.sidebarWaitingList().click()
-        app.contentRowTextField(4).click()
-        let itemId = app.detailIDValue()
+        app.sidebarWaitingList_NON_THROWING().click()
+        app.contentRowTextField_NON_THROWING(4).click()
+        let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.menubarItemOpenInNewTab.click()
+        app.menubarItemOpenInNewTab_NON_THROWING.click()
         XCTAssertEqual(app.windows.count, windowCount,
                        "When the app menubar item open in new window is clicked the app opens a new tab"
         )
-        XCTAssertEqual(app.detailIDValue(win: app.win2), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
                        "And shows the same item as the one in the original window")
     }
 
     func test_160_canOpenANewTabDisplayingAnItemFromTheContentContextMenu() throws {
-        app.sidebarWaitingList().click()
-        app.contentRowTextField(4).click()
-        let itemId = app.detailIDValue()
+        app.sidebarWaitingList_NON_THROWING().click()
+        app.contentRowTextField_NON_THROWING(4).click()
+        let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.contentRowTextField(4).rightClick()
-        app.contentContextMenuOpenInNewTab(4).click()
+        app.contentRowTextField_NON_THROWING(4).rightClick()
+        app.contentContextMenuOpenInNewTab_NON_THROWING(4).click()
         XCTAssertEqual(app.windows.count, windowCount,
                        "When the app menubar item open in new window is clicked the app opens a new tab"
         )
-        XCTAssertEqual(app.detailIDValue(win: app.win2), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
                        "And shows the same item as the one in the original window")
     }
 }

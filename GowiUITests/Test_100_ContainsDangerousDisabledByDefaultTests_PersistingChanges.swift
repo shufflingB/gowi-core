@@ -39,7 +39,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     }
 
     func makeChanges(numChanges: Int, create: () -> Void) throws -> Array<TData> {
-        XCTAssertGreaterThan(app.contentRows().count, numChanges,
+        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChanges,
                              "This test requires at least \(numChanges) item in the system")
 
         for _ in 1 ... numChanges {
@@ -49,20 +49,20 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
         var tdata: Array<TData> = []
         for n in 0 ... numChanges - 1 {
-            app.contentRowTextField(n).click()
+            app.contentRowTextField_NON_THROWING(n).click()
 
-            app.detailTitle().click()
-            let id = app.detailIDValue()
-            let oTitle = app.detailTitleValue()
+            app.detailTitle_NON_THROWING().click()
+            let id = app.detailIDValue_NON_THROWING()
+            let oTitle = app.detailTitleValue_NON_THROWING()
             app.typeKey(.rightArrow, modifierFlags: [.command])
             app.typeText(" T change \(n)")
-            let mTitle = app.detailTitleValue()
+            let mTitle = app.detailTitleValue_NON_THROWING()
 
-            app.detailNotes().click()
-            let oNote = app.detailNotesValue()
+            app.detailNotes_NON_THROWING().click()
+            let oNote = app.detailNotesValue_NON_THROWING()
             app.typeKey(.rightArrow, modifierFlags: [.command])
             app.typeText(" N change \(n)")
-            let mNote = app.detailNotesValue()
+            let mNote = app.detailNotesValue_NON_THROWING()
 
             tdata.append(TData(id: id!, originalTitle: oTitle, originalNote: oNote, mutatedTitle: mTitle, mutatedNote: mNote))
         }
@@ -82,25 +82,25 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     func testCanSaveChangesUsing(_ saveMechanism: SaveMech) throws {
         assert(OK_TO_RUN_DANGEROUS_TESTS, "Attempt to test dangerous configuration without OK_TO_RUN_DANGEROUS_TESTS option set")
 
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "When the app starts the Toolbar Save Changes button shows no changes are waiting to be saved")
 
         let numItemsToSave = 2
-        let tdata: Array<TData> = try makeChanges(numChanges: numItemsToSave, create: { app.menubarItemNew.click() })
+        let tdata: Array<TData> = try makeChanges(numChanges: numItemsToSave, create: { app.menubarItemNew_NON_THROWING.click() })
 
-        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                       "And after new items are added the Toolbar's Save button will indicate there are changes to be saved")
 
         switch saveMechanism {
         case .menuItem:
-            app.menubarFileSaveChanges.click()
+            app.menubarFileSaveChanges_NON_THROWING.click()
         case .shortcut:
             app.shortcutSaveChanges()
         case .toolbarItem:
-            app.toolbarSaveChangesPending.click()
+            app.toolbarSaveChangesPending_NON_THROWING.click()
         }
 
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "After saving changes using \(saveMechanism) the Toolbar's Save Changes button will indicate no other changes need saving ")
 
         ///
@@ -117,12 +117,12 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
             let ordDataIdx = ordFmtr.string(from: NSNumber(value: dataIdx))!
 
-            app.contentRowTextField(dataIdx).click()
-            XCTAssertEqual(app.detailTitleValue(), tdata[dataIdx].mutatedTitle,
+            app.contentRowTextField_NON_THROWING(dataIdx).click()
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[dataIdx].mutatedTitle,
                            "And after restarting \(ordDataIdx) sidebar item will contain the \(ordDataIdx) entry's title")
-            XCTAssertEqual(app.detailNotesValue(), tdata[dataIdx].mutatedNote,
+            XCTAssertEqual(app.detailNotesValue_NON_THROWING(), tdata[dataIdx].mutatedNote,
                            "And  notes")
-            XCTAssertEqual(app.detailIDValue(), tdata[dataIdx].id,
+            XCTAssertEqual(app.detailIDValue_NON_THROWING(), tdata[dataIdx].id,
                            "And  id")
         }
 
@@ -130,11 +130,11 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         /// Remove them so as not leave a mess in the system
         ///
         for data in tdata {
-            app.contentRowTextField(0).click()
-            XCTAssertEqual(app.detailIDValue(), data.id, "ID's must match removing")
+            app.contentRowTextField_NON_THROWING(0).click()
+            XCTAssertEqual(app.detailIDValue_NON_THROWING(), data.id, "ID's must match removing")
             app.shortcutItemDelete()
         }
-        app.menubarFileSaveChanges.click()
+        app.menubarFileSaveChanges_NON_THROWING.click()
     }
 
     func test_000_dangerous_unsavedChangesAgainstLiveDataAreDiscardedOnAppRestarts() throws {
@@ -142,13 +142,13 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
                           "Test relies on access to Live backend DB, possible risk of data corruption")
         relaunchAgainstLiveData()
 
-        app.sidebarAllList().click()
+        app.sidebarAllList_NON_THROWING().click()
         let numChangesToMake = 2
 
-        XCTAssertGreaterThan(app.contentRows().count, numChangesToMake,
+        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) item in the system")
 
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "When the app starts the Toolbar Save Changes button shows no changes are waiting to be saved")
 
         ///
@@ -158,7 +158,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
         let tdata = try makeChanges(numChanges: numChangesToMake, create: {})
 
-        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                       "And after updates are made to Item's the Toolbar's Save button will indicate there are changes to save")
 
         ///
@@ -166,24 +166,24 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         ///
         app.shortcutAppQuit()
         app.launch()
-        app.sidebarAllList().click()
+        app.sidebarAllList_NON_THROWING().click()
 
         ///
         /// Check that the changes we made have been reverted by the restart
         ///
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "But, without saving, on restart the Save Changes button will show nothing needs saving")
 
         let ordFmtr = NumberFormatter()
         ordFmtr.numberStyle = .ordinal
         for e in 0 ... numChangesToMake - 1 {
-            app.contentRowTextField(e).click()
+            app.contentRowTextField_NON_THROWING(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
-            XCTAssertEqual(app.detailTitleValue(), tdata[e].originalTitle,
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
                            "And changes made before the restart to the \(ordStr) row's Item Title will be gone")
 
-            XCTAssertEqual(app.detailTitleValue(), tdata[e].originalTitle,
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
                            "As well as those to its (\(ordStr) row) Notes")
         }
     }
@@ -214,15 +214,15 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
     
     func test_400_allUnsavedChangesCanBeRevertedFromTheMenubar() throws {
-        app.sidebarAllList().click()
+        app.sidebarAllList_NON_THROWING().click()
         let numChangesToMake = 2
-        XCTAssertGreaterThan(app.contentRows().count, numChangesToMake,
+        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) items in the system")
 
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "When the app starts the Toolbar Save Changes button shows no changes are waiting to be saved")
 
-        XCTAssertFalse(app.toolbarRevertChangesIsShowing,
+        XCTAssertFalse(app.toolbarRevertChangesIsShowing_NON_THROWING,
                        "And the Revert Changes button indicates there is nothing for it to do")
 
         ///
@@ -232,50 +232,50 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
         let tdata = try makeChanges(numChanges: numChangesToMake, create: {})
 
-        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                       "And after updates are made to items the Toolbar's Save button will indicate there are changes to save")
-        XCTAssertTrue(app.toolbarRevertChangesIsShowing,
+        XCTAssertTrue(app.toolbarRevertChangesIsShowing_NON_THROWING,
                       "And the Revert Changes button will show that those changes can also be abandoned")
 
         ///
         /// Revert changes
         ///
-        app.menubarFileRevertChanges.click()
-        app.dialogueConfirmRevertOK.click()
+        app.menubarFileRevertChanges_NON_THROWING.click()
+        app.dialogueConfirmRevertOK_NON_THROWING.click()
 
         ///
         /// Check that the changes we made have been reverted by the restart
         ///
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "And after clicking on the the Menubar's Revert Changes button and confirming, then the Save Changes button will show nothing to save")
-        XCTAssertFalse(app.toolbarRevertChangesIsShowing,
+        XCTAssertFalse(app.toolbarRevertChangesIsShowing_NON_THROWING,
                        "and the Revert button will show there is nothing further to revert")
 
         let ordFmtr = NumberFormatter()
         ordFmtr.numberStyle = .ordinal
         for e in 0 ... numChangesToMake - 1 {
-            app.contentRowTextField(e).click()
+            app.contentRowTextField_NON_THROWING(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
-            XCTAssertEqual(app.detailTitleValue(), tdata[e].originalTitle,
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
                            "And the unsaved changes to the \(ordStr) row's Item Title will be gone")
 
-            XCTAssertEqual(app.detailTitleValue(), tdata[e].originalTitle,
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
                            "As well as those to its (\(ordStr) row) Notes")
         }
     }
     
     
     func test_410_allUnsavedChangesCanBeRevertedFromTheToolbar() throws {
-        app.sidebarAllList().click()
+        app.sidebarAllList_NON_THROWING().click()
         let numChangesToMake = 2
-        XCTAssertGreaterThan(app.contentRows().count, numChangesToMake,
+        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) items in the system")
 
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "When the app starts the Toolbar Save Changes button shows no changes are waiting to be saved")
 
-        XCTAssertFalse(app.toolbarRevertChangesIsShowing,
+        XCTAssertFalse(app.toolbarRevertChangesIsShowing_NON_THROWING,
                        "And the Revert Changes button indicates there is nothing for it to do")
 
         ///
@@ -285,58 +285,58 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
         let tdata = try makeChanges(numChanges: numChangesToMake, create: {})
 
-        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                       "And after updates are made to items the Toolbar's Save button will indicate there are changes to save")
-        XCTAssertTrue(app.toolbarRevertChangesIsShowing,
+        XCTAssertTrue(app.toolbarRevertChangesIsShowing_NON_THROWING,
                       "And the Revert Changes button will show that those changes can also be abandoned")
 
         ///
         /// Revert changes
         ///
-        app.toolbarRevertChangesPending.click()
-        app.dialogueConfirmRevertOK.click()
+        app.toolbarRevertChangesPending_NON_THROWING.click()
+        app.dialogueConfirmRevertOK_NON_THROWING.click()
 
         ///
         /// Check that the changes we made have been reverted by the restart
         ///
-        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending,
+        XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                        "And after clicking on the the Toolbar's Revert Changes button and confirmin, then the Save Changes button will show nothing to save")
-        XCTAssertFalse(app.toolbarRevertChangesIsShowing,
+        XCTAssertFalse(app.toolbarRevertChangesIsShowing_NON_THROWING,
                        "and the Revert button will show there is nothing further to revert")
 
         let ordFmtr = NumberFormatter()
         ordFmtr.numberStyle = .ordinal
         for e in 0 ... numChangesToMake - 1 {
-            app.contentRowTextField(e).click()
+            app.contentRowTextField_NON_THROWING(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
-            XCTAssertEqual(app.detailTitleValue(), tdata[e].originalTitle,
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
                            "And the unsaved changes to the \(ordStr) row's Item Title will be gone")
 
-            XCTAssertEqual(app.detailTitleValue(), tdata[e].originalTitle,
+            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
                            "As well as those to its (\(ordStr) row) Notes")
         }
     }
 
     func test_500_whenRevertingUnsavedChangesTheAppDoubleChecksTheRequestToPreventAccidents() throws {
-        XCTAssertFalse(app.toolbarRevertChangesIsShowing,
+        XCTAssertFalse(app.toolbarRevertChangesIsShowing_NON_THROWING,
                        "When test starts the Toolbar's Revert Changes button should indicate there is nothing for it to do")
 
-        app.menubarItemNew.click()
-        app.detailTitle().click()
+        app.menubarItemNew_NON_THROWING.click()
+        app.detailTitle_NON_THROWING().click()
         app.typeText("A title")
-        let title = app.detailTitleValue()
+        let title = app.detailTitleValue_NON_THROWING()
 
-        XCTAssertTrue(app.toolbarRevertChangesIsShowing,
+        XCTAssertTrue(app.toolbarRevertChangesIsShowing_NON_THROWING,
                       "And after a new Item is created the Revert Changes button will indicate it can be used to revert changes")
 
-        app.toolbarRevertChangesPending.click()
-        app.dialogueConfirmRevertCancel.click()
+        app.toolbarRevertChangesPending_NON_THROWING.click()
+        app.dialogueConfirmRevertCancel_NON_THROWING.click()
 
-        XCTAssertTrue(app.toolbarRevertChangesIsShowing,
+        XCTAssertTrue(app.toolbarRevertChangesIsShowing_NON_THROWING,
                       "If the Toolbar's Revert Button is accidentally clicked then the operation can be cancelled")
 
-        XCTAssertEqual(app.detailTitleValue(), title,
+        XCTAssertEqual(app.detailTitleValue_NON_THROWING(), title,
                        "And the unsaved changes do not end up getting reverted")
     }
 }

@@ -30,33 +30,33 @@ extension XCUIApplication {
     func launchAndSanitiseWindowsAndIdentifiers() {
         launch()
 
-        if win1.exists == false || windows.firstMatch.identifier != win1.identifier || windows.count > 1 {
+        if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
             shortcutWindowsCloseAll()
             shortcutAppQuit()
             launch()
         }
 
         assert(windows.count == 1)
-        assert(windows.firstMatch.identifier == win1.identifier)
+        assert(windows.firstMatch.identifier == win1_NON_THROWING.identifier)
     }
 
-    var win1: XCUIElement {
+    var win1_NON_THROWING: XCUIElement {
         windows["Main-AppWindow-1"]
     }
 
-    var win2: XCUIElement {
+    var win2_NON_THROWING: XCUIElement {
         windows["Main-AppWindow-2"]
     }
 
-    var win3: XCUIElement {
+    var win3_NON_THROWING: XCUIElement {
         windows["Main-AppWindow-3"]
     }
 
-    var win4: XCUIElement {
+    var win4_NON_THROWING: XCUIElement {
         windows["Main-AppWindow-4"]
     }
 
-    var win5: XCUIElement {
+    var win5_NON_THROWING: XCUIElement {
         windows["Main-AppWindow-5"]
     }
 
@@ -108,11 +108,11 @@ extension XCUIApplication {
         typeKey(key, modifierFlags: modifier)
     }
 
-    var dialogueConfirmRevertOK: XCUIElement {
+    var dialogueConfirmRevertOK_NON_THROWING: XCUIElement {
         dialogs["alert"].buttons["Revert"]
     }
 
-    var dialogueConfirmRevertCancel: XCUIElement {
+    var dialogueConfirmRevertCancel_NON_THROWING: XCUIElement {
         dialogs["alert"].buttons["Cancel"]
     }
 }

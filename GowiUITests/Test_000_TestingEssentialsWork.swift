@@ -24,9 +24,9 @@ class Test_000_TestingEssentialsWork: XCTestCase {
     func test_000_appTestMode0HasNoData() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
-        app.sidebarAllList().click()
+        app.sidebarAllList_NON_THROWING().click()
         
-        XCTAssertEqual(app.contentRows().count, 0,
+        XCTAssertEqual(app.contentRows_NON_THROWING().count, 0,
                        "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
         
         
@@ -35,9 +35,9 @@ class Test_000_TestingEssentialsWork: XCTestCase {
     func test_010_appTestMode1HasHasFixture() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "1"]
         app.launchAndSanitiseWindowsAndIdentifiers()
-        app.sidebarAllList().click()
+        app.sidebarAllList_NON_THROWING().click()
 
-        XCTAssertEqual(app.contentRows().count, 10,
+        XCTAssertEqual(app.contentRows_NON_THROWING().count, 10,
                        "When the app is opened in test mode 1, it opens with 10 existing test Items")
         
 //TODO: Verify that expected UUID is presenttestingMode1ourIdPresent
@@ -48,7 +48,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
 //
 //        app.menubarItemNew.click()
 //        app.typeText("000")
-//        XCTAssertEqual(app.contentRows().count, 1,
+//        XCTAssertEqual(app.contentRows_NON_THROWING().count, 1,
 //                       "And it is possible to create a new Item in this test mode")
 //        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
 //                      "That detects it needs saving")
@@ -60,8 +60,8 @@ class Test_000_TestingEssentialsWork: XCTestCase {
 //        app.menubarGowiQuit.click()
 //
 //        app.launch()
-//        app.sidebarAllList().click()
-//        XCTAssertEqual(app.contentRows().count, 0,
+//        app.sidebarAllList_NON_THROWING().click()
+//        XCTAssertEqual(app.contentRows_NON_THROWING().count, 0,
 //                       "And yet when the app is relaunched the created Item has been expunged")
 //    }
 
@@ -72,7 +72,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         app.launchAndSanitiseWindowsAndIdentifiers()
         let initialWindowCount = app.windows.count
 
-        app.menubarWindowNew.click()
+        app.menubarWindowNew_NON_THROWING.click()
         XCTAssertGreaterThan(app.windows.count, initialWindowCount,
                              "There is a menu bar entry to create a new window that when it is clicked creates new Window")
     }

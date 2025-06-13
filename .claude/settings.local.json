@@ -4,7 +4,9 @@
       "Bash(ls:*)",
       "Bash(xcodebuild test:*)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(xcodebuild:*)"
     ],
     "deny": []
   }
