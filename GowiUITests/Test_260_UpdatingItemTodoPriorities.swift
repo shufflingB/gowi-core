@@ -63,7 +63,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     func test_000_anItemsPriorityInTheWaitingListCanBeIncreasedByDraggingItUpInTheList() throws {
         // Test dragging the 1st Item below the 2nd
 
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 1,
                              "This test requires at least two Items in the list")
 
@@ -84,7 +84,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
 
     func test_010_anItemsPriorityInTheWaitingListCanBeDecreasedByDraggingItDownTheList() throws {
         // Swap last with penultimate Items
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 2, "This test requires at least two items")
 
         // Might be long list
@@ -111,7 +111,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     }
 
     func test_300_anItemsPriorityInTheWaitingListCanBeIncreasedByTheNudgeUpShortcut() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 6, "This test requires at least six items")
 
         // Select two items that we will move & stash detail for checking later
@@ -140,7 +140,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     }
 
     func test_400_anItemsPriorityInTheWaitingListCanBeDecreasedByTheNudgeDownShortcut() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 6, "This test requires at least six items")
 
         // Jump to the end just in case we have a lot of fixture data
@@ -174,7 +174,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     }
 
     func test_500_itemPriorityChangingShortcutsStopAtHead() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+       try  app.sidebarWaitingList().click()
         app.contentRowTextField_NON_THROWING(0).click()
 
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 4, "This test requires at least four items")
@@ -204,7 +204,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     }
 
     func test_600_itemPriorityChangingShortcutsStopAtTail() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+       try  app.sidebarWaitingList().click()
 
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 4, "This test requires at least four items")
 
@@ -235,7 +235,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     }
 
     func test_700_changingPrioritiesInTheWaitingListIsUndoableAndRedoable() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+       try  app.sidebarWaitingList().click()
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 6, "This test requires at least six items")
 
         // Select two items that we will move & stash detail for checking later

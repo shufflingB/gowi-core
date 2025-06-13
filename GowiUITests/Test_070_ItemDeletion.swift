@@ -26,7 +26,7 @@ class Test_070_ItemDeletion: XCTestCase {
     }
 
     func itemCanBeDeletedUsing(description: String, rowToDelete row: Int = 3, method: () -> Void) throws {
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         assert(app.contentRows_NON_THROWING().count > 5,
                "Testing from \(description) should run successfully if at least 5 existing items is present in the sidebar")
 
@@ -64,7 +64,7 @@ class Test_070_ItemDeletion: XCTestCase {
     }
 
     func test_300_aDiscontinuousSelectionOfItemsCanBeDeletedInOneGo() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         assert(app.contentRows_NON_THROWING().count > 5,
                "This test should run successfully if at least 5 existing items is present in the sidebar")
 
@@ -92,7 +92,7 @@ class Test_070_ItemDeletion: XCTestCase {
         let numTestItems = 9
         let idxsOfItemsToDelete = [1, 3, 4]
 
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numTestItems,
                              "This test should run successfully if there are \(numTestItems) in the sidebar list")
 

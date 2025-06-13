@@ -51,7 +51,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
     func test_050_itemsAreDisplayedInTheWaitingDoneAndAllListsAccordingToTheirCompletionStatus() throws {
         // Create a new item
-        app.sidebarDoneList_NON_THROWING().click() // Ensure in a list that should not show newly created items by default
+        try app.sidebarDoneList().click() // Ensure in a list that should not show newly created items by default
         app.menubarItemNew_NON_THROWING.click()
 
         let titleStr = "\(#function) dummy test item"
@@ -65,12 +65,12 @@ class Test_060_ItemInformationInUI: XCTestCase {
                        "Sidebar list which would not show the new item should get updated so that the new item is shown as its top item ")
 
         // ... visible in the All list
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
                        "When the All items list is selected, the SideBar should show the title of the new item as its top item")
 
         // ... not visible in the Done list
-        app.sidebarDoneList_NON_THROWING().click()
+        try app.sidebarDoneList().click()
         let foundInDoneCount: Int = app.contentRows_NON_THROWING().reduce(0) { currentCount, row in
             if row.value as! String == titleStr {
                 return currentCount + 1
@@ -83,7 +83,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
                        "When the Done list is selected, the SideBar should NOT show the new item in any row")
 
         // ... and finally that the incomplete item is visible in the todo list
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
         XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
                        "When the Todo items list is selected, the SideBar should show the new item as its top item ")
 
@@ -92,7 +92,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         //
         // Next, mark the item as done and check the completed item is showing up as expected
         //
-        app.sidebarWaitingList_NON_THROWING().click() // Ensure in a list that will not show a completed item unless correct business logic
+        try app.sidebarWaitingList().click() // Ensure in a list that will not show a completed item unless correct business logic
         app.detailCompletionCheckBox_NON_THROWING().click()
         let foundInDoneCount1: Int = app.contentRows_NON_THROWING().reduce(0) { currentCount, row in
             if row.value as! String == titleStr {
@@ -105,7 +105,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         XCTAssertEqual(foundInDoneCount1, 0,
                        "After the Item is marked as complete it does not show up in the Waiting list")
 
-        app.sidebarDoneList_NON_THROWING().click()
+        try app.sidebarDoneList().click()
         XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
                        "And instead now shows up as the most recent Item completed in the Done list")
 
@@ -113,7 +113,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
                       "Where it is marked as completed")
 
         // ... completed is visible in the All items list
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
                        "And it also remains visible in the All Items list")
     }
@@ -150,7 +150,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
                       "When the item is incomplete, clicking on the button will set 'Incomplete' as the pasteboard string")
 
         app.detailCompletionCheckBox_NON_THROWING().click()
-        app.sidebarDoneList_NON_THROWING().click()
+        try app.sidebarDoneList().click()
         app.contentRowTextField_NON_THROWING(0).click()
         XCTAssertNotNil(XCUIApplication.detailDateFormatter.date(from: app.detailCompletedDateValue_NON_THROWING()),
                         "And when the item is completed, clicking on the same button causes a date to be copied to the pasteboard")

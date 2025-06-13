@@ -26,8 +26,8 @@ class Test_800_WindowsAndTabs: XCTestCase {
     }
 
     func test_100_canOpenANewWindowDisplayingAnItemFromTheMenubar() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(4).click()
+        try app.sidebarWaitingList().click()
+        try app.contentRowTextField(4).click()
         let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
@@ -40,12 +40,12 @@ class Test_800_WindowsAndTabs: XCTestCase {
     }
 
     func test_110_canOpenANewWindowDisplayingAnItemFromTheContentContextMenu() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(4).click()
+        try app.sidebarWaitingList().click()
+        try app.contentRowTextField(4).click()
         let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.contentRowTextField_NON_THROWING(4).rightClick()
+        try app.contentRowTextField(4).rightClick()
         app.contentContextMenuOpenInNewWindow_NON_THROWING(4).click()
 
         XCTAssertEqual(app.windows.count, windowCount + 1,
@@ -56,8 +56,8 @@ class Test_800_WindowsAndTabs: XCTestCase {
     }
 
     func test_150_canOpenANewTabDisplayingAnItemFromTheMenubar() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(4).click()
+        try app.sidebarWaitingList().click()
+        try app.contentRowTextField(4).click()
         let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
@@ -70,12 +70,12 @@ class Test_800_WindowsAndTabs: XCTestCase {
     }
 
     func test_160_canOpenANewTabDisplayingAnItemFromTheContentContextMenu() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(4).click()
+        try app.sidebarWaitingList().click()
+        try app.contentRowTextField(4).click()
         let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.contentRowTextField_NON_THROWING(4).rightClick()
+        try app.contentRowTextField(4).rightClick()
         app.contentContextMenuOpenInNewTab_NON_THROWING(4).click()
         XCTAssertEqual(app.windows.count, windowCount,
                        "When the app menubar item open in new window is clicked the app opens a new tab"

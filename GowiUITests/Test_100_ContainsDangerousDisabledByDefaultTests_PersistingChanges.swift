@@ -142,7 +142,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
                           "Test relies on access to Live backend DB, possible risk of data corruption")
         relaunchAgainstLiveData()
 
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         let numChangesToMake = 2
 
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
@@ -166,7 +166,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         ///
         app.shortcutAppQuit()
         app.launch()
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
 
         ///
         /// Check that the changes we made have been reverted by the restart
@@ -214,7 +214,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
     
     func test_400_allUnsavedChangesCanBeRevertedFromTheMenubar() throws {
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         let numChangesToMake = 2
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) items in the system")
@@ -267,7 +267,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     
     
     func test_410_allUnsavedChangesCanBeRevertedFromTheToolbar() throws {
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         let numChangesToMake = 2
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) items in the system")

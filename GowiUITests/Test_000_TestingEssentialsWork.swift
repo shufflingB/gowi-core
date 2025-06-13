@@ -21,7 +21,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func test__010_frameworkThrowsWhenAccessingNonExistentWindow() throws {
+    func test__010_frameworkCanAccessTheAppsWindows() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         
@@ -47,10 +47,10 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         }
     }
 
-    func test_000_appTestMode0HasNoDataAndFrameworkContentRowsDetectsThis() throws {
+    func test_000_appTestMode0HasNoDataAndFrameworkCanWorkThisOut() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         
         XCTAssertEqual(try app.contentRows().count, 0,
                        "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
@@ -62,7 +62,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
     func test_020_frameworkThrowsWhenAccessingInvalidContentRow() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         
         // Verify that accessing non-existent content rows throws
         XCTAssertThrowsError(try app.contentRowTextField(0), "contentRowTextField should throw for non-existent row 0") { error in
@@ -89,10 +89,10 @@ class Test_000_TestingEssentialsWork: XCTestCase {
 
     
     
-    func test_030_appTestMode1HasHasFixtureAndContentRowAccessorsWorkWithThatData() throws {
+    func test_030_appTestMode1HasHasFixtureAndFrameworkCanAccessContentRows() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "1"]
         app.launchAndSanitiseWindowsAndIdentifiers()
-        app.sidebarAllList_NON_THROWING().click()
+        try app.sidebarAllList().click()
         
         XCTAssertEqual(try app.contentRows().count, 10,
                        "When the app is opened in test mode 1, it opens with 10 existing test Items")
@@ -113,6 +113,29 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         
         
     }
+
+    func test_040_frameworkCanAccessSidebarLists() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "0"]
+        app.launchAndSanitiseWindowsAndIdentifiers()
+        
+        // Verify that existing lists work
+        XCTAssertNoThrow(try app.sidebarAllList(), "sidebarAllList should work for 'All' list")
+        XCTAssertNoThrow(try app.sidebarWaitingList(), "sidebarWaitingList should work for 'Waiting' list")
+        XCTAssertNoThrow(try app.sidebarDoneList(), "sidebarDoneList should work for 'Done' list")
+        
+        // Verify that accessing a non-existent list throws
+        XCTAssertThrowsError(try app.sidebarList(identifier: "NonExistentList"), "sidebarList should throw for non-existent list") { error in
+            guard let testError = error as? XCTestError else {
+                XCTFail("Expected XCTestError, got \(type(of: error))")
+                return
+            }
+            
+            let userInfo = testError.userInfo
+            XCTAssertTrue(userInfo["description"] as? String ?? "" != "", "Error should contain description")
+            XCTAssertEqual(userInfo["timeout"] as? String, "3 seconds", "Error should contain timeout info")
+            XCTAssertEqual(userInfo["requested_identifier"] as? String, "NonExistentList", "Error should contain requested identifier")
+        }
+    }
     
 
 //    fun test_can_create_new_date
@@ -120,7 +143,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
 //
 //        app.menubarItemNew.click()
 //        app.typeText("000")
-//        XCTAssertEqual(app.contentRows_NON_THROWING().count, 1,
+//        XCTAssertEqual(try app.contentRows().count, 1,
 //                       "And it is possible to create a new Item in this test mode")
 //        XCTAssertTrue(app.toolbarSaveChangesIsShowingPending,
 //                      "That detects it needs saving")
@@ -132,8 +155,8 @@ class Test_000_TestingEssentialsWork: XCTestCase {
 //        app.menubarGowiQuit.click()
 //
 //        app.launch()
-//        app.sidebarAllList_NON_THROWING().click()
-//        XCTAssertEqual(app.contentRows_NON_THROWING().count, 0,
+//        try app.sidebarAllList().click()
+//        XCTAssertEqual(try app.contentRows().count, 0,
 //                       "And yet when the app is relaunched the created Item has been expunged")
 //    }
 

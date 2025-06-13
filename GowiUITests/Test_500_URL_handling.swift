@@ -39,7 +39,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the default URL route \(url) is opened a new window is created")
-        XCTAssertTrue(app.sidebarWaitingList_NON_THROWING(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarWaitingList(win: app.win2_NON_THROWING).isSelected,
                       " And it displays the list of Waiting items"
         )
     }
@@ -59,7 +59,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to the Waiting Items is opened a new window is created")
-        XCTAssertTrue(app.sidebarWaitingList_NON_THROWING(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarWaitingList(win: app.win2_NON_THROWING).isSelected,
                       " And it displays the list of Waiting Items"
         )
     }
@@ -79,7 +79,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to the Done Items is opened a new window is created")
-        XCTAssertTrue(app.sidebarDoneList_NON_THROWING(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarDoneList(win: app.win2_NON_THROWING).isSelected,
                       " And it displays the list of Done Items"
         )
     }
@@ -99,14 +99,14 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to All Items is opened a new window is created")
-        XCTAssertTrue(app.sidebarAllList_NON_THROWING(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarAllList(win: app.win2_NON_THROWING).isSelected,
                       " And it displays the list of All Items"
         )
     }
 
-    func test_040_canCreateAUrlRouteToASpecificItem() {
-        app.sidebarAllList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(3).click()
+    func test_040_canCreateAUrlRouteToASpecificItem() throws {
+        try app.sidebarAllList().click()
+        try app.contentRowTextField(3).click()
 
         let itemId: String = app.detailIDValue_NON_THROWING()!
 
@@ -127,16 +127,16 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to a specific Item is opened a new window is created")
-        XCTAssertTrue(app.sidebarAllList_NON_THROWING(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarAllList(win: app.win2_NON_THROWING).isSelected,
                       " And it displays that Item"
         )
     }
 
-    func test_100_ifNotNewItemRouteWillPrefertToRaiseExistingWindowInsteadOfCreatingNew() {
+    func test_100_ifNotNewItemRouteWillPrefertToRaiseExistingWindowInsteadOfCreatingNew() throws{
         
         // And not create new ones
-        app.sidebarAllList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(5).click()
+        try app.sidebarAllList().click()
+        try app.contentRowTextField(5).click()
 
         let itemId: String = app.detailIDValue_NON_THROWING()!
 
@@ -155,7 +155,7 @@ class Test_500_URL_handling: XCTestCase {
         // Now open a new window and set its route to something different
         app.shortcutWindowOpenNew()
         assert(app.isKeyFrontWindow(app.win2_NON_THROWING))
-        app.sidebarDoneList_NON_THROWING(win: app.win2_NON_THROWING).click()
+        try app.sidebarDoneList(win: app.win2_NON_THROWING).click()
 
         // Attempt to open route we setup in window 1 to verify it just raises rather than creating new window
         let winCount = app.windows.count
@@ -169,8 +169,8 @@ class Test_500_URL_handling: XCTestCase {
         )
     }
 
-    func test_200_aNewItemRouteExistsThatCreatesNewItemsInNewWindows() {
-        app.sidebarAllList_NON_THROWING().click()
+    func test_200_aNewItemRouteExistsThatCreatesNewItemsInNewWindows() throws{
+        try app.sidebarAllList().click()
 
         let url: URL = {
             var components = URLComponents()

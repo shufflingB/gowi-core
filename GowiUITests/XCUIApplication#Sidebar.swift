@@ -11,20 +11,43 @@ import XCTest
 // MARK: Extension for Main window Sidebar testing items
 
 extension XCUIApplication {
-    func sidebarList_NON_THROWING(win: XCUIElement? = nil, identifier: String) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.outlines.cells.containing(.staticText, identifier: identifier).element
+    func sidebarList(win: XCUIElement? = nil, identifier: String) throws -> XCUIElement {
+        let winS: XCUIElement = win == nil ? try win1 : win!
+
+        // First verify the sidebar outline structure exists
+        guard winS.outlines.firstMatch.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Sidebar outline failed to exist within timeout when accessing list '\(identifier)'",
+                "timeout": "3 seconds",
+                "window": winS.debugDescription,
+                "requested_identifier": identifier,
+            ])
+        }
+
+        let listElement = winS.outlines.cells.containing(.staticText, identifier: identifier).element
+
+        // Verify the specific list exists
+        guard listElement.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Sidebar list '\(identifier)' failed to exist within timeout",
+                "timeout": "3 seconds",
+                "window": winS.debugDescription,
+                "requested_identifier": identifier,
+            ])
+        }
+
+        return listElement
     }
 
-    func sidebarWaitingList_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        sidebarList_NON_THROWING(win: win, identifier: "Waiting")
+    func sidebarWaitingList(win: XCUIElement? = nil) throws -> XCUIElement {
+        try sidebarList(win: win, identifier: "Waiting")
     }
 
-    func sidebarDoneList_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        sidebarList_NON_THROWING(win: win, identifier: "Done")
+    func sidebarDoneList(win: XCUIElement? = nil) throws -> XCUIElement {
+        try sidebarList(win: win, identifier: "Done")
     }
 
-    func sidebarAllList_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        sidebarList_NON_THROWING(win: win, identifier: "All")
+    func sidebarAllList(win: XCUIElement? = nil) throws -> XCUIElement {
+        try sidebarList(win: win, identifier: "All")
     }
 }

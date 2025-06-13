@@ -91,7 +91,7 @@ class Test_050_ItemCreation: XCTestCase {
     }
 
     func test_230_theCreationOfNewItemsCanBeUndoneAndRedone() throws {
-        app.sidebarWaitingList_NON_THROWING().click()
+        try app.sidebarWaitingList().click()
 
         let originalCount = app.contentRows_NON_THROWING().count
 

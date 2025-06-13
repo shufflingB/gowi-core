@@ -25,8 +25,8 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
 
 
     func test_500_itemCanBeMarkCompletedInDetailAreaUsingADefaultDate() throws {
-        app.sidebarAllList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(3).click()
+        try app.sidebarAllList().click()
+        try app.contentRowTextField(3).click()
         XCTAssertFalse(app.detailCompletionCheckBoxValue_NON_THROWING(),
                        "When an Item that is incomplete")
 
@@ -57,8 +57,8 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
     }
 
     func test_550_itemCanBeMarkCompletedInDetailAreaWithAProvidedDate() throws {
-        app.sidebarAllList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(3).click()
+        try app.sidebarAllList().click()
+        try app.contentRowTextField(3).click()
 
         let dateToSet = app.detailCompletedDateFormatter.date(from: "1945-12-25 12:12")!
         app.detailCompletedDatePickerSet(dateToSet)
@@ -76,8 +76,8 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
     }
 
     func test_560_itemCompletionDataCanBeAdjustedAfterCompletionUsingKeyboardAndIsUndoable() throws {
-        app.sidebarAllList_NON_THROWING().click()
-        app.contentRowTextField_NON_THROWING(3).click()
+        try app.sidebarAllList().click()
+        try app.contentRowTextField(3).click()
 
         let dateToAdjustTo = app.detailCompletedDateFormatter.date(from: "1945-12-25 12:12")!
         app.detailCompletionCheckBox_NON_THROWING().click()
