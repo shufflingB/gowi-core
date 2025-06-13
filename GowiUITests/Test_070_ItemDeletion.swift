@@ -25,18 +25,18 @@ class Test_070_ItemDeletion: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func itemCanBeDeletedUsing(description: String, rowToDelete row: Int = 3, method: () -> Void) throws {
+    func itemCanBeDeletedUsing(description: String, rowToDelete row: Int = 3, method: () throws -> Void) throws {
         try app.sidebarAllList().click()
         assert(app.contentRows_NON_THROWING().count > 5,
                "Testing from \(description) should run successfully if at least 5 existing items is present in the sidebar")
 
         let rowToDelete = row
-        app.contentRowTextField_NON_THROWING(rowToDelete).click()
+        try app.contentRowTextField(rowToDelete).click()
         let itemToDeleteTitle = app.contentRowTextFieldValue_NON_THROWING(rowToDelete)
 
-        method()
+        try method()
 
-        app.contentRows_NON_THROWING().indices.forEach { idx in
+        try app.contentRows().indices.forEach { idx in
             XCTAssertNotEqual(app.contentRowTextFieldValue_NON_THROWING(idx), itemToDeleteTitle,
                               "And after \(description)'s deletion that title should not be visible")
         }
@@ -44,7 +44,7 @@ class Test_070_ItemDeletion: XCTestCase {
 
     func test_100_canDeleteItemFromTheMenuBar() throws {
         try itemCanBeDeletedUsing(description: #function) {
-            app.menubarItemDelete_NON_THROWING.click()
+            try app.menubarItemDelete.click()
         }
     }
 
@@ -74,7 +74,7 @@ class Test_070_ItemDeletion: XCTestCase {
 
         try app.contentRowsSelect(indices: idxsToDelete)
 
-        app.menubarItemDelete_NON_THROWING.click()
+        try app.menubarItemDelete.click()
 
         let afterDeleteCount = app.contentRows_NON_THROWING().count
 
@@ -105,7 +105,7 @@ class Test_070_ItemDeletion: XCTestCase {
         // Select possibly discontinuous set of Items and then delete theme
         try app.contentRowsSelect(indices: idxsOfItemsToDelete)
 
-        app.menubarItemDelete_NON_THROWING.click()
+        try app.menubarItemDelete.click()
 
         // Minimal check that the deletion looks plausible
         let afterDeleteCount = app.contentRows_NON_THROWING().count

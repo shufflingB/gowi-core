@@ -31,7 +31,7 @@ class Test_800_WindowsAndTabs: XCTestCase {
         let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.menubarItemOpenInNewWindow_NON_THROWING.click()
+        try app.menubarItemOpenInNewWindow.click()
         XCTAssertEqual(app.windows.count, windowCount + 1,
                        "When the app menubar item open in new window is clicked the app opens a new window"
         )
@@ -61,7 +61,7 @@ class Test_800_WindowsAndTabs: XCTestCase {
         let itemId = app.detailIDValue_NON_THROWING()
         let windowCount = app.windows.count
 
-        app.menubarItemOpenInNewTab_NON_THROWING.click()
+        try app.menubarItemOpenInNewTab.click()
         XCTAssertEqual(app.windows.count, windowCount,
                        "When the app menubar item open in new window is clicked the app opens a new tab"
         )

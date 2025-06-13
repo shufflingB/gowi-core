@@ -26,7 +26,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     }
 
     func test_000_theItemsDetailAreaDisplaysItsTitleIdCreatedAndCompletionDatesAndNotes() throws {
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         let title = "\(#function) di"
         app.detailTitle_NON_THROWING().click()
         app.typeText(title)
@@ -52,7 +52,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     func test_050_itemsAreDisplayedInTheWaitingDoneAndAllListsAccordingToTheirCompletionStatus() throws {
         // Create a new item
         try app.sidebarDoneList().click() // Ensure in a list that should not show newly created items by default
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
 
         let titleStr = "\(#function) dummy test item"
         app.detailTitle_NON_THROWING().click()
@@ -119,7 +119,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     }
 
     func test_100_detailAreaProvidesButtonToCopyTheItemIdToClipboard() throws {
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         XCTAssertTrue(app.detailIDButtonCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
                       "The window's detail area should contain a button that displays the item's unique ID")
 
@@ -133,7 +133,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     }
 
     func test_110_detailAreaProvidesButtonToCopyCreationDateToClipboard() throws {
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         XCTAssertTrue(app.detailCreateDateButtonToCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
                       "The window's detail area should contain a button that displays the item's creation date")
 
@@ -142,7 +142,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     }
 
     func test_120_detailAreaProvidesButtonToCopyCompletedDateToClipboard() throws {
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         XCTAssertTrue(app.detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
                       "The window's detail area should contain a button that displays the item's completion date")
 
@@ -157,7 +157,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     }
 
     func test_130_detailAreaProvidesButtonToCopyURLToClipboard() throws {
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         let title = "\(#function)"
         app.detailTitle_NON_THROWING().click()
         app.typeText(title)

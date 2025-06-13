@@ -26,7 +26,7 @@ class Test_250_UpdatingItemDetails: XCTestCase {
     }
 
     func test_000_theItemsTitleIsEditableInBothTheContentListAndDetailAreas() throws {
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
 
         /**
          Verify linkage between sidebar and detail view.

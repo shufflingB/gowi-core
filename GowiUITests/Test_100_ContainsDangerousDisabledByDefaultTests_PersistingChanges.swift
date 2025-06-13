@@ -38,12 +38,12 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         let mutatedNote: String
     }
 
-    func makeChanges(numChanges: Int, create: () -> Void) throws -> Array<TData> {
+    func makeChanges(numChanges: Int, create: () throws -> Void) throws -> Array<TData> {
         XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChanges,
                              "This test requires at least \(numChanges) item in the system")
 
         for _ in 1 ... numChanges {
-            create()
+            try create()
             app.typeText("- ") /// Anything so that when create runs again it'll create a new one
         }
 
@@ -86,7 +86,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
                        "When the app starts the Toolbar Save Changes button shows no changes are waiting to be saved")
 
         let numItemsToSave = 2
-        let tdata: Array<TData> = try makeChanges(numChanges: numItemsToSave, create: { app.menubarItemNew_NON_THROWING.click() })
+        let tdata: Array<TData> = try makeChanges(numChanges: numItemsToSave, create: { try app.menubarItemNew.click() })
 
         XCTAssertTrue(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
                       "And after new items are added the Toolbar's Save button will indicate there are changes to be saved")
@@ -322,7 +322,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         XCTAssertFalse(app.toolbarRevertChangesIsShowing_NON_THROWING,
                        "When test starts the Toolbar's Revert Changes button should indicate there is nothing for it to do")
 
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         app.detailTitle_NON_THROWING().click()
         app.typeText("A title")
         let title = app.detailTitleValue_NON_THROWING()

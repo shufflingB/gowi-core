@@ -68,33 +68,69 @@ extension XCUIApplication {
 
     // MARK: Item
 
-    var menuBarItemsMenu_NON_THROWING: XCUIElement {
-//        _ = menuBars.menuBarItems["Items"].waitForExistence(timeout: 2)
-        return menuBars.menuBarItems["Items"]
+
+
+    var menubarItemNew: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["Items"].menuItems["New Item"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Items' > 'New Item' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "New Item"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarItemNew_NON_THROWING: XCUIElement {
-        return menuBars.menuBarItems["Items"].menuItems["New Item"]
+    var menubarItemDelete: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["Items"].menuItems["Delete"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Items' > 'Delete' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Delete"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarItemDelete_NON_THROWING: XCUIElement {
-        return menuBars.menuBarItems["Items"].menuItems["Delete"]
+
+    var menubarItemOpenInNewWindow: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["Items"].menuItems["Open in New Window"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Items' > 'Open in New Window' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Open in New Window"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarItemOpenInNewWindow_NON_THROWING: XCUIElement {
-        return menuBars.menuBarItems["Items"].menuItems["Open in New Window"]
-    }
 
-    var menubarItemOpenInNewTab_NON_THROWING: XCUIElement {
-        return menuBars.menuBarItems["Items"].menuItems["Open in New Tab"]
+    var menubarItemOpenInNewTab: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["Items"].menuItems["Open in New Tab"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Items' > 'Open in New Tab' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Open in New Tab"
+                ])
+            }
+            return element
+        }
     }
 
     // MARK: Window operations ...
 
-    var menubarWindowMenu_NON_THROWING: XCUIElement {
-        _ = menuBars.menuBarItems["Window"].waitForExistence(timeout: 2)
-        return menuBars.menuBarItems["Window"]
-    }
+
     
     var menubarWindowMenu: XCUIElement {
         get throws {
@@ -112,7 +148,7 @@ extension XCUIApplication {
     
     var menubarWindowNew: XCUIElement {
         get throws {
-            try menubarWindowMenu.click()
+//            try menubarWindowMenu.click()
             guard menuBars.menuItems["New Window"].waitForExistence(timeout: 2) else {
                 throw XCTestError(.failureWhileWaiting, userInfo: [
                     "description": "menuBarItems[\"Window\"] > \"New Window\" failed to exist within timeout",

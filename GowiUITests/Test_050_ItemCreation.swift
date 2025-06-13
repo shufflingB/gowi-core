@@ -26,9 +26,8 @@ class Test_050_ItemCreation: XCTestCase {
     }
 
     func test_000_canCreateNewItemFromTheMenubar() throws {
-        XCTAssertTrue(app.menubarItemNew_NON_THROWING.exists,
-                      "The app should have a Menu Bar entry to create a new item")
-        app.menubarItemNew_NON_THROWING.click()
+
+        try app.menubarItemNew.click()
 
         let clickDate = Date()
 
@@ -46,7 +45,7 @@ class Test_050_ItemCreation: XCTestCase {
                        "And the new item's detail should show that it is incomplete")
 
         // and that it has the new item at the top of todo list
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(win: app.win1_NON_THROWING, 0), "",
+        XCTAssertEqual(try app.contentRowTextFieldValue(win: app.win1_NON_THROWING, 0), "",
                        "And the sidebar should show the empty new item at the top of the list")
         
         
@@ -61,6 +60,8 @@ class Test_050_ItemCreation: XCTestCase {
         Self.checkNewItemLooksOkay(app)
     }
 
+//    TODO: For reasons unknown SwiftUI is hijacking the my chosen CMD+N shortcut and using it to open a new window. Need
+    // to figure out why
     func test_020_canCreateNewItemUsingKeyboardShortcut() throws {
         // Can't just use itemNewCheck - app.win1_NON_THROWING will not exist bc it got closed
         XCTAssertEqual(try app.contentRows().count, 0)
@@ -81,7 +82,7 @@ class Test_050_ItemCreation: XCTestCase {
         app.shortcutWindowsCloseAll()
 
         // Now attempt to create a new Item
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
 
         // Check that a new window has been opened
         XCTAssertEqual(app.windows.allElementsBoundByIndex.count, 1,
@@ -95,7 +96,7 @@ class Test_050_ItemCreation: XCTestCase {
 
         let originalCount = app.contentRows_NON_THROWING().count
 
-        app.menubarItemNew_NON_THROWING.click()
+        try app.menubarItemNew.click()
         let afterNewItemCount = app.contentRows_NON_THROWING().count
         XCTAssertEqual(afterNewItemCount, originalCount + 1,
                        "After adding a new Item there should be an additional Item displayed in the sidebar")
