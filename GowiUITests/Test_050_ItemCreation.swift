@@ -101,12 +101,12 @@ class Test_050_ItemCreation: XCTestCase {
         XCTAssertEqual(afterNewItemCount, originalCount + 1,
                        "After adding a new Item there should be an additional Item displayed in the sidebar")
 
-        app.menubarUndo_NON_THROWING.click()
-        let afterUndoCount = app.contentRows_NON_THROWING().count
+        try app.menubarUndo.click()
+        let afterUndoCount = try app.contentRows().count
         XCTAssertEqual(afterUndoCount, originalCount,
                        "And when the last action is Undone the new Item is removed")
 
-        app.menubarRedo_NON_THROWING.click()
+        try app.menubarRedo.click()
         let afterRedoItemCount = app.contentRows_NON_THROWING().count
         XCTAssertEqual(afterRedoItemCount, afterNewItemCount,
                        "And after Redoing the new Item reappears")

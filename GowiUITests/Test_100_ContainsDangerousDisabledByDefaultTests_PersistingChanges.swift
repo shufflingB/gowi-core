@@ -93,7 +93,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
         switch saveMechanism {
         case .menuItem:
-            app.menubarFileSaveChanges_NON_THROWING.click()
+            try app.menubarFileSaveChanges.click()
         case .shortcut:
             app.shortcutSaveChanges()
         case .toolbarItem:
@@ -134,7 +134,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
             XCTAssertEqual(app.detailIDValue_NON_THROWING(), data.id, "ID's must match removing")
             app.shortcutItemDelete()
         }
-        app.menubarFileSaveChanges_NON_THROWING.click()
+        try app.menubarFileSaveChanges.click()
     }
 
     func test_000_dangerous_unsavedChangesAgainstLiveDataAreDiscardedOnAppRestarts() throws {
@@ -240,7 +240,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         ///
         /// Revert changes
         ///
-        app.menubarFileRevertChanges_NON_THROWING.click()
+        try app.menubarFileRevertChanges.click()
         app.dialogueConfirmRevertOK_NON_THROWING.click()
 
         ///

@@ -15,15 +15,34 @@ extension XCUIApplication {
 
     // MARK: Gowi
 
-    var menubarGowiQuit_NON_THROWING: XCUIElement {
-        return menuBars.menuItems["Quit Gowi"]
+    var menubarGowiQuit: XCUIElement {
+        get throws {
+            let element = menuBars.menuItems["Quit Gowi"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Quit Gowi' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Quit Gowi"
+                ])
+            }
+            return element
+        }
     }
 
     // MARK: File
 
-    var menubarFileMenu_NON_THROWING: XCUIElement {
-        _ = menuBars.menuBarItems["File"].waitForExistence(timeout: 2)
-        return menuBars.menuBarItems["File"]
+    var menubarFileMenu: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["File"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu bar 'File' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_bar_item": "File"
+                ])
+            }
+            return element
+        }
     }
 
 //    var menubarFileExportItems: XCUIElement {
@@ -41,29 +60,82 @@ extension XCUIApplication {
 //        return menuBars.menuItems["Import Items"]
 //    }
 
-    var menubarFileSaveChanges_NON_THROWING: XCUIElement {
-        return menuBars.menuItems["Save Changes"]
+    var menubarFileSaveChanges: XCUIElement {
+        get throws {
+            let element = menuBars.menuItems["Save Changes"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Save Changes' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Save Changes"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarFileRevertChanges_NON_THROWING: XCUIElement {
-        return menuBars.menuItems["Revert Changes"]
+
+    var menubarFileRevertChanges: XCUIElement {
+        get throws {
+            let element = menuBars.menuItems["Revert Changes"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Revert Changes' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Revert Changes"
+                ])
+            }
+            return element
+        }
     }
 
     // MARK: Edit
 
-    var menubarEditMenu_NON_THROWING: XCUIElement {
-        _ = menuBars.menuBarItems["Edit"].waitForExistence(timeout: 2)
-        return menuBars.menuBarItems["Edit"]
+
+    var menubarEditMenu: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["Edit"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu bar 'Edit' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_bar_item": "Edit"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarUndo_NON_THROWING: XCUIElement {
-        let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Undo")
-        return menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
+
+    var menubarUndo: XCUIElement {
+        get throws {
+            let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Undo")
+            let element = menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Edit' > 'Undo' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Undo"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarRedo_NON_THROWING: XCUIElement {
-        let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Redo")
-        return menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
+
+    var menubarRedo: XCUIElement {
+        get throws {
+            let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Redo")
+            let element = menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Edit' > 'Redo' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Redo"
+                ])
+            }
+            return element
+        }
     }
 
     // MARK: Item
@@ -148,7 +220,6 @@ extension XCUIApplication {
     
     var menubarWindowNew: XCUIElement {
         get throws {
-//            try menubarWindowMenu.click()
             guard menuBars.menuItems["New Window"].waitForExistence(timeout: 2) else {
                 throw XCTestError(.failureWhileWaiting, userInfo: [
                     "description": "menuBarItems[\"Window\"] > \"New Window\" failed to exist within timeout",
@@ -162,12 +233,33 @@ extension XCUIApplication {
     }
     
 
-    var menubarWindowClose_NON_THROWING: XCUIElement {
-        menubarFileMenu_NON_THROWING.click()
-        return menuBars.menuItems["Close"]
+    var menubarWindowClose: XCUIElement {
+        get throws {
+            try menubarFileMenu.click()
+            let element = menuBars.menuItems["Close"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'Close' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "Close"
+                ])
+            }
+            return element
+        }
     }
 
-    var menubarWindowsCloseAll_NON_THROWING: XCUIElement {
-        return menuBars.menuItems["closeAll:"] // Has to be used with XCUIElement.perform ( ... most of time just use the shortcut instead
+
+    var menubarWindowsCloseAll: XCUIElement {
+        get throws {
+            let element = menuBars.menuItems["closeAll:"]
+            guard element.waitForExistence(timeout: 3) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "Menu item 'closeAll:' failed to exist within timeout",
+                    "timeout": "3 seconds",
+                    "menu_item": "closeAll:"
+                ])
+            }
+            return element
+        }
     }
 }

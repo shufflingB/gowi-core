@@ -43,11 +43,11 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
         XCTAssertLessThan(deltaDateDisplayedAndSet.second!, 60,
                           "And the Item's completion date matches to the nearest minute when the check box was clicked")
 
-        app.menubarUndo_NON_THROWING.click()
+        try app.menubarUndo.click()
         XCTAssertFalse(app.detailCompletionCheckBoxValue_NON_THROWING(),
                        "And if the completion is undone then completion checkbox is unmarked")
 
-        app.menubarRedo_NON_THROWING.click()
+        try app.menubarRedo.click()
         XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
                       "And if the completion is redone then completion checkbox is marked")
 
@@ -97,11 +97,11 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
         XCTAssertEqual(dateFromButton, dateDisplayedInPicker,
                        "And the value returned by Copy Date to Clipboard button matches that set in the picker")
 
-        app.menubarUndo_NON_THROWING.click()
-        app.menubarUndo_NON_THROWING.click()
-        app.menubarUndo_NON_THROWING.click()
-        app.menubarUndo_NON_THROWING.click()
-        app.menubarUndo_NON_THROWING.click()
+        try app.menubarUndo.click()
+        try app.menubarUndo.click()
+        try app.menubarUndo.click()
+        try app.menubarUndo.click()
+        try app.menubarUndo.click()
 
         let dateDisplayedInPickerAfterUndo = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
         XCTAssertEqual(dateDisplayedInPickerAfterUndo, originalDate,

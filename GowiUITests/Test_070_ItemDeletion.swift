@@ -113,7 +113,7 @@ class Test_070_ItemDeletion: XCTestCase {
 
         // Undo and see what we have
 
-        app.menubarUndo_NON_THROWING.click()
+        try app.menubarUndo.click()
         let afterUndoCount = app.contentRows_NON_THROWING().count
         XCTAssertEqual(afterUndoCount, originalCount,
                        "After undo the number of Items should be as it was originally")
@@ -125,7 +125,7 @@ class Test_070_ItemDeletion: XCTestCase {
         }
 
         // Then Redo and check things are as expected
-        app.menubarRedo_NON_THROWING.click()
+        try app.menubarRedo.click()
         let afterRedoCount = app.contentRows_NON_THROWING().count
         XCTAssertEqual(afterRedoCount, originalCount - idxsOfItemsToDelete.count,
                        "And Redo should redo the Delete again and the original set of Items displayed to decrease by \(idxsOfItemsToDelete.count)")
