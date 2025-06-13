@@ -139,12 +139,12 @@ class Test_000_TestingEssentialsWork: XCTestCase {
 
 
 
-    func test_100_appCanCreateNewWindowsFromMenuBar() {
+    func test_100_appCanCreateNewWindowsFromMenuBar() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         let initialWindowCount = app.windows.count
 
-        app.menubarWindowNew_NON_THROWING.click()
+        try app.menubarWindowNew.click()
         XCTAssertGreaterThan(app.windows.count, initialWindowCount,
                              "There is a menu bar entry to create a new window that when it is clicked creates new Window")
     }

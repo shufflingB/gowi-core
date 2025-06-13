@@ -95,11 +95,36 @@ extension XCUIApplication {
         _ = menuBars.menuBarItems["Window"].waitForExistence(timeout: 2)
         return menuBars.menuBarItems["Window"]
     }
-
-    var menubarWindowNew_NON_THROWING: XCUIElement {
-        menubarWindowMenu_NON_THROWING.click()
-        return menuBars.menuItems["New Window"]
+    
+    var menubarWindowMenu: XCUIElement {
+        get throws {
+            guard menuBars.menuBarItems["Window"].waitForExistence(timeout: 2) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "menuBarItems[\"Window\"] failed to exist within timeout",
+                    "timeout": "2 seconds",
+                    "available_menuBarItems":  menuBarItems.allElementsBoundByIndex.map { $0.identifier }
+                ])
+            }
+            return menuBars.menuBarItems["Window"]
+            
+        }
     }
+    
+    var menubarWindowNew: XCUIElement {
+        get throws {
+            try menubarWindowMenu.click()
+            guard menuBars.menuItems["New Window"].waitForExistence(timeout: 2) else {
+                throw XCTestError(.failureWhileWaiting, userInfo: [
+                    "description": "menuBarItems[\"Window\"] > \"New Window\" failed to exist within timeout",
+                    "timeout": "2 seconds",
+                    "available_menuBarItems":  menuBarItems.allElementsBoundByIndex.map { $0.identifier }
+                ])
+            }
+            
+            return menuBars.menuItems["New Window"]
+        }
+    }
+    
 
     var menubarWindowClose_NON_THROWING: XCUIElement {
         menubarFileMenu_NON_THROWING.click()
