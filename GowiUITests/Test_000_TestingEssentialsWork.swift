@@ -21,12 +21,40 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func test_minus_001_frameworkThrowsWhenAccessingNonExistentWindow() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "0"]
+        app.launchAndSanitiseWindowsAndIdentifiers()
+        
+        // Verify that only one window exists (win1)
+        XCTAssertEqual(app.windows.count, 1, "Test setup should have exactly one window")
+        
+        // Verify that accessing an existing window (win1) works
+        XCTAssertNoThrow(try app.win1, "win1 should be accessible when it exists")
+        
+        // Verify that accessing a non-existent window (win4) throws an error
+        XCTAssertThrowsError(try app.win4, "win4 should throw an error when it doesn't exist") { error in
+            // Verify the error is an XCTestError with expected information
+            guard let testError = error as? XCTestError else {
+                XCTFail("Expected XCTestError, got \(type(of: error))")
+                return
+            }
+            
+            // Check that the error contains useful debugging information
+            let userInfo = testError.userInfo
+            XCTAssertTrue(userInfo["description"] as? String ?? "" != "", "Error should contain description")
+            XCTAssertEqual(userInfo["timeout"] as? String, "3 seconds", "Error should contain timeout info")
+            XCTAssertNotNil(userInfo["available_windows"], "Error should contain available windows list")
+        }
+    }
+
     func test_000_appTestMode0HasNoData() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         app.sidebarAllList_NON_THROWING().click()
-        
         XCTAssertEqual(app.contentRows_NON_THROWING().count, 0,
+                       "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
+        
+        XCTAssertEqual(try app.contentRows().count, 0,
                        "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
         
         
@@ -37,7 +65,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         app.launchAndSanitiseWindowsAndIdentifiers()
         app.sidebarAllList_NON_THROWING().click()
 
-        XCTAssertEqual(app.contentRows_NON_THROWING().count, 10,
+        XCTAssertEqual(try app.contentRows().count, 10,
                        "When the app is opened in test mode 1, it opens with 10 existing test Items")
         
 //TODO: Verify that expected UUID is presenttestingMode1ourIdPresent

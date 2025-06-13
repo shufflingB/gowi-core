@@ -44,6 +44,48 @@ extension XCUIApplication {
         windows["Main-AppWindow-1"]
     }
 
+    private func winX(name: String) throws -> XCUIElement {
+        let mainWindow = windows[name]
+        guard mainWindow.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Main window '\(name)' failed to exist within timeout",
+                "timeout": "3 seconds",
+                "available_windows": windows.allElementsBoundByIndex.map { $0.identifier }
+            ])
+        }
+        return mainWindow
+    }
+    
+    var win1: XCUIElement {
+        get throws {
+            try winX(name: "Main-AppWindow-1")
+        }
+    }
+
+    var win2: XCUIElement {
+        get throws {
+            try winX(name: "Main-AppWindow-2")
+        }
+    }
+    
+    var win3: XCUIElement {
+        get throws {
+            try winX(name: "Main-AppWindow-3")
+        }
+    }
+    
+    var win4: XCUIElement {
+        get throws {
+            try winX(name: "Main-AppWindow-4")
+        }
+    }
+    
+    var win5: XCUIElement {
+        get throws {
+            try winX(name: "Main-AppWindow-5")
+        }
+    }
+    
     var win2_NON_THROWING: XCUIElement {
         windows["Main-AppWindow-2"]
     }

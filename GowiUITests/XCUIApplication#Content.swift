@@ -22,8 +22,38 @@ extension XCUIApplication {
             .matching(identifier: AccessId.MainWindowContentTitleField.rawValue)
 
         _ = query.element.waitForExistence(timeout: 3)
+        
 
         return query.allElementsBoundByIndex
+    }
+
+    func contentRows(win: XCUIElement? = nil) throws -> Array<XCUIElement> {
+        /** Throwing version of contentRows that fails the test if essential UI elements are not found.
+         This ensures test framework failures rather than app behavior failures when UI elements that must be present are missing.
+         */
+
+        let winS: XCUIElement = win == nil ? try win1 : win!
+        
+        // First, verify the essential UI structure exists (the outline itself)
+        guard winS.outlines.firstMatch.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Content outline failed to exist within timeout",
+                "timeout": "3 seconds",
+                "window": winS.debugDescription
+            ])
+        }
+        
+        let query: XCUIElementQuery = winS.outlines.children(matching: .outlineRow)
+            .textFields
+            .matching(identifier: AccessId.MainWindowContentTitleField.rawValue)
+
+        // Wait a moment for the query to settle, but don't fail if no elements exist
+        // (empty content is a valid state)
+        _ = query.element.waitForExistence(timeout: 3)
+
+        let elements = query.allElementsBoundByIndex
+        
+        return elements
     }
 
     private func contentRow_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
