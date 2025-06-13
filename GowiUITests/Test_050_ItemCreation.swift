@@ -30,7 +30,27 @@ class Test_050_ItemCreation: XCTestCase {
                       "The app should have a Menu Bar entry to create a new item")
         app.menubarItemNew_NON_THROWING.click()
 
-        Self.checkNewItemLooksOkay(app)
+        let clickDate = Date()
+
+        XCTAssertEqual(app.detailTitleValue_NON_THROWING(), "",
+                       "New item's should have an empty title string")
+
+        // displays a creation date that is close enough to when the item was created
+        let createdDateInApp: Date = app.detailCreateDateValueAsDate_NON_THROWING()
+
+        XCTAssertEqual(createdDateInApp.timeIntervalSince1970, clickDate.timeIntervalSince1970, accuracy: 200.0,
+                       "And the new item's detail should show a creation date close to the time the new item option was triggered")
+
+        // and shows that the item is incomplete
+        XCTAssertFalse(app.detailCompletionCheckBoxValue_NON_THROWING(),
+                       "And the new item's detail should show that it is incomplete")
+
+        // and that it has the new item at the top of todo list
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(win: app.win1_NON_THROWING, 0), "",
+                       "And the sidebar should show the empty new item at the top of the list")
+        
+        
+//        Self.checkNewItemLooksOkay(app)
     }
 
     func test_010_canCreateNewItemFromTheToolbar() throws {
@@ -43,9 +63,9 @@ class Test_050_ItemCreation: XCTestCase {
 
     func test_020_canCreateNewItemUsingKeyboardShortcut() throws {
         // Can't just use itemNewCheck - app.win1_NON_THROWING will not exist bc it got closed
-        XCTAssertEqual(app.contentRows_NON_THROWING().count, 0)
+        XCTAssertEqual(try app.contentRows().count, 0)
         app.shortcutItemNew()
-        XCTAssertEqual(app.contentRows_NON_THROWING().count, 1)
+        XCTAssertEqual(try app.contentRows().count, 1)
     }
 
     func test_200_canCreateANewItemByOpeningAnAppUrl() throws {

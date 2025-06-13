@@ -40,10 +40,6 @@ extension XCUIApplication {
         assert(windows.firstMatch.identifier == win1_NON_THROWING.identifier)
     }
 
-    var win1_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-1"]
-    }
-
     private func winX(name: String) throws -> XCUIElement {
         let mainWindow = windows[name]
         guard mainWindow.waitForExistence(timeout: 3) else {
@@ -84,6 +80,10 @@ extension XCUIApplication {
         get throws {
             try winX(name: "Main-AppWindow-5")
         }
+    }
+    
+    var win1_NON_THROWING: XCUIElement {
+        windows["Main-AppWindow-1"]
     }
     
     var win2_NON_THROWING: XCUIElement {

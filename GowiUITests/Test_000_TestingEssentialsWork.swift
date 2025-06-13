@@ -21,7 +21,7 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func test_minus_001_frameworkThrowsWhenAccessingNonExistentWindow() throws {
+    func test__010_frameworkThrowsWhenAccessingNonExistentWindow() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         
@@ -47,29 +47,73 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         }
     }
 
-    func test_000_appTestMode0HasNoData() throws {
+    func test_000_appTestMode0HasNoDataAndFrameworkContentRowsDetectsThis() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         app.sidebarAllList_NON_THROWING().click()
-        XCTAssertEqual(app.contentRows_NON_THROWING().count, 0,
-                       "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
         
         XCTAssertEqual(try app.contentRows().count, 0,
                        "When the app is opened in test mode 0, it opens an empty, in memory only, backing store")
         
         
     }
+
+
+    func test_020_frameworkThrowsWhenAccessingInvalidContentRow() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "0"]
+        app.launchAndSanitiseWindowsAndIdentifiers()
+        app.sidebarAllList_NON_THROWING().click()
+        
+        // Verify that accessing non-existent content rows throws
+        XCTAssertThrowsError(try app.contentRowTextField(0), "contentRowTextField should throw for non-existent row 0") { error in
+            guard let testError = error as? XCTestError else {
+                XCTFail("Expected XCTestError, got \(type(of: error))")
+                return
+            }
+            
+            let userInfo = testError.userInfo
+            XCTAssertTrue(userInfo["description"] as? String ?? "" != "", "Error should contain description")
+            XCTAssertNotNil(userInfo["requested_row"], "Error should contain requested row info")
+        }
+        
+        XCTAssertThrowsError(try app.contentRowTextFieldValue(0), "contentRowTextFieldValue should throw for non-existent row 0") { error in
+            guard let testError = error as? XCTestError else {
+                XCTFail("Expected XCTestError, got \(type(of: error))")
+                return
+            }
+            
+            let userInfo = testError.userInfo
+            XCTAssertTrue(userInfo["description"] as? String ?? "" != "", "Error should contain description")
+        }
+    }
+
     
-    func test_010_appTestMode1HasHasFixture() throws {
+    
+    func test_030_appTestMode1HasHasFixtureAndContentRowAccessorsWorkWithThatData() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "1"]
         app.launchAndSanitiseWindowsAndIdentifiers()
         app.sidebarAllList_NON_THROWING().click()
-
+        
         XCTAssertEqual(try app.contentRows().count, 10,
                        "When the app is opened in test mode 1, it opens with 10 existing test Items")
         
-//TODO: Verify that expected UUID is presenttestingMode1ourIdPresent
+      
+        XCTAssertNoThrow(try app.contentRowTextField(0),
+                         "contentRowTextField should work for existing row 0")
+        XCTAssertNoThrow(try app.contentRowTextFieldValue(0), "contentRowTextFieldValue should work for existing row 0")
+        
+        // Verify we can get values from multiple rows
+        let firstRowValue = try app.contentRowTextFieldValue(0)
+        let secondRowValue = try app.contentRowTextFieldValue(1)
+        
+        XCTAssertFalse(firstRowValue.isEmpty, "First row should have non-empty value")
+        XCTAssertFalse(secondRowValue.isEmpty, "Second row should have non-empty value")
+        XCTAssertNotEqual(firstRowValue, secondRowValue, "Different rows should have different values")
+        // TODO: Verify that expected UUID is presenttestingMode1ourIdPresent
+        
+        
     }
+    
 
 //    fun test_can_create_new_date
     
