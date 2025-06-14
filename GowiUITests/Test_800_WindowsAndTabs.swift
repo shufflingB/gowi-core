@@ -35,7 +35,7 @@ class Test_800_WindowsAndTabs: XCTestCase {
         XCTAssertEqual(app.windows.count, windowCount + 1,
                        "When the app menubar item open in new window is clicked the app opens a new window"
         )
-        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: try app.win2), itemId,
                        "And shows the same item as the one in the original window")
     }
 
@@ -51,7 +51,7 @@ class Test_800_WindowsAndTabs: XCTestCase {
         XCTAssertEqual(app.windows.count, windowCount + 1,
                        "When the app menubar item open in new window is clicked the app opens a new window"
         )
-        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: try app.win2), itemId,
                        "And shows the same item as the one in the original window")
     }
 
@@ -65,7 +65,7 @@ class Test_800_WindowsAndTabs: XCTestCase {
         XCTAssertEqual(app.windows.count, windowCount,
                        "When the app menubar item open in new window is clicked the app opens a new tab"
         )
-        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: try app.win2), itemId,
                        "And shows the same item as the one in the original window")
     }
 
@@ -80,7 +80,7 @@ class Test_800_WindowsAndTabs: XCTestCase {
         XCTAssertEqual(app.windows.count, windowCount,
                        "When the app menubar item open in new window is clicked the app opens a new tab"
         )
-        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: app.win2_NON_THROWING), itemId,
+        XCTAssertEqual(app.detailIDValue_NON_THROWING(win: try app.win2), itemId,
                        "And shows the same item as the one in the original window")
     }
 }

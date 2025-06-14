@@ -45,7 +45,7 @@ class Test_050_ItemCreation: XCTestCase {
                        "And the new item's detail should show that it is incomplete")
 
         // and that it has the new item at the top of todo list
-        XCTAssertEqual(try app.contentRowTextFieldValue(win: app.win1_NON_THROWING, 0), "",
+        XCTAssertEqual(try app.contentRowTextFieldValue(win: try app.win1, 0), "",
                        "And the sidebar should show the empty new item at the top of the list")
         
         
@@ -57,7 +57,7 @@ class Test_050_ItemCreation: XCTestCase {
         XCTAssertTrue(app.toolbarItemNew_NON_THROWING.exists,
                       "The app should have a button tool bar to create a new item")
         app.toolbarItemNew_NON_THROWING.click()
-        Self.checkNewItemLooksOkay(app)
+        try Self.checkNewItemLooksOkay(app)
     }
 
 //    TODO: For reasons unknown SwiftUI is hijacking the my chosen CMD+N shortcut and using it to open a new window. Need
@@ -74,7 +74,7 @@ class Test_050_ItemCreation: XCTestCase {
 
         XCTAssertEqual(app.windows.count, 2,
                        "When the app's 'new item' route is invoked it will create a new window that displays an empty Item")
-        Self.checkNewItemLooksOkay(win: app.win2_NON_THROWING, app)
+        try Self.checkNewItemLooksOkay(win: try app.win2, app)
     }
 
     func test_210_aReqestForANewItemWillOpenANewWindowIfNoneExists() throws {
@@ -88,16 +88,16 @@ class Test_050_ItemCreation: XCTestCase {
         XCTAssertEqual(app.windows.allElementsBoundByIndex.count, 1,
                        "Creating a new item when no windows are present should open new window displaying the new item")
 
-        Self.checkNewItemLooksOkay(win: app.win2_NON_THROWING, app)
+        try Self.checkNewItemLooksOkay(win: try app.win2, app)
     }
 
     func test_230_theCreationOfNewItemsCanBeUndoneAndRedone() throws {
         try app.sidebarWaitingList().click()
 
-        let originalCount = app.contentRows_NON_THROWING().count
+        let originalCount = try app.contentRows().count
 
         try app.menubarItemNew.click()
-        let afterNewItemCount = app.contentRows_NON_THROWING().count
+        let afterNewItemCount = try app.contentRows().count
         XCTAssertEqual(afterNewItemCount, originalCount + 1,
                        "After adding a new Item there should be an additional Item displayed in the sidebar")
 
@@ -107,15 +107,15 @@ class Test_050_ItemCreation: XCTestCase {
                        "And when the last action is Undone the new Item is removed")
 
         try app.menubarRedo.click()
-        let afterRedoItemCount = app.contentRows_NON_THROWING().count
+        let afterRedoItemCount = try app.contentRows().count
         XCTAssertEqual(afterRedoItemCount, afterNewItemCount,
                        "And after Redoing the new Item reappears")
     }
 }
 
-extension Test_050_ItemCreation {
-    static func checkNewItemLooksOkay(win: XCUIElement? = nil, _ app: XCUIApplication) {
-        let winS: XCUIElement = win == nil ? app.win1_NON_THROWING : win!
+extension Test_050_ItemCreation  {
+    static func checkNewItemLooksOkay(win: XCUIElement? = nil, _ app: XCUIApplication) throws {
+        let winS: XCUIElement = win == nil ? try app.win1 : win!
 
         let clickDate = Date()
 

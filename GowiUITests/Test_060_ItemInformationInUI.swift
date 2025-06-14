@@ -175,6 +175,6 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
         NSWorkspace.shared.open(possibbleURL!)
         XCTAssertEqual(app.windows.count, 1, "and when there is no window displaying it and it it is opened it creates a new window")
-        XCTAssertEqual(app.detailTitleValue_NON_THROWING(win: app.win2_NON_THROWING), title, "that is displaying the Item just created")
+        XCTAssertEqual(app.detailTitleValue_NON_THROWING(win: try app.win2), title, "that is displaying the Item just created")
     }
 }

@@ -39,7 +39,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the default URL route \(url) is opened a new window is created")
-        XCTAssertTrue(try app.sidebarWaitingList(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarWaitingList(win: try app.win2).isSelected,
                       " And it displays the list of Waiting items"
         )
     }
@@ -59,7 +59,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to the Waiting Items is opened a new window is created")
-        XCTAssertTrue(try app.sidebarWaitingList(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarWaitingList(win: try app.win2).isSelected,
                       " And it displays the list of Waiting Items"
         )
     }
@@ -79,7 +79,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to the Done Items is opened a new window is created")
-        XCTAssertTrue(try app.sidebarDoneList(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarDoneList(win: try app.win2).isSelected,
                       " And it displays the list of Done Items"
         )
     }
@@ -99,7 +99,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to All Items is opened a new window is created")
-        XCTAssertTrue(try app.sidebarAllList(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarAllList(win: try app.win2).isSelected,
                       " And it displays the list of All Items"
         )
     }
@@ -127,7 +127,7 @@ class Test_500_URL_handling: XCTestCase {
         NSWorkspace.shared.open(url)
         XCTAssertEqual(app.windows.count, 1,
                        "When the URL route \(url) to a specific Item is opened a new window is created")
-        XCTAssertTrue(try app.sidebarAllList(win: app.win2_NON_THROWING).isSelected,
+        XCTAssertTrue(try app.sidebarAllList(win: try app.win2).isSelected,
                       " And it displays that Item"
         )
     }
@@ -154,8 +154,9 @@ class Test_500_URL_handling: XCTestCase {
 
         // Now open a new window and set its route to something different
         app.shortcutWindowOpenNew()
-        assert(app.isKeyFrontWindow(app.win2_NON_THROWING))
-        try app.sidebarDoneList(win: app.win2_NON_THROWING).click()
+        let w2 = try app.win2
+        assert(app.isKeyFrontWindow(w2))
+        try app.sidebarDoneList(win: try app.win2).click()
 
         // Attempt to open route we setup in window 1 to verify it just raises rather than creating new window
         let winCount = app.windows.count

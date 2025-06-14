@@ -29,6 +29,7 @@ extension XCUIApplication {
     ///
     func launchAndSanitiseWindowsAndIdentifiers() {
         launch()
+        
 
         if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
             shortcutWindowsCloseAll()
@@ -57,6 +58,10 @@ extension XCUIApplication {
             try winX(name: "Main-AppWindow-1")
         }
     }
+    var win1_NON_THROWING: XCUIElement {
+        windows["Main-AppWindow-1"]
+    }
+    
 
     var win2: XCUIElement {
         get throws {
@@ -82,25 +87,6 @@ extension XCUIApplication {
         }
     }
     
-    var win1_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-1"]
-    }
-    
-    var win2_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-2"]
-    }
-
-    var win3_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-3"]
-    }
-
-    var win4_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-4"]
-    }
-
-    var win5_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-5"]
-    }
 
     var urlDefault: String { "gowi://main/" }
     var urlNewItem: String { "gowi://main/v1/newItem" }
