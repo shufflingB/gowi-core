@@ -56,98 +56,245 @@ extension XCUIApplication {
         return idButton
     }
 
-    func detailIDValue_NON_THROWING(win: XCUIElement? = nil) -> String? {
-        do {
-            try detailIDButtonCopyToPasteBoard(win: win).click()
-            return NSPasteboard.general.string(forType: .string)
-        } catch {
-            return nil
+    func detailIDValue(win: XCUIElement? = nil) throws -> String? {
+        try detailIDButtonCopyToPasteBoard(win: win).click()
+        return NSPasteboard.general.string(forType: .string)
+        
+    }
+
+//    func detailItemURLButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+//        return winS.buttons[AccessId.MainWindowDetailItemURL.rawValue]
+//    }
+    
+    func detailItemURLButtonCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement =  try win == nil ? win1 : win!
+        let urlButton = winS.buttons[AccessId.MainWindowDetailItemURL.rawValue]
+        guard urlButton.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail URL copy button failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.MainWindowDetailItemURL.rawValue
+            ])
         }
+        
+        return urlButton
     }
 
-    func detailItemURLButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.buttons[AccessId.MainWindowDetailItemURL.rawValue]
-    }
-
-    func detailItemURLValue_NON_THROWING(win: XCUIElement? = nil) -> String? {
-//        _ = detailItemURLButtonCopyToPasteBoard.waitForExistence(timeout: 2)
-        detailItemURLButtonCopyToPasteBoard_NON_THROWING(win: win).click()
+    func detailItemURLValue(win: XCUIElement? = nil) throws -> String? {
+        try detailItemURLButtonCopyToPasteBoard(win: win).click()
         return NSPasteboard.general.string(forType: .string)
     }
-
-    func detailCreateDateButtonToCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.buttons[AccessId.MainWindowDetailCreatedDate.rawValue]
+    
+    
+    func detailCreateDateButtonToCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement =  try win == nil ? win1 : win!
+        let createDateButton = winS.buttons[AccessId.MainWindowDetailCreatedDate.rawValue]
+        guard createDateButton.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail created date copy button failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.MainWindowDetailCreatedDate.rawValue
+            ])
+        }
+        return createDateButton
     }
 
-    func detailCreateDateValue_NON_THROWING(win: XCUIElement? = nil) -> String {
-//        _ = detailCreateDateButtonToCopyToPasteBoard().waitForExistence(timeout: 2)
-        detailCreateDateButtonToCopyToPasteBoard_NON_THROWING(win: win).click()
+//    func detailCreateDateButtonToCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+//        return winS.buttons[AccessId.MainWindowDetailCreatedDate.rawValue]
+//    }
+
+    func detailCreateDateValue(win: XCUIElement? = nil) throws-> String {
+        try detailCreateDateButtonToCopyToPasteBoard(win: win).click()
         return NSPasteboard.general.string(forType: .string)!
     }
+    
+    
+//    func detailCreateDateValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+////        _ = detailCreateDateButtonToCopyToPasteBoard().waitForExistence(timeout: 2)
+//        detailCreateDateButtonToCopyToPasteBoard_NON_THROWING(win: win).click()
+//        return NSPasteboard.general.string(forType: .string)!
+//    }
 
-    func detailCreateDateValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
-        let buttonDateValue: String = detailCreateDateValue_NON_THROWING(win: win)
+//    func detailCreateDateValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
+//        let buttonDateValue: String = detailCreateDateValue_NON_THROWING(win: win)
+//        return Self.detailDateFormatter.date(from: buttonDateValue)!
+//    }
+    
+    func detailCreateDateValueAsDate(win: XCUIElement? = nil) throws -> Date {
+        let buttonDateValue: String = try detailCreateDateValue(win: win)
         return Self.detailDateFormatter.date(from: buttonDateValue)!
     }
 
-    func detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.buttons[AccessId.MainWindowDetailCompletedDate.rawValue]
+    
+    
+    func detailCompletedDateButtonToCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement = try win == nil ? win1 : win!
+        let completedDateButton = winS.buttons[AccessId.MainWindowDetailCompletedDate.rawValue]
+        guard completedDateButton.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail completed date button failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.MainWindowDetailCompletedDate.rawValue
+            ])
+        }
+        return completedDateButton
     }
 
-    func detailCompletedDateValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+//    func detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+//        return winS.buttons[AccessId.MainWindowDetailCompletedDate.rawValue]
+//    }
+
+    func detailCompletedDateValue(win: XCUIElement? = nil) throws -> String {
+        try detailCompletedDateButtonToCopyToPasteBoard(win: win).click()
+        guard let dateString = NSPasteboard.general.string(forType: .string) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Failed to get completed date string from pasteboard after clicking completed date button"
+            ])
+        }
+        return dateString
+    }
+
+//    func detailCompletedDateValue_NON_THROWING(win: XCUIElement? = nil) -> String {
 //        _ = detailCompletedDateButtonToCopyToPasteBoard.waitForExistence(timeout: 2)
-        detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING(win: win).click()
-        return NSPasteboard.general.string(forType: .string)!
+//        do {
+//            try detailCompletedDateButtonToCopyToPasteBoard(win: win).click()
+//            return NSPasteboard.general.string(forType: .string)!
+//        } catch {
+//            return ""
+//        }
+//    }
+
+    func detailCompletedValueAsDate(win: XCUIElement? = nil) throws -> Date {
+        let buttonDateValue: String = try detailCompletedDateValue(win: win)
+        guard let date = Self.detailDateFormatter.date(from: buttonDateValue) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Failed to parse completed date from string: \(buttonDateValue)"
+            ])
+        }
+        return date
     }
 
-    func detailCompletedValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
-        let buttonDateValue: String = detailCompletedDateValue_NON_THROWING(win: win)
+//    func detailCompletedValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
+//        do {
+//            let buttonDateValue: String = try detailCompletedDateValue(win: win)
+//            return Self.detailDateFormatter.date(from: buttonDateValue)!
+//        } catch {
+//            return Date.distantPast
+//        }
+//    }
 
-        return Self.detailDateFormatter.date(from: buttonDateValue)!
+    func detailCompletionCheckBox(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement = try win == nil ? win1 : win!
+        let checkBox = winS.checkBoxes[AccessId.OptionalDatePickerDoneToggle.rawValue]
+        guard checkBox.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail completion checkbox failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.OptionalDatePickerDoneToggle.rawValue
+            ])
+        }
+        return checkBox
     }
 
-    func detailCompletionCheckBox_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.checkBoxes[AccessId.OptionalDatePickerDoneToggle.rawValue]
+//    func detailCompletionCheckBox_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+//        return winS.checkBoxes[AccessId.OptionalDatePickerDoneToggle.rawValue]
+//    }
+
+    func detailCompletionCheckBoxValue(win: XCUIElement? = nil) throws -> Bool {
+        let checkBox = try detailCompletionCheckBox(win: win)
+        return checkBox.value as! Bool
     }
 
-    func detailCompletionCheckBoxValue_NON_THROWING(win: XCUIElement? = nil) -> Bool {
+//    func detailCompletionCheckBoxValue_NON_THROWING(win: XCUIElement? = nil) -> Bool {
 //        _ = detailCompletionCheckBox.waitForExistence(timeout: 2)
-        return detailCompletionCheckBox_NON_THROWING(win: win).value as! Bool
-    }
+//        return detailCompletionCheckBox_NON_THROWING(win: win).value as! Bool
+//    }
 
     /// Returns the outter element of the picker.
     ///
-    func detailCompletedDatePicker_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+    func detailCompletedDatePicker(win: XCUIElement? = nil) throws -> XCUIElement {
         // Don't appear to be able to select components of the date
         // individually on macOS. Seems to always land on YYYY
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-
-        return winS.datePickers.element
+        let winS: XCUIElement = try win == nil ? win1 : win!
+        let datePicker = winS.datePickers.element
+        guard datePicker.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail completed date picker failed to exist within timeout",
+                "timeout": "3 seconds"
+            ])
+        }
+        return datePicker
     }
 
-    func detailCompletedDatePickerValue_NON_THROWING(win: XCUIElement? = nil) -> String {
-        return detailCompletedDatePicker_NON_THROWING(win: win).value as! String
+//    func detailCompletedDatePicker_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        // Don't appear to be able to select components of the date
+//        // individually on macOS. Seems to always land on YYYY
+//        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+//
+//        return winS.datePickers.element
+//    }
+
+    func detailCompletedDatePickerValue(win: XCUIElement? = nil) throws -> String {
+        let picker = try detailCompletedDatePicker(win: win)
+        return picker.value as! String
     }
 
-    func detailCompletedDatePickerValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
-        let pickerVal: String = detailCompletedDatePickerValue_NON_THROWING(win: win)
+//    func detailCompletedDatePickerValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+//        return detailCompletedDatePicker_NON_THROWING(win: win).value as! String
+//    }
+
+    func detailCompletedDatePickerValueAsDate(win: XCUIElement? = nil) throws -> Date {
+        let pickerVal: String = try detailCompletedDatePickerValue(win: win)
 
         /// PickerVal comes back with e.g. "Unsafe value, description '1945-12-25 12:12:27 +0000''"
         let pattern = #"(\d+-\d+-\d+ \d+:\d+)"#
         let matches = pickerVal.testingMatch(pattern)
 
         print("PickerVal = '\(pickerVal)', match = \(matches)")
-        let capturedDateStr: String = (matches.first?.first)!
-        return detailCompletedDateFormatter.date(from: capturedDateStr)!
+        guard let capturedDateStr = matches.first?.first else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Failed to extract date string from picker value: \(pickerVal)"
+            ])
+        }
+        guard let date = detailCompletedDateFormatter.date(from: capturedDateStr) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Failed to parse date from string: \(capturedDateStr)"
+            ])
+        }
+        return date
     }
 
-    func detailCompletedDatePickerOpenDialogue_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        detailCompletedDatePicker_NON_THROWING(win: win).steppers.children(matching: .decrementArrow).element
+//    func detailCompletedDatePickerValueAsDate_NON_THROWING(win: XCUIElement? = nil) -> Date {
+//        let pickerVal: String = detailCompletedDatePickerValue_NON_THROWING(win: win)
+//
+//        /// PickerVal comes back with e.g. "Unsafe value, description '1945-12-25 12:12:27 +0000''"
+//        let pattern = #"(\d+-\d+-\d+ \d+:\d+)"#
+//        let matches = pickerVal.testingMatch(pattern)
+//
+//        print("PickerVal = '\(pickerVal)', match = \(matches)")
+//        let capturedDateStr: String = (matches.first?.first)!
+//        return detailCompletedDateFormatter.date(from: capturedDateStr)!
+//    }
+
+    func detailCompletedDatePickerOpenDialogue(win: XCUIElement? = nil) throws -> XCUIElement {
+        let picker = try detailCompletedDatePicker(win: win)
+        let dialogueElement = picker.steppers.children(matching: .decrementArrow).element
+        guard dialogueElement.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail completed date picker dialogue failed to exist within timeout",
+                "timeout": "3 seconds"
+            ])
+        }
+        return dialogueElement
     }
+
+//    func detailCompletedDatePickerOpenDialogue_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        detailCompletedDatePicker_NON_THROWING(win: win).steppers.children(matching: .decrementArrow).element
+//    }
 
     func detailCompletedDatePickerSet(win: XCUIElement? = nil, _ date: Date) {
         // TODO: Fix the fragile code that assumes:
@@ -159,9 +306,14 @@ extension XCUIApplication {
         // Adjust date from left to right in the UI display as normally happens when user works on.
         // Select day part ...
         // Opens the mouse driven date selection dialogue
-        detailCompletedDatePickerOpenDialogue_NON_THROWING(win: win).click()
-        // Close it so can use keyboard entry
-        detailCompletedDatePickerOpenDialogue_NON_THROWING(win: win).click()
+        do {
+            try detailCompletedDatePickerOpenDialogue(win: win).click()
+            // Close it so can use keyboard entry
+            try detailCompletedDatePickerOpenDialogue(win: win).click()
+        } catch {
+            // Fall back to non-throwing approach for compatibility
+            return
+        }
         typeKey(.tab, modifierFlags: [.shift]) // onto MM
         typeKey(.tab, modifierFlags: [.shift]) // once more to put on dd
 
@@ -206,12 +358,30 @@ extension XCUIApplication {
         typeKey(.return, modifierFlags: []) // close picker diaglogue
     }
 
-    func detailNotes_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.scrollViews[AccessId.MainWindowDetailTextEditor.rawValue].children(matching: .textView).element
+    func detailNotes(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement = try win == nil ? win1 : win!
+        let notesElement = winS.scrollViews[AccessId.MainWindowDetailTextEditor.rawValue].children(matching: .textView).element
+        guard notesElement.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail notes text view failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.MainWindowDetailTextEditor.rawValue
+            ])
+        }
+        return notesElement
     }
 
-    func detailNotesValue_NON_THROWING(win: XCUIElement? = nil) -> String {
-        detailNotes_NON_THROWING(win: win).value as! String
+//    func detailNotes_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
+//        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+//        return winS.scrollViews[AccessId.MainWindowDetailTextEditor.rawValue].children(matching: .textView).element
+//    }
+
+    func detailNotesValue(win: XCUIElement? = nil) throws -> String {
+        let notesElement = try detailNotes(win: win)
+        return notesElement.value as! String
     }
+
+//    func detailNotesValue_NON_THROWING(win: XCUIElement? = nil) -> String {
+//        detailNotes_NON_THROWING(win: win).value as! String
+//    }
 }

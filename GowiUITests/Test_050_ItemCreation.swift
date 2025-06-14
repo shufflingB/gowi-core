@@ -99,13 +99,13 @@ extension Test_050_ItemCreation  {
                        "New item's should have an empty title string")
 
         // displays a creation date that is close enough to when the item was created
-        let createdDateInApp: Date = app.detailCreateDateValueAsDate_NON_THROWING(win: win)
+        let createdDateInApp: Date = try app.detailCreateDateValueAsDate(win: win)
 
         XCTAssertEqual(createdDateInApp.timeIntervalSince1970, clickDate.timeIntervalSince1970, accuracy: 200.0,
                        "And the new item's detail should show a creation date close to the time the new item option was triggered")
 
         // and shows that the item is incomplete
-        XCTAssertFalse(app.detailCompletionCheckBoxValue_NON_THROWING(win: winS),
+        XCTAssertFalse((try? app.detailCompletionCheckBoxValue(win: winS)) ?? true,
                        "And the new item's detail should show that it is incomplete")
 
         // and that it has the new item at the top of todo list

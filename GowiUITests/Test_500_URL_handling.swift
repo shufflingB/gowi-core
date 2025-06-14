@@ -108,7 +108,7 @@ class Test_500_URL_handling: XCTestCase {
         try app.sidebarAllList().click()
         try app.contentRowTextField(3).click()
 
-        let itemId: String = app.detailIDValue_NON_THROWING()!
+        let itemId: String = try app.detailIDValue()!
 
         let url: URL = {
             var components = URLComponents()
@@ -138,7 +138,7 @@ class Test_500_URL_handling: XCTestCase {
         try app.sidebarAllList().click()
         try app.contentRowTextField(5).click()
 
-        let itemId: String = app.detailIDValue_NON_THROWING()!
+        let itemId: String = try app.detailIDValue()!
 
         let url: URL = {
             var components = URLComponents()
@@ -165,7 +165,7 @@ class Test_500_URL_handling: XCTestCase {
                        "When a url route is being displayed in an existing window it will not create new Windows")
         XCTAssertTrue(app.isKeyFrontWindow(app.win1_NON_THROWING),
                       "And it will just raise the existing window")
-        XCTAssertEqual(itemId, app.detailIDValue_NON_THROWING(),
+        XCTAssertEqual(itemId, try app.detailIDValue(),
                        "Displaying the previous information"
         )
     }

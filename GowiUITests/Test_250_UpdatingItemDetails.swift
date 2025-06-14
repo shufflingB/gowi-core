@@ -35,8 +35,8 @@ class Test_250_UpdatingItemDetails: XCTestCase {
           */
         /// Sidebar => Detail
         let sidebarEnteredTitle = "sidebar entered test title"
-        app.contentRowTextField_NON_THROWING(0).click()
-        app.contentRowTextField_NON_THROWING(0).typeText(sidebarEnteredTitle)
+        try app.contentRowTextField(0).click()
+        try app.contentRowTextField(0).typeText(sidebarEnteredTitle)
         XCTAssertEqual(try app.detailTitleValue(), sidebarEnteredTitle,
                        "The same title entered in the SideBar area should be present in the window's Detail area")
 
@@ -45,7 +45,7 @@ class Test_250_UpdatingItemDetails: XCTestCase {
         try app.detailTitle().click()
         try app.detailTitle().typeKey(.rightArrow, modifierFlags: [.command])
         try app.detailTitle().typeText(additionalDetailEnteredTitle)
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), sidebarEnteredTitle + additionalDetailEnteredTitle,
+        XCTAssertEqual(try app.contentRowTextFieldValue(0), sidebarEnteredTitle + additionalDetailEnteredTitle,
                        "Changes made to the item's title information in the Detail area should show up in its SideBar entry area")
     }
 
@@ -54,15 +54,15 @@ class Test_250_UpdatingItemDetails: XCTestCase {
     func test_600_whenEditingTheItemsNotesUsesATextSpecificUndoAndRedoProcess() throws {
         /// ...  And not single characters
         app.shortcutItemNew()
-        let notesAtStart = app.detailNotesValue_NON_THROWING()
+        let notesAtStart = (try? app.detailNotesValue()) ?? ""
         let lorem = "Some test text to be removed by a single undo"
-        app.detailNotes_NON_THROWING().click()
+        try app.detailNotes().click()
         app.typeText(lorem)
-        XCTAssertEqual(app.detailNotesValue_NON_THROWING(), lorem,
+        XCTAssertEqual((try? app.detailNotesValue()) ?? "", lorem,
                        "When I type in the Notes area it should that should be added to Item")
 
         app.shortcutUndo()
-        XCTAssertEqual(app.detailNotesValue_NON_THROWING(), notesAtStart,
+        XCTAssertEqual((try? app.detailNotesValue()) ?? "", notesAtStart,
                        "And after using the Undo Shortcut it should be removed")
     }
 }

@@ -73,9 +73,9 @@ extension XCUIApplication {
         return element
     }
 
-    func contentRowTextField_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        return contentRow_NON_THROWING(win: win, row).textFields[AccessId.MainWindowContentTitleField.rawValue]
-    }
+//    func contentRowTextField_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
+//        return contentRow_NON_THROWING(win: win, row).textFields[AccessId.MainWindowContentTitleField.rawValue]
+//    }
 
     func contentRowTextField(win: XCUIElement? = nil, _ row: Int) throws -> XCUIElement {
    
@@ -94,9 +94,9 @@ extension XCUIApplication {
         return textField
     }
 
-    func contentRowTextFieldValue_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> String {
-        contentRowTextField_NON_THROWING(win: win, row).value as! String
-    }
+//    func contentRowTextFieldValue_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> String {
+//        contentRowTextField_NON_THROWING(win: win, row).value as! String
+//    }
 
     func contentRowTextFieldValue(win: XCUIElement? = nil, _ row: Int) throws -> String {
         return try contentRowTextField(win: win, row).value as! String

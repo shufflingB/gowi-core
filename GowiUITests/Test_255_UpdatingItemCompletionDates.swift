@@ -27,16 +27,16 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
     func test_500_itemCanBeMarkCompletedInDetailAreaUsingADefaultDate() throws {
         try app.sidebarAllList().click()
         try app.contentRowTextField(3).click()
-        XCTAssertFalse(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        XCTAssertFalse((try? app.detailCompletionCheckBoxValue()) ?? true,
                        "When an Item that is incomplete")
 
-        app.detailCompletionCheckBox_NON_THROWING().click()
+        try app.detailCompletionCheckBox().click()
         let completionClickDate: Date = Date()
 
-        XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        XCTAssertTrue((try? app.detailCompletionCheckBoxValue()) ?? false,
                       "Has its completion checkbox clicked on it is marked as complete")
 
-        let dateDisplayedInPicker = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
+        let dateDisplayedInPicker = try app.detailCompletedDatePickerValueAsDate()
         let deltaDateDisplayedAndSet = Calendar
             .current
             .dateComponents([.second], from: completionClickDate, to: dateDisplayedInPicker)
@@ -44,14 +44,14 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
                           "And the Item's completion date matches to the nearest minute when the check box was clicked")
 
         try app.menubarUndo.click()
-        XCTAssertFalse(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        XCTAssertFalse((try? app.detailCompletionCheckBoxValue()) ?? true,
                        "And if the completion is undone then completion checkbox is unmarked")
 
         try app.menubarRedo.click()
-        XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        XCTAssertTrue((try? app.detailCompletionCheckBoxValue()) ?? false,
                       "And if the completion is redone then completion checkbox is marked")
 
-        let dateDisplayedInPickerAfterRedoing = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
+        let dateDisplayedInPickerAfterRedoing = try app.detailCompletedDatePickerValueAsDate()
         XCTAssertEqual(dateDisplayedInPickerAfterRedoing, dateDisplayedInPicker
                        , "And the original date is restored")
     }
@@ -62,12 +62,12 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
 
         let dateToSet = app.detailCompletedDateFormatter.date(from: "1945-12-25 12:12")!
         app.detailCompletedDatePickerSet(dateToSet)
-        app.detailCompletionCheckBox_NON_THROWING().click()
+        try app.detailCompletionCheckBox().click()
 
-        XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        XCTAssertTrue((try? app.detailCompletionCheckBoxValue()) ?? false,
                       "When the Item's completion checkbox is clicked it is marked as complete")
 
-        let dateDisplayedInPicker = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
+        let dateDisplayedInPicker = try app.detailCompletedDatePickerValueAsDate()
         let deltaDateDisplayedAndSet = Calendar
             .current
             .dateComponents([.second], from: dateToSet, to: dateDisplayedInPicker)
@@ -80,20 +80,20 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
         try app.contentRowTextField(3).click()
 
         let dateToAdjustTo = app.detailCompletedDateFormatter.date(from: "1945-12-25 12:12")!
-        app.detailCompletionCheckBox_NON_THROWING().click()
-        XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        try app.detailCompletionCheckBox().click()
+        XCTAssertTrue((try? app.detailCompletionCheckBoxValue()) ?? false,
                       "When an Item is marked as completed")
 
-        let originalDate = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
+        let originalDate = try app.detailCompletedDatePickerValueAsDate()
 
         app.detailCompletedDatePickerSet(dateToAdjustTo)
 
-        let dateDisplayedInPicker = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
+        let dateDisplayedInPicker = try app.detailCompletedDatePickerValueAsDate()
 
         XCTAssertEqual(dateDisplayedInPicker, dateToAdjustTo,
                        "Its completion date can subsequently be altered")
 
-        let dateFromButton = app.detailCompletedValueAsDate_NON_THROWING()
+        let dateFromButton = try app.detailCompletedValueAsDate()
         XCTAssertEqual(dateFromButton, dateDisplayedInPicker,
                        "And the value returned by Copy Date to Clipboard button matches that set in the picker")
 
@@ -103,7 +103,7 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
         try app.menubarUndo.click()
         try app.menubarUndo.click()
 
-        let dateDisplayedInPickerAfterUndo = app.detailCompletedDatePickerValueAsDate_NON_THROWING()
+        let dateDisplayedInPickerAfterUndo = try app.detailCompletedDatePickerValueAsDate()
         XCTAssertEqual(dateDisplayedInPickerAfterUndo, originalDate,
                        "And after the date adjustment is undone the original date set is restored")
     }

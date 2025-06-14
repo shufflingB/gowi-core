@@ -49,20 +49,20 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
         var tdata: Array<TData> = []
         for n in 0 ... numChanges - 1 {
-            app.contentRowTextField_NON_THROWING(n).click()
+            try app.contentRowTextField(n).click()
 
             try app.detailTitle().click()
-            let id = app.detailIDValue_NON_THROWING()
+            let id = try app.detailIDValue()
             let oTitle = try app.detailTitleValue()
             app.typeKey(.rightArrow, modifierFlags: [.command])
             app.typeText(" T change \(n)")
             let mTitle = try app.detailTitleValue()
 
-            app.detailNotes_NON_THROWING().click()
-            let oNote = app.detailNotesValue_NON_THROWING()
+            try app.detailNotes().click()
+            let oNote = (try? app.detailNotesValue()) ?? ""
             app.typeKey(.rightArrow, modifierFlags: [.command])
             app.typeText(" N change \(n)")
-            let mNote = app.detailNotesValue_NON_THROWING()
+            let mNote = (try? app.detailNotesValue()) ?? ""
 
             tdata.append(TData(id: id!, originalTitle: oTitle, originalNote: oNote, mutatedTitle: mTitle, mutatedNote: mNote))
         }
@@ -117,12 +117,12 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
 
             let ordDataIdx = ordFmtr.string(from: NSNumber(value: dataIdx))!
 
-            app.contentRowTextField_NON_THROWING(dataIdx).click()
+            try app.contentRowTextField(dataIdx).click()
             XCTAssertEqual(try app.detailTitleValue(), tdata[dataIdx].mutatedTitle,
                            "And after restarting \(ordDataIdx) sidebar item will contain the \(ordDataIdx) entry's title")
-            XCTAssertEqual(app.detailNotesValue_NON_THROWING(), tdata[dataIdx].mutatedNote,
+            XCTAssertEqual((try? app.detailNotesValue()) ?? "", tdata[dataIdx].mutatedNote,
                            "And  notes")
-            XCTAssertEqual(app.detailIDValue_NON_THROWING(), tdata[dataIdx].id,
+            XCTAssertEqual(try app.detailIDValue(), tdata[dataIdx].id,
                            "And  id")
         }
 
@@ -130,8 +130,8 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         /// Remove them so as not leave a mess in the system
         ///
         for data in tdata {
-            app.contentRowTextField_NON_THROWING(0).click()
-            XCTAssertEqual(app.detailIDValue_NON_THROWING(), data.id, "ID's must match removing")
+            try app.contentRowTextField(0).click()
+            XCTAssertEqual(try app.detailIDValue(), data.id, "ID's must match removing")
             app.shortcutItemDelete()
         }
         try app.menubarFileSaveChanges.click()
@@ -177,7 +177,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         let ordFmtr = NumberFormatter()
         ordFmtr.numberStyle = .ordinal
         for e in 0 ... numChangesToMake - 1 {
-            app.contentRowTextField_NON_THROWING(e).click()
+            try app.contentRowTextField(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
             XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
@@ -254,7 +254,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         let ordFmtr = NumberFormatter()
         ordFmtr.numberStyle = .ordinal
         for e in 0 ... numChangesToMake - 1 {
-            app.contentRowTextField_NON_THROWING(e).click()
+            try app.contentRowTextField(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
             XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
@@ -307,7 +307,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         let ordFmtr = NumberFormatter()
         ordFmtr.numberStyle = .ordinal
         for e in 0 ... numChangesToMake - 1 {
-            app.contentRowTextField_NON_THROWING(e).click()
+            try app.contentRowTextField(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
             XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,

@@ -37,17 +37,17 @@ class Test_060_ItemInformationInUI: XCTestCase {
         XCTAssertNotNil(try? app.detailIDButtonCopyToPasteBoard(),
                         "And a button to copy the item's ID to the system clipboard")
 
-        XCTAssertTrue(app.detailItemURLButtonCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
+        XCTAssertTrue(try app.detailItemURLButtonCopyToPasteBoard().waitForExistence(timeout: 1),
                       "And a button to copy a URL to the Item to the system clipboard")
 
-        XCTAssertTrue(app.detailCreateDateButtonToCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
+        XCTAssertTrue(try app.detailCreateDateButtonToCopyToPasteBoard().waitForExistence(timeout: 1),
                       "And a button to copy the Item creation date to the system clipboard")
 
-        XCTAssertTrue(app.detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
-                      "And a button to copy the Item completion date to the system clipboard")
+        XCTAssertNotNil(try? app.detailCompletedDateButtonToCopyToPasteBoard(),
+                        "And a button to copy the Item completion date to the system clipboard")
 
-        XCTAssertTrue(app.detailCompletionCheckBox_NON_THROWING().waitForExistence(timeout: 1),
-                      "And a Checkbox to mark the item as completed")
+        XCTAssertNotNil(try? app.detailCompletionCheckBox(),
+                        "And a Checkbox to mark the item as completed")
     }
 
     func test_050_itemsAreDisplayedInTheWaitingDoneAndAllListsAccordingToTheirCompletionStatus() throws {
@@ -94,7 +94,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         // Next, mark the item as done and check the completed item is showing up as expected
         //
         try app.sidebarWaitingList().click() // Ensure in a list that will not show a completed item unless correct business logic
-        app.detailCompletionCheckBox_NON_THROWING().click()
+        try app.detailCompletionCheckBox().click()
         let foundInDoneCount1: Int = try app.contentRows().reduce(0) { currentCount, row in
             if row.value as! String == titleStr {
                 return currentCount + 1
@@ -110,7 +110,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         XCTAssertEqual(try app.contentRowTextFieldValue(0), titleStr,
                        "And instead now shows up as the most recent Item completed in the Done list")
 
-        XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
+        XCTAssertTrue((try? app.detailCompletionCheckBoxValue()) ?? false,
                       "Where it is marked as completed")
 
         // ... completed is visible in the All items list
@@ -124,7 +124,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         XCTAssertNotNil(try? app.detailIDButtonCopyToPasteBoard(),
                         "The window's detail area should contain a button that displays the item's unique ID")
 
-        let possibleUUIDString = app.detailIDValue_NON_THROWING()
+        let possibleUUIDString = try app.detailIDValue()
 
         XCTAssertNotNil(possibleUUIDString,
                         "And that button should be copy the item's id to the clipboard")
@@ -135,26 +135,31 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
     func test_110_detailAreaProvidesButtonToCopyCreationDateToClipboard() throws {
         try app.menubarItemNew.click()
-        XCTAssertTrue(app.detailCreateDateButtonToCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
+        XCTAssertTrue(try app.detailCreateDateButtonToCopyToPasteBoard().waitForExistence(timeout: 1),
                       "The window's detail area should contain a button that displays the item's creation date")
 
-        XCTAssertNotNil(XCUIApplication.detailDateFormatter.date(from: app.detailCreateDateValue_NON_THROWING()),
+        XCTAssertNotNil(XCUIApplication.detailDateFormatter.date(from: try app.detailCreateDateValue()),
                         "And that button should copy the creation date to the clipboard")
     }
 
     func test_120_detailAreaProvidesButtonToCopyCompletedDateToClipboard() throws {
         try app.menubarItemNew.click()
-        XCTAssertTrue(app.detailCompletedDateButtonToCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
-                      "The window's detail area should contain a button that displays the item's completion date")
+        XCTAssertNotNil(try? app.detailCompletedDateButtonToCopyToPasteBoard(),
+                        "The window's detail area should contain a button that displays the item's completion date")
 
-        XCTAssertTrue(app.detailCompletedDateValue_NON_THROWING().contains("Incomplete"),
+        XCTAssertTrue((try? app.detailCompletedDateValue())?.contains("Incomplete") ?? false,
                       "When the item is incomplete, clicking on the button will set 'Incomplete' as the pasteboard string")
 
-        app.detailCompletionCheckBox_NON_THROWING().click()
+        try app.detailCompletionCheckBox().click()
         try app.sidebarDoneList().click()
         try app.contentRowTextField(0).click()
-        XCTAssertNotNil(XCUIApplication.detailDateFormatter.date(from: app.detailCompletedDateValue_NON_THROWING()),
-                        "And when the item is completed, clicking on the same button causes a date to be copied to the pasteboard")
+        do {
+            let dateString = try app.detailCompletedDateValue()
+            XCTAssertNotNil(XCUIApplication.detailDateFormatter.date(from: dateString),
+                            "And when the item is completed, clicking on the same button causes a date to be copied to the pasteboard")
+        } catch {
+            XCTFail("Failed to get completed date value: \(error)")
+        }
     }
 
     func test_130_detailAreaProvidesButtonToCopyURLToClipboard() throws {
@@ -163,13 +168,13 @@ class Test_060_ItemInformationInUI: XCTestCase {
         try app.detailTitle().click()
         app.typeText(title)
 
-        XCTAssertTrue(app.detailItemURLButtonCopyToPasteBoard_NON_THROWING().exists,
+        XCTAssertTrue(try app.detailItemURLButtonCopyToPasteBoard().exists,
                       "The detail area should contain a button to copy a URL for the item to the OS's clipboard")
 
-        XCTAssertNotNil(app.detailItemURLValue_NON_THROWING(),
+        XCTAssertNotNil(try app.detailItemURLValue(),
                         "Should be able to use the detail areas link button to copy a string representation of the item's URL to the clipboard")
 
-        let possibbleURL = URL(string: app.detailItemURLValue_NON_THROWING()!)
+        let possibbleURL = URL(string: try app.detailItemURLValue()!)
         XCTAssertNotNil(possibbleURL, "and that string looks like a valid URL")
 
         app.shortcutWindowsCloseAll()
