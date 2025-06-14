@@ -32,6 +32,7 @@ extension Menubar {
                 }
                 .disabled(appModel.hasUnPushedChanges == false)
                 .accessibilityIdentifier(AccessId.FileMenuRevert.rawValue)
+//                TODO: Figure out what, or even if, shotcut to use.
 //                .keyboardShortcut(KbShortcuts.fileSaveChanges)
             }
         }

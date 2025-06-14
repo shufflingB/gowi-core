@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF02B0652DFDA9CC000695C1 /* ProcessInfo#App.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF02B0642DFDA9C1000695C1 /* ProcessInfo#App.swift */; };
 		FF09FC4E28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */; };
 		FF1A944428EC873D008303B8 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944328EC873D008303B8 /* AppModel.swift */; };
 		FF1A944628EC8A04008303B8 /* AppModel#Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944528EC8A03008303B8 /* AppModel#Testing.swift */; };
@@ -89,6 +90,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF02B0642DFDA9C1000695C1 /* ProcessInfo#App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProcessInfo#App.swift"; sourceTree = "<group>"; };
 		FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test020_AppModel_Item_Deletion.swift; sourceTree = "<group>"; };
 		FF1A944328EC873D008303B8 /* AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		FF1A944528EC8A03008303B8 /* AppModel#Testing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppModel#Testing.swift"; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 		FFDE6CE328EF2670009736E3 /* ExtExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FF02B0642DFDA9C1000695C1 /* ProcessInfo#App.swift */,
 				FF1A944928EC927E008303B8 /* Item#App.swift */,
 				FFDE6CE428EF2707009736E3 /* FocusedValues#App.swift */,
 				FF4E1116291433F3002BEC74 /* Set+RawRepresentable.swift */,
@@ -478,6 +481,7 @@
 				"$SRCROOT/DevScripts/generate-cloudkit-config.sh",
 				"",
 				"",
+				"",
 			);
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -517,6 +521,7 @@
 				FFDE6CEC28F072C4009736E3 /* Main#Model.swift in Sources */,
 				FF1A944428EC873D008303B8 /* AppModel.swift in Sources */,
 				FF1A947128ED85CC008303B8 /* Main#ContentView.swift in Sources */,
+				FF02B0652DFDA9CC000695C1 /* ProcessInfo#App.swift in Sources */,
 				FFA62B8F28EC7B8300868F77 /* Gowi.xcdatamodeld in Sources */,
 				FF4E112529153D67002BEC74 /* OptionalDatePickerView.swift in Sources */,
 			);

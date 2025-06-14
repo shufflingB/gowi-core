@@ -50,11 +50,6 @@
                BlueprintName = "GowiUITests"
                ReferencedContainer = "container:Gowi.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "Test_050_ItemCreation/test_020_canCreateNewItemUsingKeyboardShortcut()">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

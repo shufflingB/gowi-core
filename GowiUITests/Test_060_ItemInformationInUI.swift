@@ -61,17 +61,17 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
         // Check newly minted items are visible by default
 
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
+        XCTAssertEqual(try app.contentRowTextFieldValue(0), titleStr,
                        "Sidebar list which would not show the new item should get updated so that the new item is shown as its top item ")
 
         // ... visible in the All list
         try app.sidebarAllList().click()
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
+        XCTAssertEqual(try app.contentRowTextFieldValue(0), titleStr,
                        "When the All items list is selected, the SideBar should show the title of the new item as its top item")
 
         // ... not visible in the Done list
         try app.sidebarDoneList().click()
-        let foundInDoneCount: Int = app.contentRows_NON_THROWING().reduce(0) { currentCount, row in
+        let foundInDoneCount: Int = try app.contentRows().reduce(0) { currentCount, row in
             if row.value as! String == titleStr {
                 return currentCount + 1
             } else {
@@ -84,7 +84,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
         // ... and finally that the incomplete item is visible in the todo list
         try app.sidebarWaitingList().click()
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
+        XCTAssertEqual(try app.contentRowTextFieldValue(0), titleStr,
                        "When the Todo items list is selected, the SideBar should show the new item as its top item ")
 
         //
@@ -94,7 +94,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         //
         try app.sidebarWaitingList().click() // Ensure in a list that will not show a completed item unless correct business logic
         app.detailCompletionCheckBox_NON_THROWING().click()
-        let foundInDoneCount1: Int = app.contentRows_NON_THROWING().reduce(0) { currentCount, row in
+        let foundInDoneCount1: Int = try app.contentRows().reduce(0) { currentCount, row in
             if row.value as! String == titleStr {
                 return currentCount + 1
             } else {
@@ -106,7 +106,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
                        "After the Item is marked as complete it does not show up in the Waiting list")
 
         try app.sidebarDoneList().click()
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
+        XCTAssertEqual(try app.contentRowTextFieldValue(0), titleStr,
                        "And instead now shows up as the most recent Item completed in the Done list")
 
         XCTAssertTrue(app.detailCompletionCheckBoxValue_NON_THROWING(),
@@ -114,7 +114,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
         // ... completed is visible in the All items list
         try app.sidebarAllList().click()
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), titleStr,
+        XCTAssertEqual(try app.contentRowTextFieldValue(0), titleStr,
                        "And it also remains visible in the All Items list")
     }
 
@@ -151,7 +151,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
         app.detailCompletionCheckBox_NON_THROWING().click()
         try app.sidebarDoneList().click()
-        app.contentRowTextField_NON_THROWING(0).click()
+        try app.contentRowTextField(0).click()
         XCTAssertNotNil(XCUIApplication.detailDateFormatter.date(from: app.detailCompletedDateValue_NON_THROWING()),
                         "And when the item is completed, clicking on the same button causes a date to be copied to the pasteboard")
     }
