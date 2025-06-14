@@ -39,7 +39,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     }
 
     func makeChanges(numChanges: Int, create: () throws -> Void) throws -> Array<TData> {
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChanges,
+        XCTAssertGreaterThan(try app.contentRows().count, numChanges,
                              "This test requires at least \(numChanges) item in the system")
 
         for _ in 1 ... numChanges {
@@ -145,7 +145,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         try app.sidebarAllList().click()
         let numChangesToMake = 2
 
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
+        XCTAssertGreaterThan(try app.contentRows().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) item in the system")
 
         XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
@@ -216,7 +216,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     func test_400_allUnsavedChangesCanBeRevertedFromTheMenubar() throws {
         try app.sidebarAllList().click()
         let numChangesToMake = 2
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
+        XCTAssertGreaterThan(try app.contentRows().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) items in the system")
 
         XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,
@@ -269,7 +269,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
     func test_410_allUnsavedChangesCanBeRevertedFromTheToolbar() throws {
         try app.sidebarAllList().click()
         let numChangesToMake = 2
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, numChangesToMake,
+        XCTAssertGreaterThan(try app.contentRows().count, numChangesToMake,
                              "This test requires at least \(numChangesToMake) items in the system")
 
         XCTAssertFalse(app.toolbarSaveChangesIsShowingPending_NON_THROWING,

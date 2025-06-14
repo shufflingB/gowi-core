@@ -8,24 +8,6 @@
 import SwiftUI
 import XCTest
 extension XCUIApplication {
-    func contentRows_NON_THROWING(win: XCUIElement? = nil) -> Array<XCUIElement> {
-        /** NB: When the contents of the sidebar is larger than the height of the window then the contents of the returned query is incomplete (suspect this is
-         because the app is is lazily loading only what's visible).  The least PITA approach to work around this is to make what is use below of what should  strictly be a redundant query on
-         the last element in the list that forces the loading of everything.
-         (Other options might include ensuring smaller amounts of fixture data so as to ensure window always contains it, using a shortcut to jump to end of list to force loading of contents )
-         */
-
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-//
-        let query: XCUIElementQuery = winS.outlines.children(matching: .outlineRow)
-            .textFields
-            .matching(identifier: AccessId.MainWindowContentTitleField.rawValue)
-
-        _ = query.element.waitForExistence(timeout: 3)
-        
-
-        return query.allElementsBoundByIndex
-    }
 
     func contentRows(win: XCUIElement? = nil) throws -> Array<XCUIElement> {
         /** Throwing version of contentRows that fails the test if essential UI elements are not found.
@@ -121,7 +103,7 @@ extension XCUIApplication {
     }
 
     func contentRowsSelect(win: XCUIElement? = nil, indices itemIdxs: Array<Int>) throws {
-        let currentRows = contentRows_NON_THROWING(win: win)
+        let currentRows = try contentRows(win: win)
 
         // Check what's being requested to select is sane
         itemIdxs.forEach { idx in

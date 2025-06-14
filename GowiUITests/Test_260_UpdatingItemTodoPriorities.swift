@@ -64,7 +64,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
         // Test dragging the 1st Item below the 2nd
 
         try app.sidebarWaitingList().click()
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 1,
+        XCTAssertGreaterThan(try app.contentRows().count, 1,
                              "This test requires at least two Items in the list")
 
         let firstItemTitle = app.contentRowTextFieldValue_NON_THROWING(0)
@@ -85,13 +85,13 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     func test_010_anItemsPriorityInTheWaitingListCanBeDecreasedByDraggingItDownTheList() throws {
         // Swap last with penultimate Items
         try app.sidebarWaitingList().click()
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 2, "This test requires at least two items")
+        XCTAssertGreaterThan(try app.contentRows().count, 2, "This test requires at least two items")
 
         // Might be long list
         app.contentRowTextField_NON_THROWING(0).click()
         app.shortcutSelectEndOfList()
 
-        let tailIdx: Int = app.contentRows_NON_THROWING().indices.last!
+        let tailIdx: Int = try app.contentRows().indices.last!
         let penultimateIdx: Int = tailIdx - 1
 
         let penultimateTitle = app.contentRowTextFieldValue_NON_THROWING(penultimateIdx)
@@ -112,7 +112,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
 
     func test_300_anItemsPriorityInTheWaitingListCanBeIncreasedByTheNudgeUpShortcut() throws {
         try app.sidebarWaitingList().click()
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 6, "This test requires at least six items")
+        XCTAssertGreaterThan(try app.contentRows().count, 6, "This test requires at least six items")
 
         // Select two items that we will move & stash detail for checking later
         let itemOneIdx = 3
@@ -141,14 +141,14 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
 
     func test_400_anItemsPriorityInTheWaitingListCanBeDecreasedByTheNudgeDownShortcut() throws {
         try app.sidebarWaitingList().click()
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 6, "This test requires at least six items")
+        XCTAssertGreaterThan(try app.contentRows().count, 6, "This test requires at least six items")
 
         // Jump to the end just in case we have a lot of fixture data
         app.contentRowTextField_NON_THROWING(0).click() // stop it jumping end of the Sidebar List
         app.shortcutSelectEndOfList()
 
         // Select two items that we will move & stash detail for checking later
-        let itemOneIdx = app.contentRows_NON_THROWING().count - 6
+        let itemOneIdx = try app.contentRows().count - 6
         let itemTwoIdx = itemOneIdx + 1
         let itemOneTitle = app.contentRowTextFieldValue_NON_THROWING(itemOneIdx)
         let itemTwoTitle = app.contentRowTextFieldValue_NON_THROWING(itemTwoIdx)
@@ -167,9 +167,9 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
         // Now move them down to what should be the tail of the list
         app.shortcutSelectedItemsMoveDownInList()
         app.shortcutSelectedItemsMoveDownInList()
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(app.contentRows_NON_THROWING().count - 2), itemOneTitle,
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(try app.contentRows().count - 2), itemOneTitle,
                        "And nudging them up twice more should put the first of the pair second from last")
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(app.contentRows_NON_THROWING().count - 1), itemTwoTitle,
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(try app.contentRows().count - 1), itemTwoTitle,
                        "And the second of the pair should be at the end of the list")
     }
 
@@ -177,7 +177,7 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
        try  app.sidebarWaitingList().click()
         app.contentRowTextField_NON_THROWING(0).click()
 
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 4, "This test requires at least four items")
+        XCTAssertGreaterThan(try app.contentRows().count, 4, "This test requires at least four items")
 
         // Select two items that we will move & stash detail for checking later
         let itemOneIdx = 2
@@ -206,14 +206,14 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
     func test_600_itemPriorityChangingShortcutsStopAtTail() throws {
        try  app.sidebarWaitingList().click()
 
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 4, "This test requires at least four items")
+        XCTAssertGreaterThan(try app.contentRows().count, 4, "This test requires at least four items")
 
         app.contentRowTextField_NON_THROWING(0).click()
         app.shortcutSelectEndOfList() // Jump to the end just in case we have a lot of fixture data
 
         // Select two items that we will move & stash detail for checking later
-        let itemOneIdx = app.contentRows_NON_THROWING().count - 4
-        let itemTwoIdx = app.contentRows_NON_THROWING().count - 2 // <- Note gappy selection and -2 so can move down once
+        let itemOneIdx = try app.contentRows().count - 4
+        let itemTwoIdx = try app.contentRows().count - 2 // <- Note gappy selection and -2 so can move down once
         let itemOneTitle = app.contentRowTextFieldValue_NON_THROWING(itemOneIdx)
         let itemTwoTitle = app.contentRowTextFieldValue_NON_THROWING(itemTwoIdx)
 
@@ -222,21 +222,21 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
         // Move them down one place
         app.shortcutSelectedItemsMoveDownInList()
 
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(app.contentRows_NON_THROWING().count - 2), itemOneTitle,
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(try app.contentRows().count - 2), itemOneTitle,
                        "When two items in the sidebar with a single gap between them are nudged down once with the shortcut then the first should end up two places lower")
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(app.contentRows_NON_THROWING().count - 1), itemTwoTitle,
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(try app.contentRows().count - 1), itemTwoTitle,
                        "And the second should end up one place (and up in the last location)")
 
         // Now attempt to over nude down
         app.shortcutSelectedItemsMoveDownInList()
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(app.contentRows_NON_THROWING().count - 2), itemOneTitle,
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(try app.contentRows().count - 2), itemOneTitle,
                        "And any further attempts to nudge them up will leave their locations unchanged")
-        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(app.contentRows_NON_THROWING().count - 1), itemTwoTitle)
+        XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(try app.contentRows().count - 1), itemTwoTitle)
     }
 
     func test_700_changingPrioritiesInTheWaitingListIsUndoableAndRedoable() throws {
        try  app.sidebarWaitingList().click()
-        XCTAssertGreaterThan(app.contentRows_NON_THROWING().count, 6, "This test requires at least six items")
+        XCTAssertGreaterThan(try app.contentRows().count, 6, "This test requires at least six items")
 
         // Select two items that we will move & stash detail for checking later
         let itemOneIdx = 3

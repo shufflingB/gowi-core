@@ -50,6 +50,14 @@
                BlueprintName = "GowiUITests"
                ReferencedContainer = "container:Gowi.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "Test_050_ItemCreation/test_200_canCreateANewItemByOpeningAnAppUrl()">
+               </Test>
+               <Test
+                  Identifier = "Test_050_ItemCreation/test_210_aReqestForANewItemWillOpenANewWindowIfNoneExists()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

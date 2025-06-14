@@ -181,12 +181,12 @@ class Test_500_URL_handling: XCTestCase {
             return components.url!
         }()
 
-        let itemCount = app.contentRows_NON_THROWING().count
+        let itemCount = try app.contentRows().count
         let winCount = app.windows.count
 
         NSWorkspace.shared.open(url)
 
-        XCTAssertEqual(app.contentRows_NON_THROWING().count, itemCount + 1,
+        XCTAssertEqual(try app.contentRows().count, itemCount + 1,
                        "When the new Item URL route is used it will always add a new Item"
         )
         XCTAssertEqual(app.windows.count, winCount + 1,
@@ -194,7 +194,7 @@ class Test_500_URL_handling: XCTestCase {
         )
 
         NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.contentRows_NON_THROWING().count, itemCount + 2)
+        XCTAssertEqual(try app.contentRows().count, itemCount + 2)
         XCTAssertEqual(app.windows.count, winCount + 2)
     }
 }
