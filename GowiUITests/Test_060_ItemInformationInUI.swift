@@ -34,8 +34,8 @@ class Test_060_ItemInformationInUI: XCTestCase {
         XCTAssertEqual(try app.detailTitleValue(), title,
                       "The app's detail area should contain the item's title")
 
-        XCTAssertTrue(app.detailIDButtonCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
-                      "And a button to copy the item's ID to the system clipboard")
+        XCTAssertNotNil(try? app.detailIDButtonCopyToPasteBoard(),
+                        "And a button to copy the item's ID to the system clipboard")
 
         XCTAssertTrue(app.detailItemURLButtonCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
                       "And a button to copy a URL to the Item to the system clipboard")
@@ -121,8 +121,8 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
     func test_100_detailAreaProvidesButtonToCopyTheItemIdToClipboard() throws {
         try app.menubarItemNew.click()
-        XCTAssertTrue(app.detailIDButtonCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
-                      "The window's detail area should contain a button that displays the item's unique ID")
+        XCTAssertNotNil(try? app.detailIDButtonCopyToPasteBoard(),
+                        "The window's detail area should contain a button that displays the item's unique ID")
 
         let possibleUUIDString = app.detailIDValue_NON_THROWING()
 

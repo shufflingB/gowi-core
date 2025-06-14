@@ -42,15 +42,27 @@ extension XCUIApplication {
         return try detailTitle(win: win).value as! String
     }
 
-    func detailIDButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.buttons[AccessId.MainWindowDetailId.rawValue].firstMatch
+
+    func detailIDButtonCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement = try win == nil ? win1 : win!
+        let idButton = winS.buttons[AccessId.MainWindowDetailId.rawValue].firstMatch
+        guard idButton.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail ID button failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.MainWindowDetailId.rawValue
+            ])
+        }
+        return idButton
     }
 
     func detailIDValue_NON_THROWING(win: XCUIElement? = nil) -> String? {
-//        _ = detailIDButtonCopyToPasteBoard(win: win).waitForExistence(timeout: 2)
-        detailIDButtonCopyToPasteBoard_NON_THROWING(win: win).click()
-        return NSPasteboard.general.string(forType: .string)
+        do {
+            try detailIDButtonCopyToPasteBoard(win: win).click()
+            return NSPasteboard.general.string(forType: .string)
+        } catch {
+            return nil
+        }
     }
 
     func detailItemURLButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
