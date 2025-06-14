@@ -24,13 +24,22 @@ extension XCUIApplication {
         return displayedPickerDateFmt
     }
 
-    func detailTitle_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
-        return winS.textFields[AccessId.MainWindowDetailTitleField.rawValue].firstMatch
+
+    func detailTitle(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement = try win == nil ? win1 : win!
+        let titleField = winS.textFields[AccessId.MainWindowDetailTitleField.rawValue].firstMatch
+        guard titleField.waitForExistence(timeout: 3) else {
+            throw XCTestError(.failureWhileWaiting, userInfo: [
+                "description": "Detail title field failed to exist within timeout",
+                "timeout": "3 seconds",
+                "accessibilityIdentifier": AccessId.MainWindowDetailTitleField.rawValue
+            ])
+        }
+        return titleField
     }
 
-    func detailTitleValue_NON_THROWING(win: XCUIElement? = nil) -> String {
-        return detailTitle_NON_THROWING(win: win).value as! String
+    func detailTitleValue(win: XCUIElement? = nil) throws -> String {
+        return try detailTitle(win: win).value as! String
     }
 
     func detailIDButtonCopyToPasteBoard_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {

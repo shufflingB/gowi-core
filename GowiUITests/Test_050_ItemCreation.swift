@@ -95,7 +95,7 @@ extension Test_050_ItemCreation  {
 
         let clickDate = Date()
 
-        XCTAssertEqual(app.detailTitleValue_NON_THROWING(win: winS), "",
+        XCTAssertEqual(try app.detailTitleValue(win: winS), "",
                        "New item's should have an empty title string")
 
         // displays a creation date that is close enough to when the item was created

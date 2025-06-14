@@ -27,10 +27,11 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
     func test_000_theItemsDetailAreaDisplaysItsTitleIdCreatedAndCompletionDatesAndNotes() throws {
         try app.menubarItemNew.click()
-        let title = "\(#function) di"
-        app.detailTitle_NON_THROWING().click()
+        let title = "\(#function) some other text"
+        try app.detailTitle().click()
         app.typeText(title)
-        XCTAssertTrue(app.detailTitle_NON_THROWING().waitForExistence(timeout: 1),
+
+        XCTAssertEqual(try app.detailTitleValue(), title,
                       "The app's detail area should contain the item's title")
 
         XCTAssertTrue(app.detailIDButtonCopyToPasteBoard_NON_THROWING().waitForExistence(timeout: 1),
@@ -55,7 +56,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
         try app.menubarItemNew.click()
 
         let titleStr = "\(#function) dummy test item"
-        app.detailTitle_NON_THROWING().click()
+        try app.detailTitle().click()
 
         app.typeText(titleStr)
 
@@ -159,7 +160,7 @@ class Test_060_ItemInformationInUI: XCTestCase {
     func test_130_detailAreaProvidesButtonToCopyURLToClipboard() throws {
         try app.menubarItemNew.click()
         let title = "\(#function)"
-        app.detailTitle_NON_THROWING().click()
+        try app.detailTitle().click()
         app.typeText(title)
 
         XCTAssertTrue(app.detailItemURLButtonCopyToPasteBoard_NON_THROWING().exists,
@@ -175,6 +176,6 @@ class Test_060_ItemInformationInUI: XCTestCase {
 
         NSWorkspace.shared.open(possibbleURL!)
         XCTAssertEqual(app.windows.count, 1, "and when there is no window displaying it and it it is opened it creates a new window")
-        XCTAssertEqual(app.detailTitleValue_NON_THROWING(win: try app.win2), title, "that is displaying the Item just created")
+        XCTAssertEqual(try app.detailTitleValue(win: try app.win2), title, "that is displaying the Item just created")
     }
 }

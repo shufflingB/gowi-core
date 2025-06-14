@@ -37,14 +37,14 @@ class Test_250_UpdatingItemDetails: XCTestCase {
         let sidebarEnteredTitle = "sidebar entered test title"
         app.contentRowTextField_NON_THROWING(0).click()
         app.contentRowTextField_NON_THROWING(0).typeText(sidebarEnteredTitle)
-        XCTAssertEqual(app.detailTitleValue_NON_THROWING(), sidebarEnteredTitle,
+        XCTAssertEqual(try app.detailTitleValue(), sidebarEnteredTitle,
                        "The same title entered in the SideBar area should be present in the window's Detail area")
 
         /// Detail => Sidebar
         let additionalDetailEnteredTitle = " plus some more from detail"
-        app.detailTitle_NON_THROWING().click()
-        app.detailTitle_NON_THROWING().typeKey(.rightArrow, modifierFlags: [.command])
-        app.detailTitle_NON_THROWING().typeText(additionalDetailEnteredTitle)
+        try app.detailTitle().click()
+        try app.detailTitle().typeKey(.rightArrow, modifierFlags: [.command])
+        try app.detailTitle().typeText(additionalDetailEnteredTitle)
         XCTAssertEqual(app.contentRowTextFieldValue_NON_THROWING(0), sidebarEnteredTitle + additionalDetailEnteredTitle,
                        "Changes made to the item's title information in the Detail area should show up in its SideBar entry area")
     }

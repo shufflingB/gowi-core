@@ -51,12 +51,12 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         for n in 0 ... numChanges - 1 {
             app.contentRowTextField_NON_THROWING(n).click()
 
-            app.detailTitle_NON_THROWING().click()
+            try app.detailTitle().click()
             let id = app.detailIDValue_NON_THROWING()
-            let oTitle = app.detailTitleValue_NON_THROWING()
+            let oTitle = try app.detailTitleValue()
             app.typeKey(.rightArrow, modifierFlags: [.command])
             app.typeText(" T change \(n)")
-            let mTitle = app.detailTitleValue_NON_THROWING()
+            let mTitle = try app.detailTitleValue()
 
             app.detailNotes_NON_THROWING().click()
             let oNote = app.detailNotesValue_NON_THROWING()
@@ -118,7 +118,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
             let ordDataIdx = ordFmtr.string(from: NSNumber(value: dataIdx))!
 
             app.contentRowTextField_NON_THROWING(dataIdx).click()
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[dataIdx].mutatedTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[dataIdx].mutatedTitle,
                            "And after restarting \(ordDataIdx) sidebar item will contain the \(ordDataIdx) entry's title")
             XCTAssertEqual(app.detailNotesValue_NON_THROWING(), tdata[dataIdx].mutatedNote,
                            "And  notes")
@@ -180,10 +180,10 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
             app.contentRowTextField_NON_THROWING(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
                            "And changes made before the restart to the \(ordStr) row's Item Title will be gone")
 
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
                            "As well as those to its (\(ordStr) row) Notes")
         }
     }
@@ -257,10 +257,10 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
             app.contentRowTextField_NON_THROWING(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
                            "And the unsaved changes to the \(ordStr) row's Item Title will be gone")
 
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
                            "As well as those to its (\(ordStr) row) Notes")
         }
     }
@@ -310,10 +310,10 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
             app.contentRowTextField_NON_THROWING(e).click()
 
             let ordStr: String = ordFmtr.string(from: NSNumber(value: e))!
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
                            "And the unsaved changes to the \(ordStr) row's Item Title will be gone")
 
-            XCTAssertEqual(app.detailTitleValue_NON_THROWING(), tdata[e].originalTitle,
+            XCTAssertEqual(try app.detailTitleValue(), tdata[e].originalTitle,
                            "As well as those to its (\(ordStr) row) Notes")
         }
     }
@@ -323,9 +323,9 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
                        "When test starts the Toolbar's Revert Changes button should indicate there is nothing for it to do")
 
         try app.menubarItemNew.click()
-        app.detailTitle_NON_THROWING().click()
+        try app.detailTitle().click()
         app.typeText("A title")
-        let title = app.detailTitleValue_NON_THROWING()
+        let title = try app.detailTitleValue()
 
         XCTAssertTrue(app.toolbarRevertChangesIsShowing_NON_THROWING,
                       "And after a new Item is created the Revert Changes button will indicate it can be used to revert changes")
@@ -336,7 +336,7 @@ class Test_100_ContainsDangerousDisabledByDefaultTests_PersistingChanges: XCTest
         XCTAssertTrue(app.toolbarRevertChangesIsShowing_NON_THROWING,
                       "If the Toolbar's Revert Button is accidentally clicked then the operation can be cancelled")
 
-        XCTAssertEqual(app.detailTitleValue_NON_THROWING(), title,
+        XCTAssertEqual(try app.detailTitleValue(), title,
                        "And the unsaved changes do not end up getting reverted")
     }
 }
