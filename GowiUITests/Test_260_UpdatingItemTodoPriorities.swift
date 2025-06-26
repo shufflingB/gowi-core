@@ -73,7 +73,6 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
         let srcEle = try app.contentRowTextField(0)
         let tgtEle = try app.contentRowTextField(1)
 
-        srcEle.click()
         srcEle.press(forDuration: 1, thenDragTo: tgtEle)
 
         XCTAssertEqual(try app.contentRowTextFieldValue(0), secondItemTitle,
@@ -100,10 +99,10 @@ class Test_260_UpdatingItemTodoPriorities: XCTestCase {
         let srcEle = try app.contentRowTextField(tailIdx)
         /// See comments at top of file about why we specify with a -1 here.
         let tgtEle = try app.contentRowTextField(penultimateIdx - 1)
-
-        srcEle.click()
+        
+        
         srcEle.press(forDuration: 1, thenDragTo: tgtEle)
-
+        
         XCTAssertEqual(try app.contentRowTextFieldValue(penultimateIdx), lastTitle,
                        "When the last Item in the list is dragged up one place in the list it becomes the penultimate value")
         XCTAssertEqual(try app.contentRowTextFieldValue(tailIdx), penultimateTitle,

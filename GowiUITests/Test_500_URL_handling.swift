@@ -132,7 +132,7 @@ class Test_500_URL_handling: XCTestCase {
         )
     }
 
-    func test_100_ifNotNewItemRouteWillPrefertToRaiseExistingWindowInsteadOfCreatingNew() throws{
+    func test_100_ifNotNewItemRouteWillPreferToRaiseExistingWindowInsteadOfCreatingNew() throws{
         
         // And not create new ones
         try app.sidebarAllList().click()

@@ -33,11 +33,11 @@ extension XCUIApplication {
         launch()
         
 
-//        if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
-//            shortcutWindowsCloseAll()
-//            shortcutAppQuit()
-//            launch()
-//        }
+        if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
+            shortcutWindowsCloseAll()
+            shortcutAppQuit()
+            launch()
+        }
 
         assert(windows.count == 1)
         assert(windows.firstMatch.identifier == win1_NON_THROWING.identifier)

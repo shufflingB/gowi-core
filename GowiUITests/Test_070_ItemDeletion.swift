@@ -58,7 +58,6 @@ class Test_070_ItemDeletion: XCTestCase {
     func test_200_canDeleteItenUsingTheContentContextMenu() throws {
         let rowToDelete = 2
         try itemCanBeDeletedUsing(description: #function, rowToDelete: rowToDelete) {
-            try app.contentRowTextField(rowToDelete).click()
             try app.contentRowTextField(rowToDelete).rightClick()
             app.contentContextMenuDelete_NON_THROWING(rowToDelete).click()
         }

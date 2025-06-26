@@ -50,14 +50,6 @@
                BlueprintName = "GowiUITests"
                ReferencedContainer = "container:Gowi.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "Test_050_ItemCreation/test_200_canCreateANewItemByOpeningAnAppUrl()">
-               </Test>
-               <Test
-                  Identifier = "Test_050_ItemCreation/test_210_aReqestForANewItemWillOpenANewWindowIfNoneExists()">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
@@ -94,8 +86,8 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "GOWI_TESTMODE"
-            value = "0"
-            isEnabled = "NO">
+            value = "1"
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>

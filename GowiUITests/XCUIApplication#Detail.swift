@@ -360,7 +360,9 @@ extension XCUIApplication {
 
     func detailNotes(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = try win == nil ? win1 : win!
-        let notesElement = winS.scrollViews[AccessId.MainWindowDetailTextEditor.rawValue].children(matching: .textView).element
+//        let notesElement = winS.scrollViews[AccessId.MainWindowDetailTextEditor.rawValue].children(matching: .textView).element
+        let notesElement = winS.textViews[AccessId.MainWindowDetailTextEditor.rawValue]
+
         guard notesElement.waitForExistence(timeout: 3) else {
             throw XCTestError(.failureWhileWaiting, userInfo: [
                 "description": "Detail notes text view failed to exist within timeout",

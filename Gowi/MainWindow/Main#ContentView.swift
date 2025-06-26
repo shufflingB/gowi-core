@@ -12,11 +12,29 @@ extension Main {
     struct ContentView: View {
         let stateView: Main
 
+        
+        /* Workaround; SwiftUI - bless it's little macOS must die socks so it can be reinvented in
+        iPadOS - treats key window status and focus separately. So it doesn't matter if you've
+        just opened a new window on your app and can merrily keyboard navigate around one of its
+        windows. That Window will not update any of its SwiftUI Focused values until at least one
+         of its internal inputs has actively experienced a focusing event (macOS == clicked on,
+         typed into). Hence here, we end up faking that by using onAppear make the app's focusedValue
+         event fire which is useful for letting things like the menubar know if it's got a Window to work with, what state that Window is in etc ...
+         
+         (the alternative is to forget about using focusedValues and try and keep track in the app's
+         model, which would be a pity)
+         */
+        @FocusState private var isInitiallyFocused: Bool
+        
         @FocusedValue(\.undoWfa) private var wfa: UndoWorkFocusArea?
 
         var body: some View {
             Layout(selections: stateView.$itemIdsSelected, items: stateView.contentItems, onMovePerform: stateView.contentOnMovePerform, contextMenu: contextMenu)
                 .focusedValue(\.undoWfa, .content)
+                .focused($isInitiallyFocused)
+                .onAppear {
+                    isInitiallyFocused = true
+                }
         }
     }
 }

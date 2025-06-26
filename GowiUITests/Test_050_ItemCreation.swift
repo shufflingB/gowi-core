@@ -37,8 +37,6 @@ class Test_050_ItemCreation: XCTestCase {
         try Self.checkNewItemLooksOkay(app)
     }
 
-//    TODO: For reasons unknown SwiftUI is during test hijacking the my chosen CMD+N shortcut and using it to open a new window. Need
-    // to figure out why
     func test_020_canCreateNewItemUsingKeyboardShortcut() throws {
         XCTAssertEqual(try app.contentRows().count, 0)
         app.shortcutItemNew()

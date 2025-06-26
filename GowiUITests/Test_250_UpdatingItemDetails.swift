@@ -57,10 +57,11 @@ class Test_250_UpdatingItemDetails: XCTestCase {
         let notesAtStart = (try? app.detailNotesValue()) ?? ""
         let lorem = "Some test text to be removed by a single undo"
         
+        try app.detailNotes().click()
         
         
         app.typeText(lorem)
-        XCTAssertEqual((try? app.detailNotesValue()) ?? "", lorem,
+        XCTAssertEqual((try app.detailNotesValue()), lorem,
                        "When I type in the Notes area it should that should be added to Item")
 
         app.shortcutUndo()
