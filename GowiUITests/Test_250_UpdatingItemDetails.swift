@@ -53,10 +53,12 @@ class Test_250_UpdatingItemDetails: XCTestCase {
 
     func test_600_whenEditingTheItemsNotesUsesATextSpecificUndoAndRedoProcess() throws {
         /// ...  And not single characters
-        app.shortcutItemNew()
+        try app.menubarItemNew.click()
         let notesAtStart = (try? app.detailNotesValue()) ?? ""
         let lorem = "Some test text to be removed by a single undo"
-        try app.detailNotes().click()
+        
+        
+        
         app.typeText(lorem)
         XCTAssertEqual((try? app.detailNotesValue()) ?? "", lorem,
                        "When I type in the Notes area it should that should be added to Item")

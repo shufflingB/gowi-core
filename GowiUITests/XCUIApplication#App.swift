@@ -28,14 +28,16 @@ extension XCUIApplication {
     ///  This function works around this to ensure the app tests always start with single window and it's identifier contains "1"
     ///
     func launchAndSanitiseWindowsAndIdentifiers() {
+        launchArguments.append("--uitesting-reset-state")
+        
         launch()
         
 
-        if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
-            shortcutWindowsCloseAll()
-            shortcutAppQuit()
-            launch()
-        }
+//        if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
+//            shortcutWindowsCloseAll()
+//            shortcutAppQuit()
+//            launch()
+//        }
 
         assert(windows.count == 1)
         assert(windows.firstMatch.identifier == win1_NON_THROWING.identifier)

@@ -15,6 +15,19 @@ struct GowiApp: App {
     enum WindowGroupId: String {
         case Main
     }
+    
+    init() {
+         // CommandLine parsing here
+         if CommandLine.arguments.contains("--uitesting-reset-state") {
+             // Clear UserDefaults
+             if let bundleID = Bundle.main.bundleIdentifier {
+                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
+                 UserDefaults.standard.synchronize()
+             }
+             // Add any other state-reset logic here (e.g., delete files, clear caches)
+         }
+     }
+    
 
     /*
      Why `AppModel.shared`? A shared  single instance of the ``AppModel`` is used here as well as `@StateObject` (which nominally does the

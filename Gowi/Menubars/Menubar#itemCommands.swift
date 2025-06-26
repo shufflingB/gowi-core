@@ -14,6 +14,7 @@ extension Menubar {
             Section {
                 Button("New Item") {
                     if let sideBarFilterSelected = mainStateView?.sideBarFilterSelected {
+                        // Then we have an existing Window, and we will update that to show the new Item ready for the user.
                         withAnimation {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: mainStateView?.windowUM,
@@ -25,6 +26,8 @@ extension Menubar {
                             mainStateView?.itemIdsSelected = route.itemIdsSelected
                         }
                     } else {
+                        // There is no window, so open a new window with the routing option necessary to create a new Item and show
+                        // it.
                         let route = Main.WindowGroupRoutingOpt.newItem(sideBarFilterSelected: .waiting)
                         openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
                     }

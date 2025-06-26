@@ -6,7 +6,12 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(rg:*)",
-      "Bash(xcodebuild:*)"
+      "Bash(xcodebuild:*)",
+      "Bash(perplexity-search:*)",
+      "Bash(python:*)",
+      "Bash(/Users/jhume/anaconda3/bin/perplexity-search-cli --help)",
+      "Bash(/Users/jhume/anaconda3/bin/perplexity-search-cli -p \"What are the latest improvements in SwiftUI for macOS window management and routing in 2024-2025? Has Apple improved WindowGroup, openWindow, handlesExternalEvents, or added new APIs for macOS app window management?\")",
+      "Bash(/Users/jhume/anaconda3/bin/perplexity-search-cli -p \"SwiftUI macOS 2024 issues with openWindow handlesExternalEvents not working URL routing problems known bugs WindowGroup routing parameters\")"
     ],
     "deny": []
   }
