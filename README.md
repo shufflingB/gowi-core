@@ -149,6 +149,51 @@ AppModel.shared.debugPrintAllItems() // Prints all items with ourIds and sync st
 
 **Known Issues**: The codebase includes a workaround (`houseKeepingHackToCleanUpInMemoryProblem`) for a CoreData/CloudKit bug where in-memory stores incorrectly persist data.
 
+## FocusedValues and Menu Bar Communication
+
+The app uses SwiftUI's `@FocusedValue` system to enable menu bar commands to access the current window's state, even though menu bars exist independently of any particular window.
+
+### How FocusedValues Work
+
+`@FocusedValue` passes data up the SwiftUI responder chain from focused views to parent containers. This enables:
+- Menu commands to access the currently focused window's state
+- Window-independent UI elements (like menu bars) to operate on the "active" window
+- Multi-window applications to have context-aware menu commands
+
+**Key Implementation Points**:
+```swift
+// In Main.swift - Publishing state up the chain
+.focusedValue(\.mainStateView, self)
+
+// In Menubar.swift - Accessing published state  
+@FocusedValue(\.mainStateView) var mainStateView: Main?
+```
+
+### The macOS Focus Chain Design Limitation
+
+SwiftUI on macOS treats key window status and focus separately. Newly opened windows don't establish a proper focus chain for `@FocusedValue` propagation until a user explicitly interacts with (clicks on or types into) a UI element within the window. This design limitation can leave menu commands without access to window state immediately after window creation.
+
+### The @FocusState Workaround
+
+To ensure reliable menu bar functionality, the app uses a `@FocusState` workaround in key views:
+
+```swift
+// In Main#ContentView.swift
+@FocusState private var isInitiallyFocused: Bool
+
+var body: some View {
+    // ... view content
+    .focused($isInitiallyFocused)
+    .onAppear {
+        isInitiallyFocused = true  // Establish focus chain immediately
+    }
+}
+```
+
+This approach artificially establishes the focus chain when the view appears, ensuring that `@FocusedValue` propagation works reliably from the moment a window is created.
+
+**See the detailed explanation comment in `Gowi/MainWindow/Main#ContentView.swift` lines 16-25 for more technical context.**
+
 ## Expected app behaviour - see test cases under `GowiUITests`
 
 Aside from playing with the app and reading the code, the app's UI tests cover most of its functionality and aims to 
