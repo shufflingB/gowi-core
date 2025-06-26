@@ -63,8 +63,9 @@ class Test_255_UpdatingItemCompletionDates: XCTestCase {
         let dateToSet = app.detailCompletedDateFormatter.date(from: "1945-12-25 12:12")!
         app.detailCompletedDatePickerSet(dateToSet)
         try app.detailCompletionCheckBox().click()
-
-        XCTAssertTrue((try? app.detailCompletionCheckBoxValue()) ?? false,
+        let isComplete = try app.detailCompletionCheckBoxValue()
+     
+        XCTAssertTrue(isComplete,
                       "When the Item's completion checkbox is clicked it is marked as complete")
 
         let dateDisplayedInPicker = try app.detailCompletedDatePickerValueAsDate()
