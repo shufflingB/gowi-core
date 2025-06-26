@@ -49,7 +49,7 @@ class Test_050_ItemCreation: XCTestCase {
         NSWorkspace.shared.open(URL(string: app.urlNewItem)!)
 
         XCTAssertEqual(app.windows.count, 2,
-                       "When the app's 'new item' route is invoked it will create a new window that displays an empty Item")
+                       "When the app's 'new item' route is invoked it should open new window that displays an empty Item (not update existing window and annoy user)")
         try Self.checkNewItemLooksOkay(win: try app.win2, app)
     }
 

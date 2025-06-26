@@ -2,17 +2,16 @@
 
 Gowi (*Get On With It*) is a feature complete(ish) implementation in SwiftUI of a canonical "Todo" example application.
 
-The goals of the project are to:
+The goals of the project are for SwiftUI to:
 
-1. Determine and document how to:
+1. Determine, document and demo how to:
 
     2. Achieve established platform norms using SwiftUI.
-    2. Test that it does.
+    2. Test that it does so.
     
-2. Form a usable \* and scalable basis for future experimentation and development, e.g. add `iPadOS` version, work 
-sharing, time estimation, richer text editing ...
+2. Create a usable basic todo application that is suitable that can be used as the basis for future experimentation 
+and development, e.g. add `iPadOS` version, Rich Text Descriptions, CLI API etc. 
 
-\* **For small personal projects.**
 
 # Supported platforms
 
@@ -29,20 +28,10 @@ And each of these attributes - Id and Creation date aside - may be altered by th
 
 To help the user to find their `Item`s the app:
 
-- Provides URL routing to:
-	1. `Item`s within the system, e.g. [gowi://main/v1/showitems?fid=All&id=42FA9B5A-959A-42C3-A5D1-184E634E2E33](gowi://main/v1/showitems?fid=All&id=42FA9B5A-959A-42C3-A5D1-184E634E2E33)
-	2. Lists of `Item`s
-- And uses the `Item`'s Completion date to derive lists of them that are either:
+- Uses the `Item`'s Completion date to derive lists of them that are either:
 	- Waiting for action sorted by their Priority relative to one and other. Or,
 	- Done and sorted by completion date.
-
-For convenience, most of  the app's functionality is deep linkable through a predictable versioned URL interface e.g.
-
-- New `Item` creation - [gowi://main/v1/newItem](gowi://main/v1/newItem)
-- The list of:
-	- All `Item`s - [gowi://main/v1/showitems?fid=All](gowi://main/v1/showitems?fid=All)
-    - Done  `Item`s - [gowi://main/v1/showitems?fid=Done](gowi://main/v1/showitems?fid=Done)
-    - Waiting `Item`s - [gowi://main/v1/showitems?fid=Waiting](gowi://main/v1/showitems?fid=Waiting)
+- Provides comprehensive URL routing and deep linking capabilities (see [URL Routing and Deep Linking](#url-routing-and-deep-linking) section below)
 
  
 It guards against accidental user data loss through app termination with unsaved changes.
@@ -55,12 +44,13 @@ Further, on `macOs` it endeavours to follow the de-facto platform conventions fo
 - Keyboard shortcut keys and menu structures.
 - Keyboard navigation.
 - Pop-up text.
-- Multi-window behaviour.
+- Standard multi-window behavior (see [Window Management](#window-management) section below).
 - Lists having context menus and are navigable by typing title characters.
 - Universal undo and redo capabilities for user data.
 
 ![Gowi running on macOS Ventura](DevAssets/GowiRunningOnMacOSScreenshot.png  "Screenshot of Gowi running on macOS Ventura")
- 
+
+
 
 # Developer notes
 ## Compiling and testing
@@ -173,7 +163,7 @@ SwiftUI's prebuilt *@someStore* and *@someControl* functionality.
 `viewContext.undoManager` and `@FocusedValue` driven undo/redo stack grouping.
 - How to use `@NSApplicationDelegateAdaptor` with an `AppKit.NSApplicationDelegate` to protect users from app 
 termination with unsaved data.
-- An in-app routing scheme to open and handle multi-window, tabs and rich URL  requests on `macOS`.
+- Standard macOS window management with intelligent routing and comprehensive deep linking via custom URL schemes.
 - How to test it.
 
 ### Other bits ... 
@@ -229,6 +219,135 @@ In this architecture the
 		-  Layout works in concert with the StateView's Intent static part and Model to enable Preview testing without 
         initialising StateView.
 	-  Codebase examples `Main#DetailView` and  `ItemView` 
+
+
+## Routing and macOS Window Management
+
+Gowi implements URL routing and macOS window management that follows platform conventions.
+
+### Application States
+
+The application operates in three distinct states, each with specific behaviors:
+
+#### 1. Application Not Running
+- Standard macOS launch behavior through Dock, Finder, or URL schemes
+- URL routing launches the app and creates a window displaying the requested content according to scheme, e.g. list, empty new Item, existing Item ...
+
+#### 2. Application Running with No Windows
+Follows Apple macOS convention where application continues to run in the background even when all of its windows have been closed.
+
+When no windows are visible:
+- **Menu bar remains fully accessible and functional**
+- All menu commands work normally (File, Edit, Window menus)
+- **"New Item"** command creates a new window with an empty item
+- **"New Window"** command opens a new window showing the default view
+- All keyboard shortcuts continue to work
+- File operations (Save, Revert) remain available
+- Undo/Redo commands are accessible
+
+creates new window displaying the requested content according to scheme, e.g. list, empty new Item, existing Item ...
+
+### 3. Application Running with One or More Windows
+- Standard operational state with full UI interaction
+- Each window has a sequential identifier: `Main-AppWindow-1`, `Main-AppWindow-2`, etc.
+- Windows share the same data model (`AppModel.shared`) but maintain independent view states
+- Changes in one window's Item state immediately reflect in the apps other windows
+- URL routing if:
+    - existing window is displaying requested scheme content in window then that window is raised/made key window.
+    - no existing window with content, creates a window displaying the requested content according to scheme, e.g. list, empty new Item, existing Item ... 
+
+## Window Lifecycle
+
+### Window Creation
+Windows are created in several scenarios:
+- **App Launch**: Creates initial window (unless restored from previous session)
+- **Menu Commands**: "New Item" and "New Window" menu options
+- **URL Deep Linking**: Smart routing creates windows when needed
+- **Context Menus**: Items can be opened in new windows or tabs
+
+### Window Management
+- **Individual Close**: Windows can be closed independently using the red close button
+- **Close All Windows**: `Cmd+Opt+W` closes all windows but keeps the app running
+- **Quit Application**: `Cmd+Q` quits the entire application
+- **Window Restoration**: SwiftUI automatically restores windows on app relaunch
+
+## Smart Window Coordination
+
+The application uses intelligent logic to determine whether to create new windows or reuse existing ones:
+
+- **Shared Data**: All windows access the same `AppModel.shared` instance
+- **Independent State**: Each window maintains its own view state and selection
+- **Immediate Synchronization**: Data changes propagate instantly across all windows
+- **Focus Management**: The app tracks which window is currently active for menu operations
+
+# URL Routing and Deep Linking
+
+Gowi provides comprehensive deep linking through a custom `gowi://` URL scheme with sensible window management.
+
+## URL Scheme Structure
+
+**Base Pattern**: `gowi://main/v1/[action]?[parameters]`
+
+- **Scheme**: `gowi://` (registered custom URL scheme)
+- **Host**: `main` (targets the main window type)
+- **Version**: `v1` (versioned API for future compatibility)
+- **Action**: Specific operation to perform
+- **Parameters**: Query parameters for filtering and targeting
+
+## Supported Routes
+
+### List Views
+- **All Items**: `gowi://main/v1/showitems?fid=All`
+- **Waiting Items**: `gowi://main/v1/showitems?fid=Waiting` 
+- **Completed Items**: `gowi://main/v1/showitems?fid=Done`
+- **Default Route**: `gowi://main/` (shows Waiting list)
+
+### Specific Items  
+- **Item by ID**: `gowi://main/v1/showitems?fid=All&id=<UUID>`
+  - Example: `gowi://main/v1/showitems?fid=All&id=42FA9B5A-959A-42C3-A5D1-184E634E2E33`
+  - Uses the item's `ourId` UUID for consistent cross-device identification
+
+### Item Creation
+- **New Item**: `gowi://main/v1/newItem`
+  - Opens with an empty item ready for editing
+
+## Smart Routing Behavior
+
+The application uses intelligent routing logic to provide the best user experience:
+
+### Window Reuse Strategy
+For most routes (except `newItem`), the app:
+1. **Checks existing windows** to see if any are already displaying the requested content
+2. **Raises existing window** if the same content is already visible
+3. **Creates new window** only if no matching content is found
+
+### New Item Exception
+The `gowi://main/v1/newItem` route has special behavior:
+- **Always creates a new window** regardless of existing windows
+- Ensures users can create multiple items simultaneously
+- Prevents accidentally overwriting existing item edits
+
+### Cross-Application Integration
+URL schemes work from:
+- **Web browsers** (clicking gowi:// links)
+- **Other applications** (programmatic URL opening)
+- **Scripts and automation** (AppleScript, shell scripts)
+- **Command line** using `open "gowi://main/v1/showitems?fid=All"`
+
+## Route Behavior Matrix
+
+| Route Type | No Windows | Existing Windows | Behavior |
+|------------|------------|------------------|----------|
+| **List Views** (`showitems`) | Creates new window | Reuses window if showing same list, otherwise creates new | Smart routing |
+| **Specific Item** (`id=<UUID>`) | Creates new window | Reuses window if showing same item, otherwise creates new | Smart routing |
+| **New Item** (`newItem`) | Creates new window | **Always** creates new window | Always new |
+| **Default** (`gowi://main/`) | Creates new window | Reuses window showing Waiting list, otherwise creates new | Smart routing |
+
+ 
+
+
+
+
 
 ## Source code documentation
 
