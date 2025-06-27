@@ -55,7 +55,7 @@ extension XCUIApplication {
         guard element.waitForExistence(timeout: timeout) else {
             var userInfo: [String: Any] = [
                 "description": "\(description) failed to exist within timeout",
-                "timeout": "\(timeout) seconds"
+                "timeout": "\(Int(timeout)) seconds"
             ]
             userInfo.merge(additionalUserInfo) { _, new in new }
             throw XCTestError(.failureWhileWaiting, userInfo: userInfo)
