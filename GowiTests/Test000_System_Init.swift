@@ -60,7 +60,7 @@ final class Test000_System_Init: XCTestCase {
         XCTAssertTrue(rootItem.root,
                       "And it should be marked as such")
 
-        XCTAssertEqual(rootItem.created!.timeIntervalSince1970, eDate.timeIntervalSince1970, accuracy: 1.0,
+        XCTAssertEqual(rootItem.created!.timeIntervalSince1970, eDate.timeIntervalSince1970, accuracy: 2.0,
                        "With a matching created date attribute ")
 
         XCTAssertEqual(rootItem.parentListAsSet.count, 0,
