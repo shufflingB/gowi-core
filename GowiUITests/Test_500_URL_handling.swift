@@ -171,8 +171,12 @@ class Test_500_URL_handling: XCTestCase {
         
         XCTAssertEqual(num_windows,  winCount,
                        "When a url route is being displayed in an existing window it will not create new Windows")
-        XCTAssertTrue(app.isKeyFrontWindow(app.win1_NON_THROWING),
-                      "And it will just raise the existing window")
+        do {
+            XCTAssertTrue(app.isKeyFrontWindow(try app.win1),
+                          "And it will just raise the existing window")
+        } catch {
+            XCTFail("Main window should exist during URL handling test: \(error)")
+        }
         XCTAssertEqual(itemId, try app.detailIDValue(),
                        "Displaying the previous information"
         )

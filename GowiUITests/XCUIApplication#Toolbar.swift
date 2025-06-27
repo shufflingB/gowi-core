@@ -10,10 +10,28 @@ import XCTest
 
 // MARK: Extension for Main Window toolbar items
 extension XCUIApplication {
-    var toolbarItemNew_NON_THROWING: XCUIElement { win1_NON_THROWING.buttons[AccessId.MainWindowToolbarCreateItemButton.rawValue].firstMatch }
+    var toolbarItemNew_NON_THROWING: XCUIElement {
+        do {
+            return try win1.buttons[AccessId.MainWindowToolbarCreateItemButton.rawValue].firstMatch
+        } catch {
+            return windows.firstMatch.buttons[AccessId.MainWindowToolbarCreateItemButton.rawValue].firstMatch
+        }
+    }
 
-    var toolbarSaveChangesPending_NON_THROWING: XCUIElement { win1_NON_THROWING.buttons[AccessId.MainWindowToolbarSaveChangesPending.rawValue].firstMatch }
-    var toolbarSaveChangesNone_NON_THROWING: XCUIElement { win1_NON_THROWING.buttons[AccessId.MainWindowToolbarSaveChangesNone.rawValue].firstMatch }
+    var toolbarSaveChangesPending_NON_THROWING: XCUIElement {
+        do {
+            return try win1.buttons[AccessId.MainWindowToolbarSaveChangesPending.rawValue].firstMatch
+        } catch {
+            return windows.firstMatch.buttons[AccessId.MainWindowToolbarSaveChangesPending.rawValue].firstMatch
+        }
+    }
+    var toolbarSaveChangesNone_NON_THROWING: XCUIElement {
+        do {
+            return try win1.buttons[AccessId.MainWindowToolbarSaveChangesNone.rawValue].firstMatch
+        } catch {
+            return windows.firstMatch.buttons[AccessId.MainWindowToolbarSaveChangesNone.rawValue].firstMatch
+        }
+    }
 
     var toolbarSaveChangesIsShowingPending_NON_THROWING: Bool {
         toolbarSaveChangesPending_NON_THROWING.exists

@@ -33,14 +33,27 @@ extension XCUIApplication {
         launch()
         
 
-        if win1_NON_THROWING.exists == false || windows.firstMatch.identifier != win1_NON_THROWING.identifier || windows.count > 1 {
+        let needsReset: Bool
+        do {
+            let mainWindow = try win1
+            needsReset = windows.firstMatch.identifier != mainWindow.identifier || windows.count > 1
+        } catch {
+            needsReset = true
+        }
+        
+        if needsReset {
             shortcutWindowsCloseAll()
             shortcutAppQuit()
             launch()
         }
 
         assert(windows.count == 1)
-        assert(windows.firstMatch.identifier == win1_NON_THROWING.identifier)
+        do {
+            let mainWindow = try win1
+            assert(windows.firstMatch.identifier == mainWindow.identifier)
+        } catch {
+            XCTFail("Main window should exist after launch and reset")
+        }
     }
 
     /// Generic helper function to validate XCUIElements with consistent error handling
@@ -74,9 +87,6 @@ extension XCUIApplication {
         get throws {
             try winX(name: "Main-AppWindow-1")
         }
-    }
-    var win1_NON_THROWING: XCUIElement {
-        windows["Main-AppWindow-1"]
     }
     
 

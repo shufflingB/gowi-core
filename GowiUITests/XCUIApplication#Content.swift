@@ -35,7 +35,16 @@ extension XCUIApplication {
     }
 
     private func contentRow_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+        let winS: XCUIElement
+        if let providedWin = win {
+            winS = providedWin
+        } else {
+            do {
+                winS = try win1
+            } catch {
+                winS = windows.firstMatch
+            }
+        }
         return winS.outlines.children(matching: .outlineRow).element(boundBy: row)
     }
 
@@ -107,17 +116,44 @@ extension XCUIApplication {
 //    func contentContextMenuDelete(
 
     func contentContextMenuDelete_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+        let winS: XCUIElement
+        if let providedWin = win {
+            winS = providedWin
+        } else {
+            do {
+                winS = try win1
+            } catch {
+                winS = windows.firstMatch
+            }
+        }
         return winS.outlines.menuItems[AccessId.MainWindowContentContextDelete.rawValue]
     }
 
     func contentContextMenuOpenInNewTab_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+        let winS: XCUIElement
+        if let providedWin = win {
+            winS = providedWin
+        } else {
+            do {
+                winS = try win1
+            } catch {
+                winS = windows.firstMatch
+            }
+        }
         return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewTab.rawValue]
     }
 
     func contentContextMenuOpenInNewWindow_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-        let winS: XCUIElement = win == nil ? win1_NON_THROWING : win!
+        let winS: XCUIElement
+        if let providedWin = win {
+            winS = providedWin
+        } else {
+            do {
+                winS = try win1
+            } catch {
+                winS = windows.firstMatch
+            }
+        }
         return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewWindow.rawValue]
     }
 }
