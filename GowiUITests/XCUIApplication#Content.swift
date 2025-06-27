@@ -17,13 +17,9 @@ extension XCUIApplication {
         let winS: XCUIElement = win == nil ? try win1 : win!
         
         // First, verify the essential UI structure exists (the outline itself)
-        guard winS.outlines.firstMatch.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Content outline failed to exist within timeout",
-                "timeout": "3 seconds",
-                "window": winS.debugDescription
-            ])
-        }
+        _ = try validateElement(winS.outlines.firstMatch, description: "Content outline", additionalUserInfo: [
+            "window": winS.debugDescription
+        ])
         
         let query: XCUIElementQuery = winS.outlines.children(matching: .outlineRow)
             .textFields
