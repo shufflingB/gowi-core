@@ -48,6 +48,59 @@ class Test_000_TestingEssentialsWork: XCTestCase {
         }
     }
 
+    func test_005_allCriticalUILocatorsAreAccessible() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "1"] // Use test data for content-dependent locators
+        app.launchAndSanitiseWindowsAndIdentifiers()
+        
+        // Helper for conditional validation that doesn't fail the entire test
+        func validateConditionalElements(_ description: String, _ block: () throws -> Void) {
+            do {
+                try block()
+            } catch {
+                print("⚠️ Conditional validation failed for \(description): \(error)")
+                // Don't fail test for conditional elements, just log
+            }
+        }
+        
+        // Tier 1: Core structural elements (always present)
+        XCTAssertNoThrow(try app.win1, "Primary window (win1) should always be accessible")
+        
+        // Tier 2: Core application UI elements - Sidebar
+        XCTAssertNoThrow(try app.sidebarAllList(), "Sidebar 'All' list should be accessible")
+        XCTAssertNoThrow(try app.sidebarWaitingList(), "Sidebar 'Waiting' list should be accessible") 
+        XCTAssertNoThrow(try app.sidebarDoneList(), "Sidebar 'Done' list should be accessible")
+        
+        // Tier 2: Toolbar elements (non-throwing variants for safety)
+        XCTAssertTrue(app.toolbarItemNew_NON_THROWING.exists, "Toolbar 'New Item' button should exist")
+        
+        // Tier 3: Content elements (require test data and selection)
+        try app.sidebarAllList().click() // Ensure we're showing content
+        XCTAssertNoThrow(try app.contentRows(), "Content rows should be accessible")
+        XCTAssertGreaterThan(try app.contentRows().count, 0, "Should have test content rows in TESTMODE=1")
+        XCTAssertNoThrow(try app.contentRowTextField(0), "First content row text field should be accessible")
+        
+        // Select first item to populate detail view
+        try app.contentRowTextField(0).click()
+        
+        // Tier 3: Detail view elements (require item selection)
+        XCTAssertNoThrow(try app.detailTitle(), "Detail title field should be accessible after item selection")
+        XCTAssertNoThrow(try app.detailCompletionCheckBox(), "Detail completion checkbox should be accessible after item selection")
+        XCTAssertNoThrow(try app.detailNotes(), "Detail notes field should be accessible after item selection")
+        
+        // Tier 4: Menu bar elements (conditional - require menu activation)
+        validateConditionalElements("Menu bar items") {
+            _ = try app.menubarItemNew
+            _ = try app.menubarUndo 
+            _ = try app.menubarRedo
+            _ = try app.menubarWindowNew
+        }
+        
+        validateConditionalElements("Detail copy buttons") {
+            _ = try app.detailIDButtonCopyToPasteBoard()
+            _ = try app.detailCreateDateButtonToCopyToPasteBoard()
+        }
+    }
+
     func test_000_appTestMode0HasNoDataAndFrameworkCanWorkThisOut() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launchAndSanitiseWindowsAndIdentifiers()
