@@ -18,14 +18,9 @@ extension XCUIApplication {
     var menubarGowiQuit: XCUIElement {
         get throws {
             let element = menuBars.menuItems["Quit Gowi"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Quit Gowi' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Quit Gowi"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Quit Gowi'", additionalUserInfo: [
+                "menu_item": "Quit Gowi"
+            ])
         }
     }
 
@@ -34,14 +29,9 @@ extension XCUIApplication {
     var menubarFileMenu: XCUIElement {
         get throws {
             let element = menuBars.menuBarItems["File"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu bar 'File' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_bar_item": "File"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu bar 'File'", additionalUserInfo: [
+                "menu_bar_item": "File"
+            ])
         }
     }
 
@@ -63,14 +53,9 @@ extension XCUIApplication {
     var menubarFileSaveChanges: XCUIElement {
         get throws {
             let element = menuBars.menuItems["Save Changes"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Save Changes' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Save Changes"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Save Changes'", additionalUserInfo: [
+                "menu_item": "Save Changes"
+            ])
         }
     }
 
@@ -78,14 +63,9 @@ extension XCUIApplication {
     var menubarFileRevertChanges: XCUIElement {
         get throws {
             let element = menuBars.menuItems["Revert Changes"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Revert Changes' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Revert Changes"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Revert Changes'", additionalUserInfo: [
+                "menu_item": "Revert Changes"
+            ])
         }
     }
 
@@ -95,14 +75,9 @@ extension XCUIApplication {
     var menubarEditMenu: XCUIElement {
         get throws {
             let element = menuBars.menuBarItems["Edit"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu bar 'Edit' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_bar_item": "Edit"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu bar 'Edit'", additionalUserInfo: [
+                "menu_bar_item": "Edit"
+            ])
         }
     }
 
@@ -111,14 +86,9 @@ extension XCUIApplication {
         get throws {
             let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Undo")
             let element = menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Edit' > 'Undo' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Undo"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Edit' > 'Undo'", additionalUserInfo: [
+                "menu_item": "Undo"
+            ])
         }
     }
 
@@ -127,14 +97,9 @@ extension XCUIApplication {
         get throws {
             let predicate = NSPredicate(format: "identifier CONTAINS[c] %@", "Redo")
             let element = menuBars.menuBarItems["Edit"].menuItems.containing(predicate).firstMatch
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Edit' > 'Redo' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Redo"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Edit' > 'Redo'", additionalUserInfo: [
+                "menu_item": "Redo"
+            ])
         }
     }
 
@@ -145,28 +110,18 @@ extension XCUIApplication {
     var menubarItemNew: XCUIElement {
         get throws {
             let element = menuBars.menuBarItems["Items"].menuItems["New Item"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Items' > 'New Item' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "New Item"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Items' > 'New Item'", additionalUserInfo: [
+                "menu_item": "New Item"
+            ])
         }
     }
 
     var menubarItemDelete: XCUIElement {
         get throws {
             let element = menuBars.menuBarItems["Items"].menuItems["Delete"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Items' > 'Delete' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Delete"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Items' > 'Delete'", additionalUserInfo: [
+                "menu_item": "Delete"
+            ])
         }
     }
 
@@ -174,14 +129,9 @@ extension XCUIApplication {
     var menubarItemOpenInNewWindow: XCUIElement {
         get throws {
             let element = menuBars.menuBarItems["Items"].menuItems["Open in New Window"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Items' > 'Open in New Window' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Open in New Window"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Items' > 'Open in New Window'", additionalUserInfo: [
+                "menu_item": "Open in New Window"
+            ])
         }
     }
 
@@ -189,14 +139,9 @@ extension XCUIApplication {
     var menubarItemOpenInNewTab: XCUIElement {
         get throws {
             let element = menuBars.menuBarItems["Items"].menuItems["Open in New Tab"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Items' > 'Open in New Tab' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Open in New Tab"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Items' > 'Open in New Tab'", additionalUserInfo: [
+                "menu_item": "Open in New Tab"
+            ])
         }
     }
 
@@ -206,29 +151,19 @@ extension XCUIApplication {
     
     var menubarWindowMenu: XCUIElement {
         get throws {
-            guard menuBars.menuBarItems["Window"].waitForExistence(timeout: 2) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "menuBarItems[\"Window\"] failed to exist within timeout",
-                    "timeout": "2 seconds",
-                    "available_menuBarItems":  menuBarItems.allElementsBoundByIndex.map { $0.identifier }
-                ])
-            }
-            return menuBars.menuBarItems["Window"]
-            
+            let element = menuBars.menuBarItems["Window"]
+            return try validateElement(element, description: "menuBarItems[\"Window\"]", timeout: 2, additionalUserInfo: [
+                "available_menuBarItems":  menuBarItems.allElementsBoundByIndex.map { $0.identifier }
+            ])
         }
     }
     
     var menubarWindowNew: XCUIElement {
         get throws {
-            guard menuBars.menuItems["New Window"].waitForExistence(timeout: 2) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "menuBarItems[\"Window\"] > \"New Window\" failed to exist within timeout",
-                    "timeout": "2 seconds",
-                    "available_menuBarItems":  menuBarItems.allElementsBoundByIndex.map { $0.identifier }
-                ])
-            }
-            
-            return menuBars.menuItems["New Window"]
+            let element = menuBars.menuItems["New Window"]
+            return try validateElement(element, description: "menuBarItems[\"Window\"] > \"New Window\"", timeout: 2, additionalUserInfo: [
+                "available_menuBarItems":  menuBarItems.allElementsBoundByIndex.map { $0.identifier }
+            ])
         }
     }
     
@@ -237,14 +172,9 @@ extension XCUIApplication {
         get throws {
             try menubarFileMenu.click()
             let element = menuBars.menuItems["Close"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'Close' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "Close"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'Close'", additionalUserInfo: [
+                "menu_item": "Close"
+            ])
         }
     }
 
@@ -252,14 +182,9 @@ extension XCUIApplication {
     var menubarWindowsCloseAll: XCUIElement {
         get throws {
             let element = menuBars.menuItems["closeAll:"]
-            guard element.waitForExistence(timeout: 3) else {
-                throw XCTestError(.failureWhileWaiting, userInfo: [
-                    "description": "Menu item 'closeAll:' failed to exist within timeout",
-                    "timeout": "3 seconds",
-                    "menu_item": "closeAll:"
-                ])
-            }
-            return element
+            return try validateElement(element, description: "Menu item 'closeAll:'", additionalUserInfo: [
+                "menu_item": "closeAll:"
+            ])
         }
     }
 }

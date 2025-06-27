@@ -28,14 +28,9 @@ extension XCUIApplication {
     func detailTitle(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = try win == nil ? win1 : win!
         let titleField = winS.textFields[AccessId.MainWindowDetailTitleField.rawValue].firstMatch
-        guard titleField.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail title field failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.MainWindowDetailTitleField.rawValue
-            ])
-        }
-        return titleField
+        return try validateElement(titleField, description: "Detail title field", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.MainWindowDetailTitleField.rawValue
+        ])
     }
 
     func detailTitleValue(win: XCUIElement? = nil) throws -> String {
@@ -46,14 +41,9 @@ extension XCUIApplication {
     func detailIDButtonCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = try win == nil ? win1 : win!
         let idButton = winS.buttons[AccessId.MainWindowDetailId.rawValue].firstMatch
-        guard idButton.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail ID button failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.MainWindowDetailId.rawValue
-            ])
-        }
-        return idButton
+        return try validateElement(idButton, description: "Detail ID button", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.MainWindowDetailId.rawValue
+        ])
     }
 
     func detailIDValue(win: XCUIElement? = nil) throws -> String? {
@@ -66,15 +56,9 @@ extension XCUIApplication {
     func detailItemURLButtonCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement =  try win == nil ? win1 : win!
         let urlButton = winS.buttons[AccessId.MainWindowDetailItemURL.rawValue]
-        guard urlButton.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail URL copy button failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.MainWindowDetailItemURL.rawValue
-            ])
-        }
-        
-        return urlButton
+        return try validateElement(urlButton, description: "Detail URL copy button", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.MainWindowDetailItemURL.rawValue
+        ])
     }
 
     func detailItemURLValue(win: XCUIElement? = nil) throws -> String? {
@@ -86,14 +70,9 @@ extension XCUIApplication {
     func detailCreateDateButtonToCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement =  try win == nil ? win1 : win!
         let createDateButton = winS.buttons[AccessId.MainWindowDetailCreatedDate.rawValue]
-        guard createDateButton.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail created date copy button failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.MainWindowDetailCreatedDate.rawValue
-            ])
-        }
-        return createDateButton
+        return try validateElement(createDateButton, description: "Detail created date copy button", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.MainWindowDetailCreatedDate.rawValue
+        ])
     }
 
 
@@ -113,14 +92,9 @@ extension XCUIApplication {
     func detailCompletedDateButtonToCopyToPasteBoard(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = try win == nil ? win1 : win!
         let completedDateButton = winS.buttons[AccessId.MainWindowDetailCompletedDate.rawValue]
-        guard completedDateButton.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail completed date button failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.MainWindowDetailCompletedDate.rawValue
-            ])
-        }
-        return completedDateButton
+        return try validateElement(completedDateButton, description: "Detail completed date button", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.MainWindowDetailCompletedDate.rawValue
+        ])
     }
 
 
@@ -147,15 +121,9 @@ extension XCUIApplication {
     func detailCompletionCheckBox(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = try win == nil ? win1 : win!
         let checkBox = winS.checkBoxes[AccessId.OptionalDatePickerDoneToggle.rawValue]
-       
-        guard checkBox.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail completion checkbox failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.OptionalDatePickerDoneToggle.rawValue
-            ])
-        }
-        return checkBox
+        return try validateElement(checkBox, description: "Detail completion checkbox", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.OptionalDatePickerDoneToggle.rawValue
+        ])
     }
 
 
@@ -172,13 +140,7 @@ extension XCUIApplication {
         // individually on macOS. Seems to always land on YYYY
         let winS: XCUIElement = try win == nil ? win1 : win!
         let datePicker = winS.datePickers.element
-        guard datePicker.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail completed date picker failed to exist within timeout",
-                "timeout": "3 seconds"
-            ])
-        }
-        return datePicker
+        return try validateElement(datePicker, description: "Detail completed date picker")
     }
 
     func detailCompletedDatePickerValue(win: XCUIElement? = nil) throws -> String {
@@ -211,18 +173,8 @@ extension XCUIApplication {
     func detailCompletedDatePickerOpenDialogue(win: XCUIElement? = nil) throws -> XCUIElement {
         let picker = try detailCompletedDatePicker(win: win)
         let dialogueElement = picker.steppers.children(matching: .decrementArrow).element
-        guard dialogueElement.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail completed date picker dialogue failed to exist within timeout",
-                "timeout": "3 seconds"
-            ])
-        }
-        return dialogueElement
+        return try validateElement(dialogueElement, description: "Detail completed date picker dialogue")
     }
-
-//    func detailCompletedDatePickerOpenDialogue_NON_THROWING(win: XCUIElement? = nil) -> XCUIElement {
-//        detailCompletedDatePicker_NON_THROWING(win: win).steppers.children(matching: .decrementArrow).element
-//    }
 
     func detailCompletedDatePickerSet(win: XCUIElement? = nil, _ date: Date) {
         // TODO: Fix the fragile code that assumes:
@@ -287,15 +239,9 @@ extension XCUIApplication {
     func detailNotes(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = try win == nil ? win1 : win!
         let notesElement = winS.textViews[AccessId.MainWindowDetailTextEditor.rawValue]
-
-        guard notesElement.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Detail notes text view failed to exist within timeout",
-                "timeout": "3 seconds",
-                "accessibilityIdentifier": AccessId.MainWindowDetailTextEditor.rawValue
-            ])
-        }
-        return notesElement
+        return try validateElement(notesElement, description: "Detail notes text view", additionalUserInfo: [
+            "accessibilityIdentifier": AccessId.MainWindowDetailTextEditor.rawValue
+        ])
     }
 
     func detailNotesValue(win: XCUIElement? = nil) throws -> String {

@@ -15,28 +15,18 @@ extension XCUIApplication {
         let winS: XCUIElement = win == nil ? try win1 : win!
 
         // First verify the sidebar outline structure exists
-        guard winS.outlines.firstMatch.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Sidebar outline failed to exist within timeout when accessing list '\(identifier)'",
-                "timeout": "3 seconds",
-                "window": winS.debugDescription,
-                "requested_identifier": identifier,
-            ])
-        }
+        _ = try validateElement(winS.outlines.firstMatch, description: "Sidebar outline when accessing list '\(identifier)'", additionalUserInfo: [
+            "window": winS.debugDescription,
+            "requested_identifier": identifier,
+        ])
 
         let listElement = winS.outlines.cells.containing(.staticText, identifier: identifier).element
 
         // Verify the specific list exists
-        guard listElement.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Sidebar list '\(identifier)' failed to exist within timeout",
-                "timeout": "3 seconds",
-                "window": winS.debugDescription,
-                "requested_identifier": identifier,
-            ])
-        }
-
-        return listElement
+        return try validateElement(listElement, description: "Sidebar list '\(identifier)'", additionalUserInfo: [
+            "window": winS.debugDescription,
+            "requested_identifier": identifier,
+        ])
     }
 
     func sidebarWaitingList(win: XCUIElement? = nil) throws -> XCUIElement {

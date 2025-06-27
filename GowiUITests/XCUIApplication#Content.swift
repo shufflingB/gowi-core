@@ -47,35 +47,21 @@ extension XCUIApplication {
         let winS: XCUIElement = win == nil ? try win1 : win!
         
         // First verify the outline structure exists
-        guard winS.outlines.firstMatch.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Content outline failed to exist within timeout when accessing row \(row)",
-                "timeout": "3 seconds",
-                "window": winS.debugDescription,
-                "requested_row": row
-            ])
-        }
+        _ = try validateElement(winS.outlines.firstMatch, description: "Content outline when accessing row \(row)", additionalUserInfo: [
+            "window": winS.debugDescription,
+            "requested_row": row
+        ])
         
         let outlineRows = winS.outlines.children(matching: .outlineRow)
         let element = outlineRows.element(boundBy: row)
         
         // Verify the specific row exists
-        guard element.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Content row \(row) failed to exist within timeout",
-                "timeout": "3 seconds",
-                "window": winS.debugDescription,
-                "requested_row": row,
-                "available_rows": outlineRows.count
-            ])
-        }
-        
-        return element
+        return try validateElement(element, description: "Content row \(row)", additionalUserInfo: [
+            "window": winS.debugDescription,
+            "requested_row": row,
+            "available_rows": outlineRows.count
+        ])
     }
-
-//    func contentRowTextField_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> XCUIElement {
-//        return contentRow_NON_THROWING(win: win, row).textFields[AccessId.MainWindowContentTitleField.rawValue]
-//    }
 
     func contentRowTextField(win: XCUIElement? = nil, _ row: Int) throws -> XCUIElement {
         let textField = textFields.matching(identifier: AccessId.MainWindowContentTitleField.rawValue).element(boundBy: row)
@@ -85,10 +71,6 @@ extension XCUIApplication {
             "text_field_identifier": AccessId.MainWindowContentTitleField.rawValue
         ])
     }
-
-//    func contentRowTextFieldValue_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> String {
-//        contentRowTextField_NON_THROWING(win: win, row).value as! String
-//    }
 
     func contentRowTextFieldValue(win: XCUIElement? = nil, _ row: Int) throws -> String {
         return try contentRowTextField(win: win, row).value as! String
@@ -118,11 +100,6 @@ extension XCUIApplication {
         }
     }
 
-//    func sidebarRowCountValue() -> Int {
-//        sidebarRowTextField(0).click()
-//        shortcutSelectEndOfList()
-//        return sidebarRows.count
-//    }
 
     /*
      Context menu - to use, need to right click on the row selection to open the menu first
