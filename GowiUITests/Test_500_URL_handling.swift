@@ -36,8 +36,10 @@ class Test_500_URL_handling: XCTestCase {
             return components.url!
         }()
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
-        NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.windows.count, 1,
+        
+        let num_windows = app.openVia(url: url.absoluteString)
+        
+        XCTAssertEqual(num_windows, 1,
                        "When the default URL route \(url) is opened a new window is created")
         XCTAssertTrue(try app.sidebarWaitingList(win: try app.win2).isSelected,
                       " And it displays the list of Waiting items"
@@ -56,8 +58,9 @@ class Test_500_URL_handling: XCTestCase {
         }()
 
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
-        NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.windows.count, 1,
+        let num_windows = app.openVia(url: url.absoluteString)
+        
+        XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to the Waiting Items is opened a new window is created")
         XCTAssertTrue(try app.sidebarWaitingList(win: try app.win2).isSelected,
                       " And it displays the list of Waiting Items"
@@ -76,8 +79,9 @@ class Test_500_URL_handling: XCTestCase {
         }()
 
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
-        NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.windows.count, 1,
+        let num_windows = app.openVia(url: url.absoluteString)
+        
+        XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to the Done Items is opened a new window is created")
         XCTAssertTrue(try app.sidebarDoneList(win: try app.win2).isSelected,
                       " And it displays the list of Done Items"
@@ -96,8 +100,9 @@ class Test_500_URL_handling: XCTestCase {
         }()
 
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
-        NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.windows.count, 1,
+        let num_windows = app.openVia(url: url.absoluteString)
+        
+        XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to All Items is opened a new window is created")
         XCTAssertTrue(try app.sidebarAllList(win: try app.win2).isSelected,
                       " And it displays the list of All Items"
@@ -124,8 +129,9 @@ class Test_500_URL_handling: XCTestCase {
         app.shortcutWindowsCloseAll()
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
 
-        NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.windows.count, 1,
+        let num_windows = app.openVia(url: url.absoluteString)
+        
+        XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to a specific Item is opened a new window is created")
         XCTAssertTrue(try app.sidebarAllList(win: try app.win2).isSelected,
                       " And it displays that Item"
@@ -160,8 +166,10 @@ class Test_500_URL_handling: XCTestCase {
 
         // Attempt to open route we setup in window 1 to verify it just raises rather than creating new window
         let winCount = app.windows.count
-        NSWorkspace.shared.open(url)
-        XCTAssertEqual(app.windows.count, winCount,
+        
+        let num_windows = app.openVia(url: url.absoluteString)
+        
+        XCTAssertEqual(num_windows,  winCount,
                        "When a url route is being displayed in an existing window it will not create new Windows")
         XCTAssertTrue(app.isKeyFrontWindow(app.win1_NON_THROWING),
                       "And it will just raise the existing window")
@@ -184,12 +192,13 @@ class Test_500_URL_handling: XCTestCase {
         let itemCount = try app.contentRows().count
         let winCount = app.windows.count
 
-        NSWorkspace.shared.open(url)
+        let num_windows = app.openVia(url: url.absoluteString, waitForNumOfWindows: winCount + 1)
+        
 
         XCTAssertEqual(try app.contentRows().count, itemCount + 1,
                        "When the new Item URL route is used it will always add a new Item"
         )
-        XCTAssertEqual(app.windows.count, winCount + 1,
+        XCTAssertEqual(num_windows, winCount + 1,
                        "That it will display in a new Window"
         )
 

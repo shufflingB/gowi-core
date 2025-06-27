@@ -145,4 +145,22 @@ extension XCUIApplication {
     var dialogueConfirmRevertCancel_NON_THROWING: XCUIElement {
         dialogs["alert"].buttons["Cancel"]
     }
+    
+    // Because NSWorkspace.shared.open is fire and forget and runs async of the tests; use this so that it will wait for t
+    // he expected number of windows to become available
+    func openVia(url: String, waitForNumOfWindows: Int = 1, timeout: TimeInterval = 5.0) -> Int {
+        NSWorkspace.shared.open(URL(string: url)!)
+        
+        let start = Date()
+        while Date().timeIntervalSince(start) < timeout {
+            if windows.count == waitForNumOfWindows {
+                return waitForNumOfWindows
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+        }
+        return windows.count
+    }
+    
+    
+    
 }

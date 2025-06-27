@@ -121,10 +121,26 @@ extension Main {
                 sideBarFilterSelected = filter
                 visibleItemIdsSelected = items
 
-            case .newItem(sideBarFilterSelected: _):
-                // This gets handled when we have the window's undo mananager available, as want to make it undoable, and when
-                // onAppear runs that undoManager is defined as nil
-                break
+            case let .newItem(sideBarFilterSelected: filter):
+                // For newItem routes, if we have an UndoManager available, create the item immediately
+                // Otherwise, it will be handled in onChange(of: windowUM)
+                if let windowUM = windowUM {
+                    log.debug("routeWindow: Creating new item immediately (UndoManager available)")
+                    withAnimation {
+                        let route = Main.itemAddNew(
+                            appModel: appModel, windowUM: windowUM,
+                            filterSelected: filter, parent: appModel.systemRootItem,
+                            filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                        )
+                        visibleItemIdsSelected = route.itemIdsSelected
+                        sideBarFilterSelected = filter
+                        // Update the route so that the newItem route can be triggered again if required.
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
+                    }
+                } else {
+                    log.debug("routeWindow: UndoManager not available, will handle in onChange(of: windowUM)")
+                    sideBarFilterSelected = filter
+                }
             }
         }
 

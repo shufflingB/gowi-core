@@ -43,10 +43,12 @@ class Test_050_ItemCreation: XCTestCase {
         XCTAssertEqual(try app.contentRows().count, 1)
     }
 
-    func test_200_canCreateANewItemByOpeningAnAppUrl() throws {
-        NSWorkspace.shared.open(URL(string: app.urlNewItem)!)
 
-        XCTAssertEqual(app.windows.count, 2,
+    
+    func test_200_canCreateANewItemByOpeningAnAppUrl() throws {
+       
+        let num_windows = app.openVia(url: app.urlNewItem, waitForNumOfWindows: 2)
+        XCTAssertEqual(num_windows, 2,
                        "When the app's 'new item' route is invoked it should open new window that displays an empty Item (not update existing window and annoy user)")
         try Self.checkNewItemLooksOkay(win: try app.win2, app)
     }
