@@ -43,16 +43,31 @@ extension XCUIApplication {
         assert(windows.firstMatch.identifier == win1_NON_THROWING.identifier)
     }
 
+    /// Generic helper function to validate XCUIElements with consistent error handling
+    /// - Parameters:
+    ///   - element: The XCUIElement to validate
+    ///   - description: Description of what element is being validated for error messages
+    ///   - timeout: Timeout in seconds (default: 3)
+    ///   - additionalUserInfo: Additional context for error messages
+    /// - Returns: The validated element if it exists within timeout
+    /// - Throws: XCTestError if element doesn't exist within timeout
+    func validateElement<T: XCUIElement>(_ element: T, description: String, timeout: TimeInterval = 3, additionalUserInfo: [String: Any] = [:]) throws -> T {
+        guard element.waitForExistence(timeout: timeout) else {
+            var userInfo: [String: Any] = [
+                "description": "\(description) failed to exist within timeout",
+                "timeout": "\(timeout) seconds"
+            ]
+            userInfo.merge(additionalUserInfo) { _, new in new }
+            throw XCTestError(.failureWhileWaiting, userInfo: userInfo)
+        }
+        return element
+    }
+
     private func winX(name: String) throws -> XCUIElement {
         let mainWindow = windows[name]
-        guard mainWindow.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Main window '\(name)' failed to exist within timeout",
-                "timeout": "3 seconds",
-                "available_windows": windows.allElementsBoundByIndex.map { $0.identifier }
-            ])
-        }
-        return mainWindow
+        return try validateElement(mainWindow, description: "Main window '\(name)'", additionalUserInfo: [
+            "available_windows": windows.allElementsBoundByIndex.map { $0.identifier }
+        ])
     }
     
     var win1: XCUIElement {

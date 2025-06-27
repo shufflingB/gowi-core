@@ -78,20 +78,12 @@ extension XCUIApplication {
 //    }
 
     func contentRowTextField(win: XCUIElement? = nil, _ row: Int) throws -> XCUIElement {
-   
         let textField = textFields.matching(identifier: AccessId.MainWindowContentTitleField.rawValue).element(boundBy: row)
-
-        // Verify the text field exists within the row
-        guard textField.waitForExistence(timeout: 3) else {
-            throw XCTestError(.failureWhileWaiting, userInfo: [
-                "description": "Content row \(row) textfield failed to exist within timeout",
-                "timeout": "3 seconds",
-                "requested_row": row,
-                "text_field_identifier": AccessId.MainWindowContentTitleField.rawValue
-            ])
-        }
         
-        return textField
+        return try validateElement(textField, description: "Content row \(row) textfield", additionalUserInfo: [
+            "requested_row": row,
+            "text_field_identifier": AccessId.MainWindowContentTitleField.rawValue
+        ])
     }
 
 //    func contentRowTextFieldValue_NON_THROWING(win: XCUIElement? = nil, _ row: Int) -> String {
