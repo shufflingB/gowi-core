@@ -31,4 +31,5 @@ enum AppMainUrlPath: String {
 enum AppMainUrlQuery: String {
     case itemId = "id"
     case filterId = "fid"
+    case searchText = "search"
 }

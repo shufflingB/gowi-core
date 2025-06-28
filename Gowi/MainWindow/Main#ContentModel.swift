@@ -9,17 +9,31 @@ import SwiftUI
 
 // The Main window's intents for its NavigationSplitView Content
 extension Main {
-    /// List of `Items` that the content should display
+    /// List of `Items` that the content should display, filtered by both sidebar selection and search text
     internal var contentItems: Array<Item> {
         withAnimation {
+            let baseItems: Array<Item>
             switch sideBarFilterSelected {
             case .waiting:
-                return contentItemsListWaiting
+                baseItems = contentItemsListWaiting
             case .done:
-                return contentItemsListDone
+                baseItems = contentItemsListDone
             case .all:
-                return contentItemsListAll
+                baseItems = contentItemsListAll
             }
+            
+            // Apply search filtering based on current search text
+            let searchText: String
+            switch sideBarFilterSelected {
+            case .all:
+                searchText = searchTextAll
+            case .done:
+                searchText = searchTextDone
+            case .waiting:
+                searchText = searchTextWaiting
+            }
+            
+            return Self.contentItemsFiltered(items: baseItems, searchText: searchText)
         }
     }
 
@@ -88,6 +102,23 @@ extension Main {
     private func contentOnMoveOfWaitingItems(_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
         withAnimation {
             appModel.rearrangeUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
+        }
+    }
+    
+    /// Filters items based on search text, matching against the item's title
+    /// - Parameters:
+    ///   - items: The array of items to filter
+    ///   - searchText: The search text to match against item titles
+    /// - Returns: Filtered array of items that match the search text, preserving original sorting
+    static func contentItemsFiltered(items: Array<Item>, searchText: String) -> Array<Item> {
+        // If search text is empty, return all items
+        guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return items
+        }
+        
+        // Filter items whose title contains the search text (case-insensitive)
+        return items.filter { item in
+            item.titleS.localizedCaseInsensitiveContains(searchText)
         }
     }
 }

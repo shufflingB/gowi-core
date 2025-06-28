@@ -23,7 +23,7 @@ extension Main {
         2. `newItem(sideBarFilterSelected: SidebarFilterOpt)` -  a new empty Item  in a new Window.
      */
     enum WindowGroupRoutingOpt: Hashable, Codable {
-        case showItems(openNewWindow: Bool, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>)
+        case showItems(openNewWindow: Bool, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>, searchText: String? = nil)
         case newItem(sideBarFilterSelected: SidebarFilterOpt)
     }
 
@@ -98,18 +98,27 @@ extension Main {
         ///   - sideBarFilterSelected: currently selected filter
         ///   - visibleItemIdsSelected: the filtered for visibility set of selected `Item#ourId`s
         ///   - route: binding to the route assigned to  the view  by `WindowGroup(id:for:content)`
+        ///   - searchTextAll: binding to search text for All items
+        ///   - searchTextDone: binding to search text for Done items
+        ///   - searchTextWaiting: binding to search text for Waiting items
         ///   - content: some View ...
         init(
             winId: Int,
             sideBarFilterSelected: Binding<SidebarFilterOpt>,
             visibleItemIdsSelected: Binding<Set<UUID>>,
             route: Binding<WindowGroupRoutingOpt?>,
+            searchTextAll: Binding<String>,
+            searchTextDone: Binding<String>,
+            searchTextWaiting: Binding<String>,
             @ViewBuilder content: () -> Content
         ) {
             self.winId = winId
             _windowGroupRoute = route
             _sideBarFilterSelected = sideBarFilterSelected
             _visibleItemIdsSelected = visibleItemIdsSelected
+            _searchTextAll = searchTextAll
+            _searchTextDone = searchTextDone
+            _searchTextWaiting = searchTextWaiting
             self.content = content()
         }
 
@@ -117,9 +126,14 @@ extension Main {
         /// - Parameter route: routing options to update the view with.
         private func routeWindow(_ route: WindowGroupRoutingOpt) {
             switch route {
-            case let .showItems(openNewWindow: _, sideBarFilterSelected: filter, contentItemIdsSelected: items):
+            case let .showItems(openNewWindow: _, sideBarFilterSelected: filter, contentItemIdsSelected: items, searchText: searchText):
                 sideBarFilterSelected = filter
                 visibleItemIdsSelected = items
+                
+                // Apply search text if provided
+                if let searchText = searchText {
+                    setSearchText(searchText, for: filter)
+                }
 
             case let .newItem(sideBarFilterSelected: filter):
                 // For newItem routes, if we have an UndoManager available, create the item immediately
@@ -176,12 +190,12 @@ extension Main {
                             visibleItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter
                             // Update the route so that the newItem route can be triggered again if required.
-                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
+                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
                         }
 
                     default:
                         log.debug("onChange(of: windowUM): Creating a default route")
-                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
                     }
                 }
                 .onOpenURL(perform: { url in
@@ -190,7 +204,7 @@ extension Main {
 
                     let defaultWinGrpRoute: WindowGroupRoutingOpt = .showItems(
                         openNewWindow: false,
-                        sideBarFilterSelected: .waiting, contentItemIdsSelected: []
+                        sideBarFilterSelected: .waiting, contentItemIdsSelected: [], searchText: nil
                     )
 
                     let decodedWinGrpRoute: WindowGroupRoutingOpt = Main.urlDecode(url)
@@ -217,10 +231,10 @@ extension Main {
                 .onChange(of: visibleItemIdsSelected, perform: { newValue in
                     if let route = windowGroupRoute {
                         switch route {
-                        case let .showItems(_, filterSelected, _):
+                        case let .showItems(_, filterSelected, _, searchText):
 //                            print("Is UPDATING route for window = \(winId)   because of selection")
                             $windowGroupRoute.wrappedValue = .showItems(openNewWindow: false, sideBarFilterSelected: filterSelected,
-                                                                        contentItemIdsSelected: newValue)
+                                                                        contentItemIdsSelected: newValue, searchText: searchText)
                         case .newItem(sideBarFilterSelected: _):
                             // Don't care because on arrival will create new and change route type
                             break
@@ -228,16 +242,16 @@ extension Main {
 
                     } else {
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
-                                                      contentItemIdsSelected: visibleItemIdsSelected)
+                                                      contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
                     }
                 })
                 .onChange(of: sideBarFilterSelected, perform: { newValue in
                     if let route = windowGroupRoute {
                         switch route {
-                        case let .showItems(_, _, contentItemIdsSelected):
+                        case let .showItems(_, _, contentItemIdsSelected, searchText):
 //                            print("Is UPDATING route for window = \(winId)  with  because of filter")
                             $windowGroupRoute.wrappedValue = .showItems(openNewWindow: false, sideBarFilterSelected: newValue,
-                                                                        contentItemIdsSelected: contentItemIdsSelected)
+                                                                        contentItemIdsSelected: contentItemIdsSelected, searchText: searchText)
                         case .newItem(sideBarFilterSelected: _):
                             // Don't care because on arrival will create new and change route type
                             break
@@ -245,7 +259,7 @@ extension Main {
 
                     } else {
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
-                                                      contentItemIdsSelected: visibleItemIdsSelected)
+                                                      contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
                     }
                 })
         }
@@ -258,6 +272,15 @@ extension Main {
 
         /// Binding to the route assigned to  the view in `@main` by `WindowGroup(id:for:content)`
         @Binding private var windowGroupRoute: WindowGroupRoutingOpt?
+        
+        /// Binding to search text for All items
+        @Binding private var searchTextAll: String
+        
+        /// Binding to search text for Done items
+        @Binding private var searchTextDone: String
+        
+        /// Binding to search text for Waiting items
+        @Binding private var searchTextWaiting: String
 
         @Environment(\.openWindow) private var openWindow
 
@@ -266,5 +289,20 @@ extension Main {
 
         private let winId: Int
         private let content: Content
+        
+        /// Sets the search text for the specified filter type
+        /// - Parameters:
+        ///   - searchText: The search text to set
+        ///   - filter: The filter type to update
+        private func setSearchText(_ searchText: String, for filter: SidebarFilterOpt) {
+            switch filter {
+            case .all:
+                searchTextAll = searchText
+            case .done:
+                searchTextDone = searchText
+            case .waiting:
+                searchTextWaiting = searchText
+            }
+        }
     }
 }

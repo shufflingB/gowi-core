@@ -24,7 +24,7 @@ struct ItemView: View {
     }
 
     private var itemURL: URL {
-        let routingOpts: Main.WindowGroupRoutingOpt = .showItems(openNewWindow: false, sideBarFilterSelected: stateView.sideBarFilterSelected, contentItemIdsSelected: [item.ourIdS])
+        let routingOpts: Main.WindowGroupRoutingOpt = .showItems(openNewWindow: false, sideBarFilterSelected: stateView.sideBarFilterSelected, contentItemIdsSelected: [item.ourIdS], searchText: nil)
         return Main.urlEncode(routingOpts)!
     }
 }
@@ -176,7 +176,7 @@ struct _ItemView_Previews: PreviewProvider {
     @Environment(\.undoManager) static var windowUm: UndoManager?
 
     static let url = Main.urlEncode(
-        .showItems(openNewWindow: false, sideBarFilterSelected: .waiting, contentItemIdsSelected: [item.ourIdS])
+        .showItems(openNewWindow: false, sideBarFilterSelected: .waiting, contentItemIdsSelected: [item.ourIdS], searchText: nil)
     )!
 
     static var previews: some View {

@@ -121,7 +121,7 @@ extension Main {
     ///   - contentItemIdsSelected: current list of `Item.ourId` selected in the content view.
     static func openNewTab(openWindow: OpenWindowAction, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>) {
         //
-        let route = WindowGroupRoutingOpt.showItems(openNewWindow: true, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected)
+        let route = WindowGroupRoutingOpt.showItems(openNewWindow: true, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: contentItemIdsSelected, searchText: nil)
 
         /*
          Opening a newTab is identical to opening a Window except if it gets added as a tab to the initial window that prevents it from

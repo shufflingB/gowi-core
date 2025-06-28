@@ -56,7 +56,10 @@ struct Main: View {
             winId: winId,
             sideBarFilterSelected: $sideBarFilterSelected,
             visibleItemIdsSelected: visibleContentItemIdsSelected,
-            route: $windowGroupRoute
+            route: $windowGroupRoute,
+            searchTextAll: $searchTextAll,
+            searchTextDone: $searchTextDone,
+            searchTextWaiting: $searchTextWaiting
         ) {
             WindowGroupUndoView {
                 NavigationSplitView(
@@ -105,6 +108,27 @@ struct Main: View {
     /// are being filtered.
     // Why Set<UUID> used (instead of Set<Item>)? Bc it is tractable to add RawRepresentable for UUID to enable the use of @SceneStorage and thus allow the selection to be persisted across application restarts.
     @SceneStorage("itemIdsSelected") internal var itemIdsSelected: Set<UUID> = []
+    
+    /// Search text for filtering the All items list
+    @SceneStorage("searchTextAll") internal var searchTextAll: String = ""
+    
+    /// Search text for filtering the Done items list  
+    @SceneStorage("searchTextDone") internal var searchTextDone: String = ""
+    
+    /// Search text for filtering the Waiting items list
+    @SceneStorage("searchTextWaiting") internal var searchTextWaiting: String = ""
+    
+    /// Current search text based on the selected sidebar filter
+    internal var currentSearchText: Binding<String> {
+        switch sideBarFilterSelected {
+        case .all:
+            return $searchTextAll
+        case .done:
+            return $searchTextDone
+        case .waiting:
+            return $searchTextWaiting
+        }
+    }
 
     @Environment(\.undoManager) internal var windowUM: UndoManager?
     @Environment(\.openWindow) internal var openWindow: OpenWindowAction

@@ -190,7 +190,16 @@ class Test_000_TestingEssentialsWork: XCTestCase {
             XCTAssertEqual(userInfo["requested_identifier"] as? String, "NonExistentList", "Error should contain requested identifier")
         }
     }
-    
+    // MARK: - Basic Search Functionality Tests
+
+    func test_000_searchFieldExistsForEachList() throws {
+        let list_locators = ["All": app.sidebarAllList, "Waiting": app.sidebarWaitingList, "Done": app.sidebarDoneList  ]
+        for (list_k, locator_v) in list_locators {
+            try locator_v(nil).click()
+            XCTAssertTrue(try app.searchField().exists, "Search field should exist in \(list_k) list")
+        }
+    }
+
 
 //    fun test_can_create_new_date
     

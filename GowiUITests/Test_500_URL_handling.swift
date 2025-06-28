@@ -140,6 +140,12 @@ class Test_500_URL_handling: XCTestCase {
 
     func test_100_ifNotNewItemRouteWillPreferToRaiseExistingWindowInsteadOfCreatingNew() throws{
         
+        /// TODO: This raise behaviour needs to verified for routes to
+        /// 1) individual items
+        /// 2) Status Lists
+        /// a) with a search filter, and
+        /// b) withoug search
+        
         // And not create new ones
         try app.sidebarAllList().click()
         try app.contentRowTextField(5).click()
@@ -171,12 +177,10 @@ class Test_500_URL_handling: XCTestCase {
         
         XCTAssertEqual(num_windows,  winCount,
                        "When a url route is being displayed in an existing window it will not create new Windows")
-        do {
-            XCTAssertTrue(app.isKeyFrontWindow(try app.win1),
+
+        XCTAssertTrue(app.isKeyFrontWindow(try app.win1),
                           "And it will just raise the existing window")
-        } catch {
-            XCTFail("Main window should exist during URL handling test: \(error)")
-        }
+
         XCTAssertEqual(itemId, try app.detailIDValue(),
                        "Displaying the previous information"
         )

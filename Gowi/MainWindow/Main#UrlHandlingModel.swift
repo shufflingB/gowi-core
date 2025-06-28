@@ -34,7 +34,7 @@ extension Main {
         components.host = AppUrlHost.mainWindow.rawValue
 
         switch routingOpts {
-        case let .showItems(_, sideBarFilterSelected, contentItemIdsSelected):
+        case let .showItems(_, sideBarFilterSelected, contentItemIdsSelected, searchText):
 
             components.path = AppMainUrlPath.showItems.rawValue
 
@@ -46,7 +46,12 @@ extension Main {
                 URLQueryItem(name: AppMainUrlQuery.itemId.rawValue, value: id.uuidString)
             }
 
-            let query = [queryFilterSelected] + queryItems
+            var query = [queryFilterSelected] + queryItems
+            
+            // Add search text if provided
+            if let searchText = searchText, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                query.append(URLQueryItem(name: AppMainUrlQuery.searchText.rawValue, value: searchText))
+            }
 
             components.queryItems = query.count > 0 ? query : nil
         case .newItem(sideBarFilterSelected: _):
@@ -102,6 +107,7 @@ extension Main {
 
         var sidebarSelected: SidebarFilterOpt = .all // Safe default
         var itemsSelected: Set<UUID> = [] // Safe default
+        var searchText: String? = nil // Safe default
 
         queryItems.forEach { (qi: URLQueryItem) in
             switch qi.name {
@@ -123,11 +129,13 @@ extension Main {
                 if let qiVal = qi.value, let id = UUID(uuidString: qiVal) {
                     itemsSelected.insert(id)
                 }
+            case AppMainUrlQuery.searchText.rawValue:
+                searchText = qi.value
             default:
                 log.warning("URL decode; \(#function) received request to decode query unknown query itemt (\(qi.name))")
             }
         }
 
-        return .showItems(openNewWindow: false, sideBarFilterSelected: sidebarSelected, contentItemIdsSelected: itemsSelected)
+        return .showItems(openNewWindow: false, sideBarFilterSelected: sidebarSelected, contentItemIdsSelected: itemsSelected, searchText: searchText)
     }
 }

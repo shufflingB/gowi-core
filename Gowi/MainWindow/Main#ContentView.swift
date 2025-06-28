@@ -30,11 +30,24 @@ extension Main {
 
         var body: some View {
             Layout(selections: stateView.$itemIdsSelected, items: stateView.contentItems, onMovePerform: stateView.contentOnMovePerform, contextMenu: contextMenu)
+                .searchable(text: stateView.currentSearchText, prompt: searchPrompt)
                 .focusedValue(\.undoWfa, .content)
                 .focused($isInitiallyFocused)
                 .onAppear {
                     isInitiallyFocused = true
                 }
+        }
+        
+        /// Dynamic search prompt text based on current sidebar filter
+        private var searchPrompt: Text {
+            switch stateView.sideBarFilterSelected {
+            case .all:
+                return Text("Search All Items")
+            case .done:
+                return Text("Search Done Items")
+            case .waiting:
+                return Text("Search Waiting Items")
+            }
         }
     }
 }
@@ -71,7 +84,8 @@ extension Main.ContentView {
                 let route = Main.WindowGroupRoutingOpt.showItems(
                     openNewWindow: true,
                     sideBarFilterSelected: stateView.sideBarFilterSelected,
-                    contentItemIdsSelected: itemIdsToActOn
+                    contentItemIdsSelected: itemIdsToActOn,
+                    searchText: nil
                 )
                 stateView.openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
             }

@@ -21,8 +21,10 @@ extension XCUIApplication {
             "window": winS.debugDescription
         ])
         
-        let query: XCUIElementQuery = winS.outlines.children(matching: .outlineRow)
-            .textFields
+        // Modified query to be more specific: look for text fields within outline rows only
+        // This avoids conflicts with search fields that might be at the same level
+        let outlineRows = winS.outlines.children(matching: .outlineRow)
+        let query: XCUIElementQuery = outlineRows.textFields
             .matching(identifier: AccessId.MainWindowContentTitleField.rawValue)
 
         // Wait a moment for the query to settle, but don't fail if no elements exist
@@ -69,7 +71,12 @@ extension XCUIApplication {
     }
 
     func contentRowTextField(win: XCUIElement? = nil, _ row: Int) throws -> XCUIElement {
-        let textField = textFields.matching(identifier: AccessId.MainWindowContentTitleField.rawValue).element(boundBy: row)
+        let winS: XCUIElement = win == nil ? try win1 : win!
+        
+        // Get text field from within the outline structure to avoid search field conflicts
+        let textField = winS.outlines.children(matching: .outlineRow)
+            .textFields.matching(identifier: AccessId.MainWindowContentTitleField.rawValue)
+            .element(boundBy: row)
         
         return try validateElement(textField, description: "Content row \(row) textfield", additionalUserInfo: [
             "requested_row": row,
@@ -155,5 +162,43 @@ extension XCUIApplication {
             }
         }
         return winS.outlines.menuItems[AccessId.MainWindowContentContextOpenInNewWindow.rawValue]
+    }
+    
+    // MARK: Search functionality test helpers
+    
+    /// Returns the search field for the content view
+    /// - Parameter win: Optional window element, defaults to win1 if not provided
+    /// - Returns: XCUIElement for the search field
+    func searchField(win: XCUIElement? = nil) throws -> XCUIElement {
+        let winS: XCUIElement = win == nil ? try win1 : win!
+        return try validateElement(winS.searchFields.firstMatch, description: "Search field")
+    }
+    
+    /// Performs a search in the content view
+    /// - Parameters:
+    ///   - searchText: The text to search for
+    ///   - win: Optional window element, defaults to win1 if not provided
+    func searchFor(_ searchText: String, win: XCUIElement? = nil) throws {
+        let searchField = try self.searchField(win: win)
+        searchField.click()
+        searchField.typeText(searchText)
+    }
+    
+    /// Clears the search field
+    /// - Parameter win: Optional window element, defaults to win1 if not provided
+    func clearSearch(win: XCUIElement? = nil) throws {
+        let searchField = try self.searchField(win: win)
+        searchField.click()
+        // Select all and delete
+        searchField.typeKey("a", modifierFlags: .command)
+        searchField.typeKey(.delete, modifierFlags: [])
+    }
+    
+    /// Gets the current search text
+    /// - Parameter win: Optional window element, defaults to win1 if not provided
+    /// - Returns: Current search text as a string
+    func currentSearchText(win: XCUIElement? = nil) throws -> String {
+        let searchField = try self.searchField(win: win)
+        return searchField.value as? String ?? ""
     }
 }
