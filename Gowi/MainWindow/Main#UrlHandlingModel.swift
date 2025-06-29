@@ -29,41 +29,19 @@ extension Main {
     /// - Parameter routingOpts: options that need encoding
     /// - Returns: URL containing the encoded data
     static func urlEncode(_ routingOpts: WindowGroupRoutingOpt) -> URL? {
-        var components = URLComponents()
-        components.scheme = AppUrlScheme
-        components.host = AppUrlHost.mainWindow.rawValue
+
 
         switch routingOpts {
         case let .showItems(_, sideBarFilterSelected, contentItemIdsSelected, searchText):
 
-            components.path = AppMainUrlPath.showItems.rawValue
-
-            let queryFilterSelected = URLQueryItem(
-                name: AppMainUrlQuery.filterId.rawValue, value: sideBarFilterSelected.rawValue
-            )
-
-            let queryItems: Array<URLQueryItem> = contentItemIdsSelected.map { id in
-                URLQueryItem(name: AppMainUrlQuery.itemId.rawValue, value: id.uuidString)
-            }
-
-            var query = [queryFilterSelected] + queryItems
+             return urlEncodeShowItems(sidebarFilter: sideBarFilterSelected, itemIdsSelected: contentItemIdsSelected, searchFilter: searchText)
             
-            // Add search text if provided
-            if let searchText = searchText, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                query.append(URLQueryItem(name: AppMainUrlQuery.searchText.rawValue, value: searchText))
-            }
-
-            components.queryItems = query.count > 0 ? query : nil
         case .newItem(sideBarFilterSelected: _):
-            break
+            return urlEncodeNewItem()
         }
-
-        guard let url = components.url else {
-            log.warning("Failed to construct openNewWindowURL")
-            return nil
-        }
-        return url
+      
     }
+    
 
     /// Entry point for decoding  a URL for the Main window into the app's equivalent routing information.
     /// - Parameter url: url for decoding

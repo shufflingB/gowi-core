@@ -9,10 +9,6 @@ import SwiftUI
 
 // The Main window's intents for its NavigationSplitView Sidebar
 extension Main {
-    /// Displayed Item filtering options and their corresponding label text
-    enum SidebarFilterOpt: String, CaseIterable, Codable {
-        case waiting = "Waiting", done = "Done", all = "All"
-    }
 
     /// List of all available Item filtering options
     var sideBarAvailableFilters: Array<SidebarFilterOpt> {

@@ -33,3 +33,44 @@ enum AppMainUrlQuery: String {
     case filterId = "fid"
     case searchText = "search"
 }
+
+/// Encode a URL that shows things in  GOWI
+func urlEncodeShowItems(sidebarFilter: SidebarFilterOpt?, itemIdsSelected: Set<UUID>?, searchFilter: String?) -> URL? {
+    var components = URLComponents()
+    components.scheme = AppUrlScheme
+    components.host = AppUrlHost.mainWindow.rawValue
+    components.path = AppMainUrlPath.showItems.rawValue
+
+    var query: Array<URLQueryItem> = []
+
+    if let sidebarFilter = sidebarFilter {
+        query.append(
+            URLQueryItem(name: AppMainUrlQuery.filterId.rawValue, value: sidebarFilter.rawValue)
+        )
+    }
+
+    if let itemIdsSelected = itemIdsSelected {
+        for id in itemIdsSelected {
+            query.append(
+                URLQueryItem(name: AppMainUrlQuery.itemId.rawValue, value: id.uuidString)
+            )
+        }
+    }
+
+    if let searchText = searchFilter, !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        query.append(
+            URLQueryItem(name: AppMainUrlQuery.searchText.rawValue, value: searchText)
+        )
+    }
+
+    components.queryItems = query.count > 0 ? query : nil
+    return components.url
+}
+
+func urlEncodeNewItem() -> URL? {
+    var components = URLComponents()
+    components.scheme = AppUrlScheme
+    components.host = AppUrlHost.mainWindow.rawValue
+    components.path = AppMainUrlPath.newItem.rawValue
+    return components.url
+}

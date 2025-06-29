@@ -34,10 +34,10 @@ extension Main {
 }
 
 #Preview {
-    @Previewable @State var tabSelected: Main.SidebarFilterOpt = .waiting
+    @Previewable @State var tabSelected: SidebarFilterOpt = .waiting
     
     Main.SidebarView.Layout(
         listSelected: $tabSelected,
-        listOfAvailableFilters: Array(Main.SidebarFilterOpt.allCases))
+        listOfAvailableFilters: Array(SidebarFilterOpt.allCases))
 
 }
