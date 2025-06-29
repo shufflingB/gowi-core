@@ -170,20 +170,24 @@ extension ItemView {
     }
 }
 
-struct _ItemView_Previews: PreviewProvider {
-    @StateObject static var appModel = AppModel.sharedInMemoryWithTestData
-    @StateObject static var item: Item = appModel.systemRootItem.childrenListAsSet.first!
-    @Environment(\.undoManager) static var windowUm: UndoManager?
 
-    static let url = Main.urlEncode(
+// MARK: - Previews
+
+
+#Preview("Item Detail with dummy data") {
+    @Previewable @StateObject var appModel = AppModel.sharedInMemoryWithTestData
+    
+    @Previewable @Environment(\.undoManager) var windowUm: UndoManager?
+    
+    let item: Item = appModel.systemRootItem.childrenListAsSet.first!
+    let url = Main.urlEncode(
         .showItems(openNewWindow: false, sideBarFilterSelected: .waiting, contentItemIdsSelected: [item.ourIdS], searchText: nil)
     )!
-
-    static var previews: some View {
-        ItemView.Layout(item: item, urlForItem: url, itemSetCompletionDate: { nv in
-            withAnimation {
-                appModel.itemsSetCompletionDate(externalUM: windowUm, items: [item], date: nv)
-            }
-        })
-    }
+    
+    
+    ItemView.Layout(item: item, urlForItem: url, itemSetCompletionDate: { nv in
+        withAnimation {
+            appModel.itemsSetCompletionDate(externalUM: windowUm, items: [item], date: nv)
+        }
+    })
 }
