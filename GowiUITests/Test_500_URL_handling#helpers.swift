@@ -77,7 +77,7 @@ extension Test_500_URL_handling {
         }
         
         // Step 4: Test URL routing - should raise existing window, not create new
-        _ = app.openVia(url: targetURL.absoluteString)
+        _ = app.openVia(url: targetURL)
         
         // Step 5: Verify the first window was raised, not created
         XCTAssertEqual(app.windows.count, 2,

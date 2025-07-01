@@ -47,7 +47,7 @@ class Test_050_ItemCreation: XCTestCase {
     
     func test_200_canCreateANewItemByOpeningAnAppUrl() throws {
        
-        let num_windows = app.openVia(url: app.urlNewItem, waitForNumOfWindows: 2)
+        let num_windows = app.openVia(url: urlEncodeNewItem()!, waitForNumOfWindows: 2)
         XCTAssertEqual(num_windows, 2,
                        "When the app's 'new item' route is invoked it should open new window that displays an empty Item (not update existing window and annoy user)")
         try Self.checkNewItemLooksOkay(win: try app.win2, app)

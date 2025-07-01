@@ -190,12 +190,16 @@ extension Main {
                             visibleItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter
                             // Update the route so that the newItem route can be triggered again if required.
-                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
+                            // Preserve current search text for the selected filter
+                            let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
+                            windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                         }
 
                     default:
                         log.debug("onChange(of: windowUM): Creating a default route")
-                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
+                        // Preserve current search text for the selected filter
+                        let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
+                        windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
                 }
                 .onOpenURL(perform: { url in
@@ -241,8 +245,10 @@ extension Main {
                         }
 
                     } else {
+                        // Preserve current search text for the selected filter
+                        let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
-                                                      contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
+                                                      contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
                 })
                 .onChange(of: sideBarFilterSelected, perform: { newValue in
@@ -258,10 +264,21 @@ extension Main {
                         }
 
                     } else {
+                        // Preserve current search text for the selected filter
+                        let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
-                                                      contentItemIdsSelected: visibleItemIdsSelected, searchText: nil)
+                                                      contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
                 })
+                .onChange(of: searchTextAll) { newValue in
+                    updateWindowRouteSearchText(for: .all, searchText: newValue)
+                }
+                .onChange(of: searchTextDone) { newValue in
+                    updateWindowRouteSearchText(for: .done, searchText: newValue)
+                }
+                .onChange(of: searchTextWaiting) { newValue in
+                    updateWindowRouteSearchText(for: .waiting, searchText: newValue)
+                }
         }
 
         /// The sideBar filter being applied
@@ -302,6 +319,44 @@ extension Main {
                 searchTextDone = searchText
             case .waiting:
                 searchTextWaiting = searchText
+            }
+        }
+        
+        /// Gets the current search text for the specified filter type
+        /// - Parameter filter: The filter type to get search text for
+        /// - Returns: Current search text for the filter, or nil if empty
+        private func getCurrentSearchText(for filter: SidebarFilterOpt) -> String? {
+            let searchText: String
+            switch filter {
+            case .all:
+                searchText = searchTextAll
+            case .done:
+                searchText = searchTextDone
+            case .waiting:
+                searchText = searchTextWaiting
+            }
+            return searchText.isEmpty ? nil : searchText
+        }
+        
+        /// Updates the window route when search text changes for the currently active filter
+        /// - Parameters:
+        ///   - filter: The filter type that had its search text changed
+        ///   - searchText: The new search text value
+        private func updateWindowRouteSearchText(for filter: SidebarFilterOpt, searchText: String) {
+            // Only update the route if this filter is currently active
+            guard filter == sideBarFilterSelected else { return }
+            
+            // Update the route with the new search text, preserving other values
+            if let route = windowGroupRoute {
+                switch route {
+                case let .showItems(_, sideBarFilter, contentItemIdsSelected, _):
+                    let newSearchText = searchText.isEmpty ? nil : searchText
+                    windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilter,
+                                                  contentItemIdsSelected: contentItemIdsSelected, searchText: newSearchText)
+                case .newItem:
+                    // Don't update newItem routes
+                    break
+                }
             }
         }
     }

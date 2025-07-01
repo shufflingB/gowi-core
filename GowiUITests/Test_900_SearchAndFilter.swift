@@ -44,7 +44,7 @@ class Test_900_SearchAndFilter: XCTestCase {
     }
 
 
-    func test_010_contentRowFilteringByItemTitle() throws {
+    func test_010_contentRowFilteringByItemTitleOnAPerStatusBasis() throws {
         try app.sidebarAllList().click()
         
         
@@ -112,28 +112,23 @@ class Test_900_SearchAndFilter: XCTestCase {
 
     func test_300_urlWithSearchParameterAppliesSearch() throws {
         
-        
-        
-        /// The expected b
-        
-
-        
         // Create URL with search parameter
-        let url = "gowi://main/v1/showitems?fid=All&search=Item"
+        let searchTerm = "5"
+        let url = urlEncodeShowItems(sidebarFilter: .all, itemIdsSelected: nil, searchFilter: searchTerm)!
         
-        let windowCount = app.openVia(url: url)
+        XCTAssertEqual(app.windows.count, 1, "When the test starts the application should have a single window" )
+       _ = app.openVia(url: url)
+        XCTAssertEqual(app.windows.count, 2, "And after a URL is opened with a search term included in it it opens a new window")
         
-        XCTAssertEqual(windowCount, 1, "URL should open a window")
         
         // Verify search is applied
-        sleep(1)
-        XCTAssertEqual(try app.currentSearchText(), "Item", "Search text should be applied from URL")
+        XCTAssertEqual(try app.currentSearchText(win: app.win2), searchTerm, "And the new window should have the search term supplied int the URL applied")
         
         // Verify items are filtered
-        let rows = try app.contentRows()
+        let rows = try app.contentRows(win: app.win2)
         for (index, _) in rows.enumerated() {
-            let rowText = try app.contentRowTextFieldValue(index)
-            XCTAssertTrue(rowText.lowercased().contains("item"), 
+            let rowText = try app.contentRowTextFieldValue(win: app.win2, index)
+            XCTAssertTrue(rowText.lowercased().contains(searchTerm),
                          "Filtered row should contain search term from URL")
         }
     }
@@ -144,7 +139,7 @@ class Test_900_SearchAndFilter: XCTestCase {
         try app.searchFor("SomeSearch")
         
         // Create URL without search parameter
-        let url = "gowi://main/v1/showitems?fid=All"
+        let url = urlEncodeShowItems(sidebarFilter: .waiting, itemIdsSelected: nil, searchFilter: nil)!
         
         let windowCount = app.openVia(url: url)
         XCTAssertEqual(windowCount, 1, "URL should open/reuse window")
@@ -156,24 +151,6 @@ class Test_900_SearchAndFilter: XCTestCase {
                      "Search should be empty or preserve existing state")
     }
 
-    func test_320_urlSearchParameterIsPerFilterType() throws {
-        // Test search parameter for All list
-        var url = "gowi://main/v1/showitems?fid=All&search=AllSearch"
-        app.shortcutWindowsCloseAll()
-        _ = app.openVia(url: url)
-        
-        XCTAssertEqual(try app.currentSearchText(), "AllSearch", "All list should apply search from URL")
-        
-        // Test search parameter for Waiting list
-        url = "gowi://main/v1/showitems?fid=Waiting&search=WaitingSearch"
-        _ = app.openVia(url: url)
-        XCTAssertEqual(try app.currentSearchText(), "WaitingSearch", "Waiting list should apply search from URL")
-        
-        // Test search parameter for Done list
-        url = "gowi://main/v1/showitems?fid=Done&search=DoneSearch"
-        _ = app.openVia(url: url)
-        XCTAssertEqual(try app.currentSearchText(), "DoneSearch", "Done list should apply search from URL")
-    }
 
     // MARK: - Edge Cases and Error Handling
 

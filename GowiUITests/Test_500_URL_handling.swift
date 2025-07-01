@@ -31,7 +31,7 @@ class Test_500_URL_handling: XCTestCase {
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
 
         let url: URL = urlEncodeShowItems(sidebarFilter: nil, itemIdsSelected: nil, searchFilter: nil)!
-        let num_windows = app.openVia(url: url.absoluteString)
+        let num_windows = app.openVia(url: url)
         XCTAssertEqual(num_windows, 1,
                        "When the default URL route \(url) is opened a new window is created")
         XCTAssertTrue(try app.sidebarWaitingList(win: try app.win2).isSelected,
@@ -44,7 +44,7 @@ class Test_500_URL_handling: XCTestCase {
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
 
         let url: URL = urlEncodeShowItems(sidebarFilter: .waiting, itemIdsSelected: nil, searchFilter: nil)!
-        let num_windows = app.openVia(url: url.absoluteString)
+        let num_windows = app.openVia(url: url)
         XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to the Waiting Items is opened a new window is created")
         XCTAssertTrue(try app.sidebarWaitingList(win: try app.win2).isSelected,
@@ -57,7 +57,7 @@ class Test_500_URL_handling: XCTestCase {
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
 
         let url: URL = urlEncodeShowItems(sidebarFilter: .done, itemIdsSelected: nil, searchFilter: nil)!
-        let num_windows = app.openVia(url: url.absoluteString)
+        let num_windows = app.openVia(url: url)
 
         XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to the Done Items is opened a new window is created")
@@ -71,7 +71,7 @@ class Test_500_URL_handling: XCTestCase {
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
 
         let url: URL = urlEncodeShowItems(sidebarFilter: .all, itemIdsSelected: nil, searchFilter: nil)!
-        let num_windows = app.openVia(url: url.absoluteString)
+        let num_windows = app.openVia(url: url)
         XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to All Items is opened a new window is created")
         XCTAssertTrue(try app.sidebarAllList(win: try app.win2).isSelected,
@@ -89,7 +89,7 @@ class Test_500_URL_handling: XCTestCase {
         XCTAssertEqual(app.windows.count, 0, "With no other windows open")
 
         let url = urlEncodeShowItems(sidebarFilter: .all, itemIdsSelected: [UUID(uuidString: itemId)!], searchFilter: nil)!
-        let num_windows = app.openVia(url: url.absoluteString)
+        let num_windows = app.openVia(url: url)
 
         XCTAssertEqual(num_windows, 1,
                        "When the URL route \(url) to a specific Item is opened a new window is created")
@@ -108,7 +108,7 @@ class Test_500_URL_handling: XCTestCase {
         )
     }
 
-    func test_102_test_urlRoutesToItemInStatusListRaiseEquivalentIfExists() throws {
+    func test_102_urlRoutesToItemInStatusListRaiseEquivalentIfExists() throws {
         try checkOpenedURLsRaiseEquivalentWindowsRatherThanCreatNewOnes(
             scenarioName: #function,
             sidebarFilter: .waiting,
@@ -135,7 +135,7 @@ class Test_500_URL_handling: XCTestCase {
         let itemCount = try app.contentRows().count
         let winCount = app.windows.count
 
-        let num_windows = app.openVia(url: url.absoluteString, waitForNumOfWindows: winCount + 1)
+        let num_windows = app.openVia(url: url, waitForNumOfWindows: winCount + 1)
 
         XCTAssertEqual(try app.contentRows().count, itemCount + 1,
                        "When the new Item URL route is used it will always add a new Item"

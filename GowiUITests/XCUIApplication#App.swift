@@ -173,8 +173,8 @@ extension XCUIApplication {
     
     // Because NSWorkspace.shared.open is fire and forget and runs async of the tests; use this so that it will wait for t
     // he expected number of windows to become available
-    func openVia(url: String, waitForNumOfWindows: Int = 1, timeout: TimeInterval = 5.0) -> Int {
-        NSWorkspace.shared.open(URL(string: url)!)
+    func openVia(url: URL, waitForNumOfWindows: Int = 1, timeout: TimeInterval = 5.0) -> Int {
+        NSWorkspace.shared.open(URL(string: url.absoluteString)!)
         
         let start = Date()
         while Date().timeIntervalSince(start) < timeout {
