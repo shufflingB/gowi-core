@@ -8,24 +8,40 @@
 import SwiftUI
 
 extension Main {
-    /// Creates the Content view component of the Main Window's `NavigationSplitView`
+    /**
+     ## Content Area View - Center Pane of Main Window
+     
+     The ContentView renders the middle pane of the NavigationSplitView, displaying a filterable
+     and searchable list of todo items. It provides the primary interaction area for item management.
+     
+     ### Features:
+     - **Item List**: Displays items filtered by sidebar selection and search text
+     - **Search Integration**: Uses SwiftUI's `.searchable()` for real-time filtering
+     - **Multi-Selection**: Supports multiple item selection with keyboard and mouse
+     - **Drag & Drop**: Enables reordering items within the list
+     - **Context Menus**: Right-click access to item operations
+     - **Keyboard Navigation**: Full keyboard accessibility for power users
+     
+     ### Focus Management:
+     Implements a SwiftUI/macOS workaround for proper focus handling in multi-window scenarios.
+     The focused values don't update properly when new windows open until a click occurs,
+     so this view forces initial focus to ensure menu bar commands work correctly.
+     */
     struct ContentView: View {
+        /// Reference to parent StateView for accessing state and intents
         let stateView: Main
 
-        
-        /* Workaround; SwiftUI - bless it's little macOS must die socks so it can be reinvented in
-        iPadOS - treats key window status and focus separately. So it doesn't matter if you've
-        just opened a new window on your app and can merrily keyboard navigate around one of its
-        windows. That Window will not update any of its SwiftUI Focused values until at least one
-         of its internal inputs has actively experienced a focusing event (macOS == clicked on,
-         typed into). Hence here, we end up faking that by using onAppear make the app's focusedValue
-         event fire which is useful for letting things like the menubar know if it's got a Window to work with, what state that Window is in etc ...
-         
-         (the alternative is to forget about using focusedValues and try and keep track in the app's
-         model, which would be a pity)
-         */
+        /// SwiftUI focus workaround for macOS multi-window focus handling
+        ///
+        /// macOS treats key window status and focus separately. New windows don't properly
+        /// update SwiftUI @FocusedValue until user interaction occurs. This property forces
+        /// initial focus on window appearance to ensure menu commands work immediately.
+        ///
+        /// Alternative would be tracking focus state manually in AppModel, but that would
+        /// break the clean separation between view state and business logic.
         @FocusState private var isInitiallyFocused: Bool
         
+        /// Tracks current focus area for menu command coordination
         @FocusedValue(\.undoWfa) private var wfa: UndoWorkFocusArea?
 
         var body: some View {

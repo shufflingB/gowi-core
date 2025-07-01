@@ -7,14 +7,42 @@
 
 import SwiftUI
 
+/**
+ ## Items Menu Commands
+ 
+ Implements the Items menu for todo item management, providing comprehensive
+ operations for creating, organizing, and manipulating todo items. The menu
+ intelligently adapts based on current window state and selection.
+ 
+ ### Menu Categories:
+ - **Creation**: New item creation with smart window management
+ - **Navigation**: Opening items in new windows/tabs
+ - **Priority Management**: Nudging item priorities up/down in waiting list
+ - **Deletion**: Safe item deletion with selection management
+ 
+ ### Smart Window Coordination:
+ Commands adapt behavior based on whether a Main window is currently focused:
+ - **With Window**: Updates existing window state directly
+ - **Without Window**: Creates new windows with appropriate routing
+ 
+ ### Priority Management:
+ The priority nudging system only operates on items in the "Waiting" filter,
+ following the design principle that priority is most relevant for incomplete tasks.
+ Complex index calculations ensure proper positioning after reordering operations.
+ 
+ ### Selection Intelligence:
+ Delete and priority operations work with current selection state, providing
+ visual feedback through button enable/disable states based on context.
+ */
 extension Menubar {
-    /// Builds the App specific parts of the Main window's  Menubar Items menu.
+    /// Builds the Items menu for comprehensive todo item management
     var itemCommands: some Commands {
         return CommandMenu("Items") {
             Section {
+                // Create new item with intelligent window management
                 Button("New Item") {
                     if let sideBarFilterSelected = mainStateView?.sideBarFilterSelected {
-                        // Then we have an existing Window, and we will update that to show the new Item ready for the user.
+                        // Update existing focused window to show new item
                         withAnimation {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: mainStateView?.windowUM,
@@ -26,8 +54,7 @@ extension Menubar {
                             mainStateView?.itemIdsSelected = route.itemIdsSelected
                         }
                     } else {
-                        // There is no window, so open a new window with the routing option necessary to create a new Item and show
-                        // it.
+                        // No focused window: create new window with newItem route
                         let route = Main.WindowGroupRoutingOpt.newItem(sideBarFilterSelected: .waiting)
                         openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: route)
                     }
@@ -37,8 +64,10 @@ extension Menubar {
             }
 
             Section {
+                // Open selected items in new tab (grouped with current window)
                 Button("Open in New Tab") {
-                    guard let sideBarFilterSelected = mainStateView?.sideBarFilterSelected, let contentItemIdsSelected = mainStateView?.itemIdsSelected else { return }
+                    guard let sideBarFilterSelected = mainStateView?.sideBarFilterSelected, 
+                          let contentItemIdsSelected = mainStateView?.itemIdsSelected else { return }
                     Main.openNewTab(
                         openWindow: openWindow,
                         sideBarFilterSelected: sideBarFilterSelected,
@@ -48,8 +77,10 @@ extension Menubar {
                 .accessibilityIdentifier(AccessId.ItemsMenuOpenItemInNewTab.rawValue)
                 .keyboardShortcut(KbShortcuts.itemsOpenInNewTab)
 
+                // Open selected items in standalone new window
                 Button("Open in New Window") {
-                    guard let sideBarFilterSelected = mainStateView?.sideBarFilterSelected, let contentItemIdsSelected = mainStateView?.itemIdsSelected else {
+                    guard let sideBarFilterSelected = mainStateView?.sideBarFilterSelected, 
+                          let contentItemIdsSelected = mainStateView?.itemIdsSelected else {
                         return
                     }
                     let route = Main.WindowGroupRoutingOpt.showItems(
@@ -63,29 +94,36 @@ extension Menubar {
                 .keyboardShortcut(KbShortcuts.itemsOpenInNewWindow)
             }
 
-            // MARK: Nudge Item priority Up & Down in Wait list Buttons
-
+            // MARK: Priority Management for Waiting Items
+            
             do {
+                // Priority nudging only works on items in the "Waiting" filter
+                // Priority determines display order: higher priority = higher in list
+                
+                /// Visual representation of target edge calculation:
                 /// --------------- tgtIdxEdge = 0
-                /// sourceItem  0
-                /// --------------- tgtIdxEdge = 1
+                /// sourceItem  0   (highest priority)
+                /// --------------- tgtIdxEdge = 1  
                 /// source Idx = 1
                 /// -------------- tgtIdxEdge = 2
-                /// source Idx =2
+                /// source Idx = 2  (lowest priority)
                 /// -------------- tgtIdxEdge = 3
 
                 let contentWaitingItems = mainStateView?.contentItemsListWaiting ?? []
 
+                // Map selected items to their indices in the waiting list
                 let sourceIndices: IndexSet = IndexSet(
                     mainStateView?.contentItemsSelected.compactMap { itemInSelection in
                         contentWaitingItems.firstIndex(where: { $0.ourId == itemInSelection.ourId })
                     } ?? [])
 
+                // Button enable/disable logic based on context and boundary conditions
                 let isDisabledBtnBase: Bool = mainStateView?.sideBarFilterSelected != .waiting || sourceIndices.count < 1
                 let isDisabledUpButton: Bool = isDisabledBtnBase || sourceIndices.first ?? 0 <= 0
                 let isDisabledDownButton: Bool = isDisabledBtnBase || sourceIndices.last ?? 0 >= contentWaitingItems.count - 1
 
                 Section {
+                    // Increase priority (move up in list)
                     Button("Nudge Waiting Item Priority Up") {
                         withAnimation {
                             guard
@@ -97,11 +135,15 @@ extension Menubar {
                             else {
                                 return
                             }
+                            // Target edge is the position above the item to nudge above
                             var tgtIdxsEdge: Int { idxInWaitingListNudgeAbove }
 
                             withAnimation {
                                 appModel.rearrangeUsingPriority(
-                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
+                                    externalUM: mainStateView?.windowUM, 
+                                    items: contentWaitingItems, 
+                                    sourceIndices: sourceIndices, 
+                                    tgtEdgeIdx: tgtIdxsEdge)
                             }
                         }
                     }
@@ -109,6 +151,7 @@ extension Menubar {
                     .disabled(isDisabledUpButton)
                     .keyboardShortcut(KbShortcuts.itemsSelectedNudgePriorityUp)
 
+                    // Decrease priority (move down in list)
                     Button("Nudge Waiting Item Priority Down") {
                         withAnimation {
                             guard
@@ -120,11 +163,15 @@ extension Menubar {
                             else {
                                 return
                             }
+                            // Target edge is one position below the item to nudge below
                             var tgtIdxsEdge: Int { idxInWaitingListNudgeBelow + 1 }
 
                             withAnimation {
                                 appModel.rearrangeUsingPriority(
-                                    externalUM: mainStateView?.windowUM, items: contentWaitingItems, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
+                                    externalUM: mainStateView?.windowUM, 
+                                    items: contentWaitingItems, 
+                                    sourceIndices: sourceIndices, 
+                                    tgtEdgeIdx: tgtIdxsEdge)
                             }
                         }
                     }
@@ -133,10 +180,12 @@ extension Menubar {
                     .keyboardShortcut(KbShortcuts.itemsSelectedNudgePriorityDown)
                 }
 
-                // MARK: Delete Items button
+                // MARK: Item Deletion
 
                 do {
-                    let isDisabledBtn: Bool = mainStateView?.contentItemsSelected == nil || mainStateView?.contentItemsSelected.count ?? 0 < 1
+                    // Only enable delete when items are selected
+                    let isDisabledBtn: Bool = mainStateView?.contentItemsSelected == nil || 
+                                              mainStateView?.contentItemsSelected.count ?? 0 < 1
 
                     Button("Delete") {
                         withAnimation {
@@ -145,6 +194,7 @@ extension Menubar {
                                 return
                             }
 
+                            // Delete items and update selection to follow Apple's selection conventions
                             mainStateView?.itemIdsSelected = Main.itemsDelete(
                                 appModel: appModel, windoUM: mainStateView?.windowUM,
                                 currentlyShowing: contentItems,

@@ -7,23 +7,31 @@
 
 import SwiftUI
 
-/*
- The aim with the shortcut definitions is for to try and adopt shortcuts that many people are familiar
- with.
-
- Concretely, they've been determined by examining in order how:
-     1. Finder
-     2. Notes, Reminders,
-     3. Xcode, Mail
-     4. Things
-
- ... do things for suitability before turning to bespoke creation.
-
- For future reference; where the origin of the shortcut is, is denoted alongside the shortcut
- iff it is not fairly obvious.
+/**
+ ## Keyboard Shortcuts Definition
+ 
+ Defines all keyboard shortcuts used throughout the Gowi application, following macOS
+ conventions and user expectations from familiar productivity applications.
+ 
+ ### Design Philosophy:
+ Shortcuts are chosen based on consistency with standard macOS applications, examined in priority order:
+ 1. **Finder**: File management operations
+ 2. **Notes, Reminders**: Text and task management  
+ 3. **Xcode, Mail**: Developer and communication tools
+ 4. **Things**: Task management specialist apps
+ 
+ Only when no clear convention exists do we create custom shortcuts.
+ 
+ ### Organization:
+ - **Primary Shortcuts**: Used directly in the application
+ - **Apple Default Extension**: Built-in SwiftUI shortcuts shared with tests
+ 
+ ### Rationale Documentation:
+ Each non-obvious shortcut includes its origin application to maintain consistency
+ and help future developers understand the choices made.
  */
 
-/// The default `KeyboardShortcut`s used in by app.
+/// Application-specific keyboard shortcuts
 struct KbShortcuts {
     static let fileSaveChanges = KeyboardShortcut("s", modifiers: .command)
 
@@ -46,17 +54,24 @@ struct KbShortcuts {
     // TODO: static let jumpToDetailTextEditor = KeyboardShortcut("j", modifiers: [.command]) // As in what A uses in Xcode
 }
 
-/*
- This extension contains kShortcuts that are built in to SwiftUI default configuration but that
- are not explicity used in app, i.e. deleting them will not cause the app to stop compiling
- (it may break the compilation of the tests though).
-
- They're definied here as shared dependency between the app and its tests because the judgement
- call is that the small increase in the app's code size is outweighed by the reduced risk of wtf
- moments occuring in the future from accidentally defining conflicting shortcuts in the app and/or
- testing code bases.
+/**
+ ## Apple Default Shortcuts Extension
+ 
+ This extension defines SwiftUI's built-in shortcuts that aren't explicitly used in the app
+ but are needed for UI testing consistency. While these shortcuts work automatically in SwiftUI,
+ defining them here provides several benefits:
+ 
+ ### Benefits:
+ - **Test Consistency**: UI tests can reference the same shortcut definitions
+ - **Conflict Prevention**: Prevents accidental conflicting shortcut definitions
+ - **Documentation**: Makes implicit shortcuts explicit for developer awareness
+ - **Future-Proofing**: Reduces risk of confusion when adding new shortcuts
+ 
+ ### Trade-off Analysis:
+ The small increase in app code size is outweighed by the reduced risk of conflicts
+ and "WTF moments" when shortcuts mysteriously don't work as expected.
  */
-extension KbShortcuts { // Apple default defined shortcuts - only used in the UI testing
+extension KbShortcuts { // Apple default shortcuts - primarily used in UI testing
     static let appQuit = KeyboardShortcut("q", modifiers: [.command])
     static let onExit = KeyboardShortcut(.escape)
     static let windowClose = KeyboardShortcut("w", modifiers: [.command])

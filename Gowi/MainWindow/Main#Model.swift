@@ -10,30 +10,59 @@ import SwiftUI
 
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
-// The Main window's top-level Intents
+/**
+ ## Main Window Business Logic Intents
+ 
+ This extension contains the "Intent" methods for the Main StateView - these are the business logic
+ operations that child views can call to perform actions. Following the MSV architecture pattern,
+ these intents bridge between the stateless views and the centralized AppModel.
+ 
+ ### Intent Categories:
+ - **Item Management**: Creating, deleting, and manipulating items with undo support
+ - **Selection Logic**: Smart selection management that mimics macOS app conventions
+ - **Filtering and Search**: Business logic for content filtering and search operations
+ 
+ ### Design Philosophy:
+ - All intents are static methods that take dependencies as parameters
+ - Each intent accepts an UndoManager for comprehensive undo/redo support
+ - Return values suggest UI state updates but don't directly modify view state
+ - Complex selection logic mimics Apple's Mail.app behavior for consistency
+ 
+ ### Undo Integration:
+ All intents coordinate with SwiftUI's per-window UndoManager to ensure that every
+ user action can be undone, maintaining a consistent and predictable user experience.
+ */
 extension Main {
     // MARK: Item's
 
-    /// Undoably add a new `Item` to a `filteredChildren` list of child items from the `parent` and update what is shown iff to make it visible
+    /// Creates a new item with intelligent filter and selection management
+    ///
+    /// Adds a new item to the top of the filtered list with smart filter switching to ensure
+    /// the new item is immediately visible. If currently viewing "Done" items, automatically
+    /// switches to "Waiting" since new items start as incomplete.
+    ///
     /// - Parameters:
-    ///   - appModel: App's shared instance of the ``AppModel``
-    ///   - windowUM: External `UndoManager` with which to register undo operations (usually SwiftUI's per-window instance)
-    ///   - filterSelected: Currently visible filter selected
-    ///   - parent: Item that should have the new Item added to its set of child `Item`
-    ///   - filteredChildren: Filtered list of the parent's children, that at the top of which, the new `Item` is to be inserted.
-    /// - Returns: The new `Item` and suggested updates to the filter and set of `Item`s being displayed such that the new `Item` would be made visible iff.
+    ///   - appModel: App's shared instance of the AppModel for business logic operations
+    ///   - windowUM: Window's UndoManager for undo registration (enables Cmd+Z)
+    ///   - filterSelected: Currently active sidebar filter
+    ///   - parent: Parent item to contain the new item (typically systemRootItem)
+    ///   - filteredChildren: Current filtered list for priority positioning
+    /// - Returns: Tuple containing the new item, recommended filter, and selection state
+    ///           for UI updates that ensure the new item is visible and selected
     static func itemAddNew(
         appModel: AppModel, windowUM: UndoManager?,
         filterSelected: SidebarFilterOpt,
         parent: Item, filteredChildren: Array<Item>
     ) -> (newItem: Item, filterSelected: SidebarFilterOpt, itemIdsSelected: Set<UUID>) {
         //
+        // Create new item at top of list (priority 0) with empty content
         let newItem = appModel.itemNewInsertInPriority(
             externalUM: windowUM,
             parent: parent, list: filteredChildren, where: 0,
             title: "", complete: nil, notes: "", children: []
         )
 
+        // Smart filter switching: if viewing "Done", switch to "Waiting" since new items are incomplete
         let newTabSelected: SidebarFilterOpt = filterSelected == .done ? .waiting : filterSelected
 
         return (newItem: newItem, filterSelected: newTabSelected, itemIdsSelected: [newItem.ourIdS])

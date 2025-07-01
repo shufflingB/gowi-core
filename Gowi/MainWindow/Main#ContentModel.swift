@@ -7,9 +7,28 @@
 
 import SwiftUI
 
-// The Main window's intents for its NavigationSplitView Content
+/**
+ ## Content Area Data and Filtering Logic
+ 
+ This extension provides the computed properties and filtering logic for the content area.
+ It coordinates between sidebar filter selection, search text, and the underlying item data
+ to produce the filtered list displayed in the UI.
+ 
+ ### Filtering Architecture:
+ - **Two-Stage Filtering**: First by completion status (sidebar), then by search text
+ - **Per-Filter Search**: Each filter (All/Waiting/Done) maintains independent search state
+ - **Real-Time Updates**: Automatic recalculation when any filter criteria changes
+ - **Performance**: Efficient filtering with minimal recalculation using SwiftUI's dependency tracking
+ */
 extension Main {
-    /// List of `Items` that the content should display, filtered by both sidebar selection and search text
+    /// Computed list of items for display, combining sidebar and search filtering
+    ///
+    /// This property orchestrates the two-stage filtering process:
+    /// 1. **Status Filtering**: Applies sidebar selection (All/Waiting/Done)
+    /// 2. **Text Filtering**: Applies search text for the current filter
+    ///
+    /// The filtering is reactive - any change to sidebar selection or search text
+    /// automatically triggers recalculation with smooth animations.
     internal var contentItems: Array<Item> {
         withAnimation {
             let baseItems: Array<Item>

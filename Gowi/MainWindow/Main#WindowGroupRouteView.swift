@@ -10,20 +10,51 @@ import SwiftUI
 import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
-// Routing for the Main Window
+/**
+ ## Window Routing and URL Handling for Main Window
+ 
+ This file implements the sophisticated routing system that enables Main windows to:
+ - Handle deep linking via custom gowi:// URLs
+ - Support multi-window coordination and state management
+ - Manage window creation, restoration, and tab grouping
+ - Coordinate search state across different filter views
+ 
+ ### Routing Architecture:
+ The system uses a three-layer approach:
+ 1. **WindowGroupRoutingOpt**: Defines available routes and their parameters
+ 2. **WindowGroupRouteView**: Handles routing logic and URL processing
+ 3. **SwiftUI WindowGroup**: Manages window lifecycle and route coordination
+ 
+ ### Key Features:
+ - **Smart Window Management**: Reuses existing windows when possible
+ - **URL Deep Linking**: Converts gowi:// URLs to internal routing
+ - **Search State Persistence**: Maintains separate search text per filter
+ - **Undo Integration**: Coordinates with UndoManager for reliable state
+ */
 extension Main {
-    /**
-     Defines the routes that the Main window supports
-
-     Options available:
-        1. `showItem(openNewWindow:sideBarFilterSelected: contentItemIdsSelected)`:  A route to a window that displays the `Item` specified.
-            If `openNewWindow` is
-                1. `false` -  it will only create a new window if there no existing app windows visibly rendering the route requested.
-                2. `true` - it will always open a new window, regardless of if any existing window is displaying the route in the app.
-        2. `newItem(sideBarFilterSelected: SidebarFilterOpt)` -  a new empty Item  in a new Window.
-     */
+    /// Defines the available routing options for Main windows
+    ///
+    /// This enum encapsulates all the ways a Main window can be configured,
+    /// whether through internal navigation, URL deep linking, or new window creation.
+    ///
+    /// ### Route Types:
+    /// - **showItems**: Display specific items with optional search filtering
+    /// - **newItem**: Create a new item and show it in the window
+    ///
+    /// ### Window Creation Logic:
+    /// When `openNewWindow` is false, the system will reuse existing windows that
+    /// already display the requested route. When true, it always creates new windows.
     enum WindowGroupRoutingOpt: Hashable, Codable {
+        /// Display items with specific filter and selection state
+        /// - Parameters:
+        ///   - openNewWindow: Force new window creation vs reusing existing
+        ///   - sideBarFilterSelected: Which filter tab to show (All/Waiting/Done)
+        ///   - contentItemIdsSelected: Set of item IDs to select
+        ///   - searchText: Optional search text to apply to the filter
         case showItems(openNewWindow: Bool, sideBarFilterSelected: SidebarFilterOpt, contentItemIdsSelected: Set<UUID>, searchText: String? = nil)
+        
+        /// Create a new item and display it
+        /// - Parameter sideBarFilterSelected: Which filter to use for the new item
         case newItem(sideBarFilterSelected: SidebarFilterOpt)
     }
 
@@ -57,37 +88,28 @@ extension Main {
          - handles turning open-by-URL requests into the correct app `WindowGroup` routing i.e. routing via URL and internal mechanisms endeavour to share a common code paths.
       */
 
+    /// Main window routing coordinator that handles URL deep linking and window state management
+    ///
+    /// This view wraps the Main window content and provides sophisticated routing capabilities
+    /// including URL handling, multi-window coordination, and state persistence.
+    ///
+    /// ### Lifecycle Event Handling:
+    /// **onAppear**: Initial route processing for new windows or restored sessions
+    /// **onChange(windowUM)**: Handles UndoManager-dependent operations like item creation
+    /// **onOpenURL**: Processes gowi:// URLs and coordinates window raising/creation
+    /// **onChange(state)**: Updates route binding when window state changes
+    ///
+    /// ### Multi-Window Coordination:
+    /// The system intelligently decides whether to:
+    /// - Route the current window to handle a request
+    /// - Raise an existing window that already shows the requested content
+    /// - Create a new window for the request
+    ///
+    /// ### UndoManager Dependency:
+    /// Some operations (like creating new items) require the window's UndoManager.
+    /// The system defers these operations until the UndoManager becomes available,
+    /// using its availability as a signal that the window is fully initialized.
     struct WindowGroupRouteView<Content: View>: View {
-        /*
-         ## What each of the content modifiers are used to handle
-
-          - `onAppear`
-            - Is the first thing that runs for the `View`
-            - If the View has been:
-                - Instantiated by the `WindowGroup` mechanism, say as the result of `openWindow`  or via the homebrewed `openTab` mechanism then the `View` will
-                have been passed a route for the Window AND it  updates the contents of the Window to be in alignment with that route. NB: Does not handle new window
-                routing requests, bc there is no access to the Window's `UndoManager` when `onAppear`runs (see next comment for more on that).
-            - Created via the Window restore mechanism, say as a result on being started and has picked up its initial settings from `@SceneStorage` then it will have a default  route
-            assigned to it that does not reflect the windows actual route state. And in that case we do nothing here and instead create an updated route for the window when the `@State` vars
-            become available for use, as signalled to the app  through the conveniece proxy of detecting `onChange(of: SwiftUIsWindowUndoManager)`
-
-         - `onChange(of: windowUM)`
-            - Gets run after `onAppear` when the window's `UndoManager` has been setup and is injected into the `View`
-            - Used to handle:
-                1. New item routing requests  that can't be done  in the onAppear handler because the `UndoManager` is not available.
-                2. Setting up the route for any window that has been restored on restart.
-
-         - `onOpenURL`
-            - Only gets run on one of the app's Windows (keyWindow?) to handle a URL request.
-            - Handles decoding the routing information from the URL or if that fails sets up a sensible default
-            - Then:
-                - If there is no route configured for the current window; it will directly route the window itself.
-                - Else, it will use openWindow to either raise a different existing  window  from the app that contains the desired route.  Or create a new one if no existing window
-                in the app matches the route requested.
-
-         - Other onChange(of:) ...
-            Used to update individual attributes of the `WindowGroup`'s  route up to date.
-         */
 
         /// App's `AppModel` shared instance
         @EnvironmentObject var appModel: AppModel
@@ -122,8 +144,14 @@ extension Main {
             self.content = content()
         }
 
-        /// Update the view to be in alignment with the suppliedrouting options.
-        /// - Parameter route: routing options to update the view with.
+        /// Updates the window's UI state to match the specified route
+        ///
+        /// This method translates route parameters into actual UI state changes,
+        /// including filter selection, item selection, and search text application.
+        /// For newItem routes, it may create the item immediately or defer creation
+        /// until the UndoManager becomes available.
+        ///
+        /// - Parameter route: The routing configuration to apply to this window
         private func routeWindow(_ route: WindowGroupRoutingOpt) {
             switch route {
             case let .showItems(openNewWindow: _, sideBarFilterSelected: filter, contentItemIdsSelected: items, searchText: searchText):
@@ -138,6 +166,8 @@ extension Main {
             case let .newItem(sideBarFilterSelected: filter):
                 // For newItem routes, if we have an UndoManager available, create the item immediately
                 // Otherwise, it will be handled in onChange(of: windowUM)
+                // For newItem routes, create the item if UndoManager is available
+                // Otherwise defer creation until UndoManager becomes available
                 if let windowUM = windowUM {
                     log.debug("routeWindow: Creating new item immediately (UndoManager available)")
                     withAnimation {
@@ -148,11 +178,12 @@ extension Main {
                         )
                         visibleItemIdsSelected = route.itemIdsSelected
                         sideBarFilterSelected = filter
-                        // Update the route so that the newItem route can be triggered again if required.
+                        // Convert to showItems route to allow repeat newItem requests
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected)
                     }
                 } else {
                     log.debug("routeWindow: UndoManager not available, will handle in onChange(of: windowUM)")
+                    // Set filter now, item creation deferred
                     sideBarFilterSelected = filter
                 }
             }
@@ -170,9 +201,9 @@ extension Main {
                 }
 
                 .onChange(of: windowUM) { newValue in
-                    // Has nothing really to do with windowUM per-se, but detecting when SWiftUI defines it is a convenient place
-                    // to detect when both the View has appeared AND the SwiftUI @State has been injected and is ready
-                    // for processings. And since we new need the window's `UndoManager` we'll use that point.
+                    // UndoManager availability signals that the window is fully initialized
+                    // and @State variables are ready for use. This is the right time to handle
+                    // operations that were deferred during onAppear due to UndoManager dependency.
 
                     guard let windowUM = newValue else {
                         return
@@ -180,6 +211,7 @@ extension Main {
 
                     switch windowGroupRoute {
                     case let .newItem(sideBarFilterSelected: filter):
+                        // Handle deferred item creation now that UndoManager is available
                         log.debug("onChange(of: windowUM): Creating a new Item and a route to it")
                         withAnimation {
                             let route = Main.itemAddNew(
@@ -189,21 +221,20 @@ extension Main {
                             )
                             visibleItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter
-                            // Update the route so that the newItem route can be triggered again if required.
-                            // Preserve current search text for the selected filter
+                            // Convert to showItems route to enable repeat newItem operations
                             let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
                             windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                         }
 
                     default:
+                        // Initialize default route for restored windows
                         log.debug("onChange(of: windowUM): Creating a default route")
-                        // Preserve current search text for the selected filter
                         let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected, contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
                 }
                 .onOpenURL(perform: { url in
-                    // Decode the URL into a RoutingOpt (only runs on the keyWindow and the @Main's setup )
+                    // Handle gowi:// URL deep linking (runs on key window)
                     log.debug("onOpenURL: winId = \(winId) is handling \(url)  ")
 
                     let defaultWinGrpRoute: WindowGroupRoutingOpt = .showItems(
@@ -218,58 +249,62 @@ extension Main {
                         }()
 
                     if windowGroupRoute == nil {
+                        // No existing route: configure this window directly
                         log.debug("onOpenURL: Existing route not set for winId \(winId), updating the window contents directly")
                         routeWindow(decodedWinGrpRoute)
                         windowGroupRoute = decodedWinGrpRoute
 
                     } else {
+                        // Existing route: use WindowGroup system to find/create appropriate window
                         log.debug("onOpenURL: Existing route defined for winId \(winId), using indirect routing to see if this window or any othercan handle or if app needs to open new window")
 
-                        // NB: Have to use dispatch, bc without SwiftUI will not make the window it finds or creates the keyWindow, i.e.
-                        // raise it above the others and make it prominent to the user.
+                        // Dispatch required to ensure window becomes key and raises properly
                         DispatchQueue.main.async {
                             openWindow(id: GowiApp.WindowGroupId.Main.rawValue, value: decodedWinGrpRoute)
                         }
                     }
                 })
                 .onChange(of: visibleItemIdsSelected, perform: { newValue in
+                    // Update route when item selection changes
                     if let route = windowGroupRoute {
                         switch route {
                         case let .showItems(_, filterSelected, _, searchText):
-//                            print("Is UPDATING route for window = \(winId)   because of selection")
+                            // Update selection in existing showItems route
                             $windowGroupRoute.wrappedValue = .showItems(openNewWindow: false, sideBarFilterSelected: filterSelected,
                                                                         contentItemIdsSelected: newValue, searchText: searchText)
                         case .newItem(sideBarFilterSelected: _):
-                            // Don't care because on arrival will create new and change route type
+                            // newItem routes will be converted to showItems routes when processed
                             break
                         }
 
                     } else {
-                        // Preserve current search text for the selected filter
+                        // Create initial route preserving current search state
                         let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
                                                       contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
                 })
                 .onChange(of: sideBarFilterSelected, perform: { newValue in
+                    // Update route when sidebar filter selection changes
                     if let route = windowGroupRoute {
                         switch route {
                         case let .showItems(_, _, contentItemIdsSelected, searchText):
-//                            print("Is UPDATING route for window = \(winId)  with  because of filter")
+                            // Update filter in existing showItems route
                             $windowGroupRoute.wrappedValue = .showItems(openNewWindow: false, sideBarFilterSelected: newValue,
                                                                         contentItemIdsSelected: contentItemIdsSelected, searchText: searchText)
                         case .newItem(sideBarFilterSelected: _):
-                            // Don't care because on arrival will create new and change route type
+                            // newItem routes will be converted to showItems routes when processed
                             break
                         }
 
                     } else {
-                        // Preserve current search text for the selected filter
+                        // Create initial route preserving current search state
                         let currentSearchText = getCurrentSearchText(for: sideBarFilterSelected)
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
                                                       contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
                 })
+                // Update route when search text changes for any filter
                 .onChange(of: searchTextAll) { newValue in
                     updateWindowRouteSearchText(for: .all, searchText: newValue)
                 }
@@ -339,6 +374,12 @@ extension Main {
         }
         
         /// Updates the window route when search text changes for the currently active filter
+        ///
+        /// This method ensures that route state stays synchronized with search text changes,
+        /// but only updates the route when the changed search text corresponds to the
+        /// currently active sidebar filter. This prevents unnecessary route updates when
+        /// users have different search text for different filters.
+        ///
         /// - Parameters:
         ///   - filter: The filter type that had its search text changed
         ///   - searchText: The new search text value
@@ -346,7 +387,7 @@ extension Main {
             // Only update the route if this filter is currently active
             guard filter == sideBarFilterSelected else { return }
             
-            // Update the route with the new search text, preserving other values
+            // Update the route with the new search text, preserving other route parameters
             if let route = windowGroupRoute {
                 switch route {
                 case let .showItems(_, sideBarFilter, contentItemIdsSelected, _):
@@ -354,7 +395,7 @@ extension Main {
                     windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilter,
                                                   contentItemIdsSelected: contentItemIdsSelected, searchText: newSearchText)
                 case .newItem:
-                    // Don't update newItem routes
+                    // newItem routes don't need search text updates
                     break
                 }
             }
