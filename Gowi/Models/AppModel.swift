@@ -12,19 +12,65 @@ import os
 
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
+/**
+ ## Application Model - Centralized Business Logic and Data Management
+ 
+ The AppModel serves as the single source of truth for the entire Gowi application, implementing
+ the "Model" layer of the MSV (Model StateView View) architecture pattern. It manages CoreData
+ persistence, CloudKit synchronization, undo operations, and all business logic.
+ 
+ ### Architecture Role:
+ - **Singleton Pattern**: Single shared instance (`AppModel.shared`) across the entire app
+ - **Business Logic**: All item operations, filtering, and data manipulation
+ - **CoreData Stack**: Manages NSPersistentCloudKitContainer and view context
+ - **CloudKit Sync**: Handles iCloud synchronization for multi-device support
+ - **Undo Management**: Coordinates with SwiftUI's UndoManager for comprehensive undo/redo
+ - **Change Tracking**: Publishes `hasUnPushedChanges` for UI state updates
+ 
+ ### Key Relationships:
+ - `systemRootItem`: The hierarchical root of all user items (hidden from UI)
+ - `viewContext`: CoreData's main thread context for UI operations
+ - `container`: NSPersistentCloudKitContainer managing persistence and sync
+ 
+ ### Testing Support:
+ - `GOWI_TESTMODE=0`: In-memory database with no test data
+ - `GOWI_TESTMODE=1`: In-memory database with 10 test items
+ - Default: Persistent database with CloudKit sync
+ 
+ ### Thread Safety:
+ - All UI operations use the main thread `viewContext`
+ - Background sync operations handled by CoreData/CloudKit
+ - Published properties automatically update UI via @ObservableObject
+ */
 final class AppModel: ObservableObject, Identifiable {
-    /// Root parent `Item` from which all other `Item` in the system are descended.
+    /// Hierarchical root item for all user-created items
+    ///
+    /// This special Item serves as the parent for all user items but is never displayed in the UI.
+    /// It provides a consistent hierarchical structure and simplifies CoreData relationships.
+    /// All business logic operations traverse from this root to find and manipulate user items.
     let systemRootItem: Item
 
-    /// Indicates if there are changes in the system that have not been persisted to the backend
+    /// Real-time indicator of unsaved changes
+    ///
+    /// Automatically tracks CoreData's `hasChanges` state and publishes updates to the UI.
+    /// Used by the save/revert toolbar buttons and the exit confirmation dialog.
+    /// Updated via Combine publisher that monitors `viewContext.hasChanges`.
     @Published private(set) var hasUnPushedChanges: Bool = false
 
-    /// App's default `NSManagedObjectContext`
+    /// Main thread CoreData context for all UI operations
+    ///
+    /// This is the primary context for reading and writing data from SwiftUI views.
+    /// Automatically merges changes from CloudKit sync operations and publishes
+    /// changes to trigger UI updates via @FetchRequest and other CoreData/SwiftUI integrations.
     var viewContext: NSManagedObjectContext {
         container.viewContext
     }
     
-    /// DEBUG: Print all item data to console
+    /// Debug utility for development and testing
+    ///
+    /// Prints detailed information about all items in the system to the console.
+    /// Useful for debugging test failures, data corruption issues, and understanding
+    /// the current state of the item hierarchy during development.
     func debugPrintAllItems() {
         let allItems = Array(systemRootItem.childrenListAsSet)
         print("=== DEBUG: All Items Data ===")
@@ -42,13 +88,24 @@ final class AppModel: ObservableObject, Identifiable {
         print("=== End Debug ===")
     }
 
-    /**
-     Creates a shared instance of the `AppModel`.
-
-     If the Environmental variable are set before:
-        - `GOWI_TESTMODE` == `0` - create the shared instance in memory only with no test data, i.e. not live data.
-        - `GOWI_TESTMODE` == `1` - create the shared instance in memory only but with some test data, i.e. not live data.
-     */
+    /// Global shared instance with environment-based configuration
+    ///
+    /// The singleton AppModel instance used throughout the application. Configuration is determined
+    /// by the `GOWI_TESTMODE` environment variable, enabling different modes for testing and development:
+    ///
+    /// - **No GOWI_TESTMODE**: Production mode with persistent CloudKit-enabled database
+    /// - **GOWI_TESTMODE=0**: Testing mode with in-memory database, no test data (clean slate)
+    /// - **GOWI_TESTMODE=1**: Testing mode with in-memory database, 10 pre-populated test items
+    /// - **Other values**: Defaults to mode 0 (in-memory, no test data)
+    ///
+    /// ## Usage in Tests:
+    /// ```bash
+    /// # For clean testing environment
+    /// GOWI_TESTMODE=0 xcodebuild test
+    /// 
+    /// # For testing with sample data
+    /// GOWI_TESTMODE=1 xcodebuild test
+    /// ```
     static let shared: AppModel = {
         if let testMode = ProcessInfo.processInfo.environment["GOWI_TESTMODE"] {
             switch testMode {
@@ -67,39 +124,56 @@ final class AppModel: ObservableObject, Identifiable {
         }
     }()
 
-    /// Create a shared instance for unit testing - don't worry about this extra defn bc `static var` is `lazy` by default
+    /// Testing instance with clean in-memory database
+    ///
+    /// Lazy-loaded instance for unit tests that need a clean slate without any pre-existing data.
+    /// Uses in-memory storage so tests don't affect the user's real data or require cleanup.
     static var sharedInMemoryNoTestData: AppModel = AppModel(inMemory: true)
 
-    /// Create a shared instance for unit testing - again don't worry about this extra defn bc `static var` is `lazy` by default
+    /// Testing instance with pre-populated test data
+    ///
+    /// Lazy-loaded instance for tests that need sample data to work with. Creates 10 test items
+    /// with one item having a predictable ID (testingMode1ourIdPresent) for reliable testing.
+    /// The other 9 items have random UUIDs but provide a realistic data set for UI testing.
     static var sharedInMemoryWithTestData: AppModel = {
         let am = AppModel(inMemory: true)
-        am.addTestData(.one)
+        am.addTestData(.one)  // Adds 10 items, with one having a known ID for testing
         return am
     }()
 
-    /// Initialise the `AppModel`
-    /// - Parameter inMemory: Specify if the app should run with a non-persistent,  in-memory only backend db (useful for testing)
+    /// Initializes the AppModel with CoreData stack and CloudKit integration
+    ///
+    /// Sets up the complete data persistence infrastructure including CoreData container,
+    /// CloudKit synchronization, undo management, and change tracking. The initialization
+    /// process creates or retrieves the system root item and establishes reactive bindings.
+    ///
+    /// - Parameter inMemory: When true, uses in-memory storage for testing (disables CloudKit)
+    ///                      When false, uses persistent storage with full CloudKit sync
     init(inMemory: Bool = false) {
-        // Suggested by https://www.hackingwithswift.com/forums/macos/app-sometimes-crashes-on-launch-since-monterey/10918/15476
-        // and https://developer.apple.com/forums/thread/711122
-        // as a workaround for tendency to crash on startup bc of possible Apple/SwiftUI bug
-        // Force assignment of main thread to the correct correct queue/thread
-        // TODO: Try removing this to see if any problems
+        // Workaround for macOS Monterey+ startup crashes in SwiftUI apps
+        // Force NSApplication initialization on main thread to prevent race conditions
+        // See: https://www.hackingwithswift.com/forums/macos/app-sometimes-crashes-on-launch-since-monterey/10918/15476
+        // TODO: Test if this workaround is still needed in current macOS versions
         _ = NSApplication.shared
 
+        // Initialize CoreData container with CloudKit integration
         container = Self.CKContainerGet(
             modelName: "Gowi",
             cloudKitContainerName: Self.cloudKitContainerName(),
             inMemory: inMemory
         )
+        
+        // Configure undo manager for comprehensive undo/redo support
         let vcUM = UndoManager()
-        vcUM.groupsByEvent = false
+        vcUM.groupsByEvent = false  // Manual grouping for fine-grained control
         container.viewContext.undoManager = vcUM
 
+        // Create or retrieve the system root item (varies by storage mode)
         let dbgTitle = inMemory ? Self.RootInMemoryTitle : Self.RootNormalTitle
-
         systemRootItem = Self.rootItemGet(container.viewContext, dbgTitle: dbgTitle)
 
+        // Establish reactive binding for change tracking
+        // Publishes updates when CoreData context has unsaved changes
         container.viewContext.publisher(for: \.hasChanges).eraseToAnyPublisher().sink { newHasChangesValue in
             self.hasUnPushedChanges = newHasChangesValue
         }
@@ -229,15 +303,25 @@ final class AppModel: ObservableObject, Identifiable {
         return item
     }
 
+    /// Workaround for CloudKit/CoreData bug with in-memory items persisting
+    ///
+    /// ## The Problem:
+    /// When switching between in-memory testing mode and normal persistent mode, CoreData
+    /// sometimes incorrectly persists items that should only exist in memory. This creates
+    /// duplicate root items that break the application's single-root assumption.
+    ///
+    /// ## Bug Reproduction Steps:
+    /// 1. Run app with `GOWI_TESTMODE=1` (in-memory + test data) 
+    /// 2. Switch to normal mode - correctly finds single persistent root
+    /// 3. Run normal mode again - incorrectly detects TWO roots (persistent + leaked in-memory)
+    ///
+    /// ## Root Cause Theory:
+    /// CloudKit sync appears to incorrectly sync in-memory items that should never be persisted,
+    /// possibly due to timing issues between memory mode switching and CloudKit initialization.
+    ///
+    /// - TODO: Test if this bug still occurs in newer CoreData/CloudKit versions
+    /// - TODO: Consider alternative root item identification strategies
     private static func houseKeepingHackToCleanUpInMemoryProblem(_ moc: NSManagedObjectContext, bogusRoot badRoot: Item) {
-        // TODO: Check if can remove this hack to fix buggy CloudKit/CoreData creation of persisted InMemory items.
-        // To recreate issue:
-        // 1) Run app with InMemory /dev/nul back end storage at least once -> creates an InMemory root item
-        // 2) Fire up the app in normal mode, get normal, correctly picks up single, normal root item from backend.
-        // 3) Fire up the ap a second time in _normal_ mode and it (wtf) detects two root items. First one is correct one, second one
-        // is the it should not be persisting, inMemory only one.
-        // Best I can figure is that it is the CloudKit syn that is not pushing inMemory one back around to us, i.e. doesn't know how to
-        // handle properly.
         guard badRoot.root == true else {
             log.warning("\(#function) erroneously called on a non-root item \n \(badRoot)")
             return

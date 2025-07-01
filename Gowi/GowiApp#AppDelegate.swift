@@ -12,46 +12,61 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 
 extension GowiApp {
     /**
-     Enable access to `AppKit` functionallity that currently has no equivalent in `SwiftUI`
-
-     > Warning:  The class's instance property ``appModel`` must be defined, i.e. not `nil`,  before this delegate will function correctly (use either the parent's `onAppear` or
-     `onChange(of: appModel, perform:)` methods to do this)
-
-     > Note: Why not `init(appModel:AppMmodel)`?  Bc unable to determine how to get `@NSApplicationDelegateAdaptor` to forward arguments to the init method.
+     ## AppKit Integration Delegate
+     
+     Provides access to AppKit functionality that has no SwiftUI equivalent, particularly
+     application lifecycle events that require AppKit's NSApplicationDelegate.
+     
+     ### Key Responsibilities:
+     - **Application Termination**: Handles `applicationShouldTerminate` to check for unsaved changes
+     - **Modal Dialogs**: Displays save/discard/cancel dialog when exiting with unsaved data
+     - **AppKit Bridge**: Enables AppKit features not available in pure SwiftUI
+     
+     ### Architecture Notes:
+     - Uses late binding for `appModel` since `@NSApplicationDelegateAdaptor` doesn't support constructor injection
+     - Must be configured via `appModel` property assignment in parent's `onAppear`
+     - Integrates with SwiftUI lifecycle while providing AppKit-specific functionality
+     
+     > Warning: The `appModel` property must be set before delegate methods are called, 
+     > typically in the parent's `onAppear` handler.
      */
-
     class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-        /**
-         Shared instance of the App's ``AppModel`` that must be set after it is available in the parent in either the parent's `onAppear` or `onChange(of: appModel, perform:)`
-         methods.
-
-         */
+        /// Late-bound reference to the application's model
+        ///
+        /// This property is set by the parent app during the `onAppear` phase since
+        /// `@NSApplicationDelegateAdaptor` doesn't support dependency injection through initializers.
         var appModel: AppModel?
 
-        /**
-         Delegate that gets run when the application is about to exit. In this app runs a modal dialogue to determine what to do when the user attempts to exit the app with unsaved data.
-
-         Modal provides the options to either:
-         - Save and exit.
-         - Exit without saving.
-         - Cancel exit
-         */
+        /// Handles application termination with unsaved data protection
+        ///
+        /// Called when the user attempts to quit the application. If there are unsaved changes,
+        /// presents a modal dialog with three options:
+        /// - **Save & Exit**: Persists changes and terminates
+        /// - **Exit**: Discards changes and terminates  
+        /// - **Cancel Exit**: Returns to application without terminating
+        ///
+        /// - Parameter sender: The NSApplication instance requesting termination
+        /// - Returns: TerminateReply indicating whether to proceed with termination
         func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
             guard let appModel = appModel else {
                 log.fault("\(#function) expected appModel has not been set prior to being called; unable to check for unsaved data before app exit")
                 return .terminateNow
             }
             /*
-                Why directly run the modal dialogue here and not via SwiftUI?
-
-                Because:
-                    1. There are no SwiftUI native options for detecting when the application is about to exit and stopping it iff
-                    necessary.
-                    2. When the app is exited there may be no windows and all of the SwiffUI options for displaying a confirmation
-                    dialogue rely on having an existing window. i.e. if didn't use `NSAlert` here would have to resort to hacky open zero
-                    sized window type code.
-
-                    => Less hacky.
+             ## Why Use NSAlert Instead of SwiftUI Dialog?
+             
+             NSAlert is used here instead of SwiftUI's native dialog system because:
+             
+             1. **No SwiftUI Exit Detection**: SwiftUI has no native way to intercept and cancel 
+                application termination
+             2. **Window Independence**: App termination may occur when no windows are open, 
+                but SwiftUI dialogs require an existing window context
+             3. **Modal Blocking**: NSAlert provides true modal behavior that blocks the termination
+                process until user responds
+             4. **Less Complexity**: Avoids hacky workarounds like creating invisible windows 
+                just to host SwiftUI dialogs
+                
+             This AppKit solution is cleaner and more reliable for this specific use case.
              */
             if appModel.hasUnPushedChanges {
                 let alert = NSAlert()

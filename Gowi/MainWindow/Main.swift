@@ -10,21 +10,37 @@ import SwiftUI
 import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)
 
-/*
- Creates the app's Main window top-level structure, links in the `@SwiftUI` state  and defines the Intents for all component
- views used to render the window.
-
- In this file ...
- - How the Main window's functional structure is to be integrated i.e. routing and undo.
- - The top-level visible structural components, this case `NavigationSplitView`
- - Window level, `@SwiftUI` state injection into the window's. data model.
-
- Elsewhere in `extension` files named according to there view or model roles:
- - the sub-views that render the components
- - the model  __Intents__ functionallity for the top-level and sub-views.
+/**
+ ## Main Window StateView - MSV Architecture Root
+ 
+ The Main struct serves as the primary "StateView" in the MSV (Model StateView View) architecture,
+ coordinating between the centralized AppModel and pure stateless views. It manages window-level
+ state, routing, and provides a consistent interface for all main window functionality.
+ 
+ ### Architecture Responsibilities:
+ - **State Coordination**: Manages window-specific state (selections, filters, search)
+ - **Routing Integration**: Handles URL-based navigation and window management  
+ - **Undo Integration**: Coordinates with SwiftUI's UndoManager for comprehensive undo/redo
+ - **Intent Provision**: Provides business logic methods to child views as dependencies
+ - **Multi-Window Support**: Each window instance maintains independent state
+ 
+ ### File Organization:
+ This file contains only the core StateView structure and initialization. Functionality is
+ organized across extension files:
+ 
+ - `Main#Model.swift`: Business logic intents and state management
+ - `Main#ContentView.swift`: Content area view and model
+ - `Main#SideBarView.swift`: Sidebar view and model  
+ - `Main#DetailView.swift`: Detail panel view and model
+ - `Main#WindowGroupRouteView.swift`: URL routing and window management
+ - `Main#Toolbar.swift`: Window toolbar implementation
+ 
+ ### SwiftUI Structure:
+ Uses `NavigationSplitView` for the classic three-pane layout:
+ - **Sidebar**: Filter lists (All, Waiting, Done)
+ - **Content**: Item list with search capability
+ - **Detail**: Selected item editor with rich formatting
  */
-
-/// Creates the app's Main window top-level structure, links in the `@SwiftUI` state  and defines the Intents for all component views used to render the window.
 struct Main: View {
     /// App's `AppModel` shared instance
     @EnvironmentObject internal var appModel: AppModel
