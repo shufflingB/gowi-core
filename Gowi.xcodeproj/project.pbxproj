@@ -154,6 +154,7 @@
 		FFB7E0EB2DF8B7AB00553A40 /* CloudKitConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitConfig.swift; sourceTree = "<group>"; };
 		FFC950A92E104A6000E27E26 /* AppStatusFilters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStatusFilters.swift; sourceTree = "<group>"; };
 		FFC950AC2E119FD300E27E26 /* Test_500_URL_handling#helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test_500_URL_handling#helpers.swift"; sourceTree = "<group>"; };
+		FFC950AE2E1409D500E27E26 /* README_DEVS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_DEVS.md; sourceTree = "<group>"; };
 		FFDE6CDC28EF109E009736E3 /* Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menubar.swift; sourceTree = "<group>"; };
 		FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KbShortcuts.swift; sourceTree = "<group>"; };
 		FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
@@ -224,6 +225,7 @@
 			children = (
 				FFB7E0E92DF8B4DB00553A40 /* DevScripts */,
 				FF99805D2934E42A003F343E /* README.md */,
+				FFC950AE2E1409D500E27E26 /* README_DEVS.md */,
 				FF99805E29350B40003F343E /* LICENSE */,
 				FFB7E0E52DF8A02700553A40 /* CLAUDE.md */,
 				FFF85F402944D3E800E498F2 /* DevAssets */,
@@ -489,6 +491,7 @@
 			shellScript = (
 				"# Type a script or drag a script file from your workspace to insert its path.",
 				"$SRCROOT/DevScripts/generate-cloudkit-config.sh",
+				"",
 				"",
 				"",
 				"",
