@@ -10,6 +10,11 @@ import SwiftUI
 import XCTest
 
 extension XCUIApplication {
+    /// Standard date formatter for parsing date button values in detail view
+    ///
+    /// Uses short date and time style for consistency with how the app displays dates
+    /// in the detail view's date copy buttons. This formatter is used for parsing
+    /// create date and completed date button text values.
     static let detailDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -17,6 +22,13 @@ extension XCUIApplication {
         return formatter
     }()
 
+    /// Date formatter specifically for parsing date picker display values
+    ///
+    /// The macOS date picker returns values in "yyyy-MM-dd HH:mm" format when accessed
+    /// via UI automation. This formatter is used to parse those picker values back into Date objects.
+    ///
+    /// - Warning: This formatter assumes a specific date format and may break with locale changes
+    /// - TODO: Make this resistant to locale changes
     var detailCompletedDateFormatter: DateFormatter {
         let displayedPickerDateFmt = DateFormatter()
         // TODO: Make this resistant to locale changes
@@ -176,11 +188,33 @@ extension XCUIApplication {
         return try validateElement(dialogueElement, description: "Detail completed date picker dialogue")
     }
 
+    /// Sets the date picker to a specific date value
+    ///
+    /// This method manipulates the macOS date picker by tabbing through its components
+    /// and typing values. It's a complex workaround for the limitations of UI automation
+    /// with native date pickers.
+    ///
+    /// - Parameters:
+    ///   - win: Optional window element, defaults to win1 if not provided
+    ///   - date: The target date to set in the picker
+    ///
+    /// ## Implementation Notes:
+    /// This implementation makes several fragile assumptions that may break in future macOS versions:
+    /// 1. Date picker format is always "dd/MM/yyyy, HH:mm"
+    /// 2. Clicking on the picker focuses on the year (yyyy) component first
+    /// 3. Tab navigation moves through components in a predictable order
+    /// 4. There's no direct way to target individual date components via accessibility
+    ///
+    /// ## Known Limitations:
+    /// - **Locale dependent**: Assumes specific date format that may vary by locale
+    /// - **macOS version dependent**: Tab order and focus behavior may change
+    /// - **Fragile**: No error recovery if tab navigation doesn't work as expected
+    ///
+    /// - Warning: This method contains fragile UI automation code that may need updates for future macOS versions
+    /// - TODO: Investigate more robust date picker interaction methods
+    /// - TODO: Add error handling for failed component navigation
+    /// - TODO: Make locale-independent or detect picker format dynamically
     func detailCompletedDatePickerSet(win: XCUIElement? = nil, _ date: Date) {
-        // TODO: Fix the fragile code that assumes:
-        // 1) Picker date format is always "dd/MM/yyyy, HH:mm"
-        // 2) If possible, clicking on the picker always focuses on the yyyy part of the date
-        // (currently no known way to specify individual selection of individual parts directly)
         let dateFormatter = DateFormatter()
 
         // Adjust date from left to right in the UI display as normally happens when user works on.

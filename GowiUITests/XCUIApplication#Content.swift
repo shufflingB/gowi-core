@@ -167,17 +167,27 @@ extension XCUIApplication {
     // MARK: Search functionality test helpers
     
     /// Returns the search field for the content view
+    ///
+    /// Locates the SwiftUI `.searchable()` search field within the content area of the specified window.
+    /// The search field is used for filtering content items by title text.
+    ///
     /// - Parameter win: Optional window element, defaults to win1 if not provided
     /// - Returns: XCUIElement for the search field
+    /// - Throws: XCTestError if search field cannot be found within timeout
     func searchField(win: XCUIElement? = nil) throws -> XCUIElement {
         let winS: XCUIElement = win == nil ? try win1 : win!
         return try validateElement(winS.searchFields.firstMatch, description: "Search field")
     }
     
     /// Performs a search in the content view
+    ///
+    /// Clicks on the search field and types the provided search text. This will trigger the
+    /// SwiftUI search filtering behavior and update the visible content rows to match the search.
+    ///
     /// - Parameters:
-    ///   - searchText: The text to search for
+    ///   - searchText: The text to search for (will filter content items by title)
     ///   - win: Optional window element, defaults to win1 if not provided
+    /// - Throws: XCTestError if search field cannot be found or interacted with
     func searchFor(_ searchText: String, win: XCUIElement? = nil) throws {
         let searchField = try self.searchField(win: win)
         searchField.click()
@@ -185,7 +195,12 @@ extension XCUIApplication {
     }
     
     /// Clears the search field
+    ///
+    /// Removes all text from the search field using Cmd+A (select all) followed by Delete.
+    /// This will restore the content view to show all unfiltered items.
+    ///
     /// - Parameter win: Optional window element, defaults to win1 if not provided
+    /// - Throws: XCTestError if search field cannot be found or interacted with
     func clearSearch(win: XCUIElement? = nil) throws {
         let searchField = try self.searchField(win: win)
         searchField.click()
@@ -195,8 +210,13 @@ extension XCUIApplication {
     }
     
     /// Gets the current search text
+    ///
+    /// Retrieves the current text value from the search field. Returns empty string if
+    /// no search is active.
+    ///
     /// - Parameter win: Optional window element, defaults to win1 if not provided
-    /// - Returns: Current search text as a string
+    /// - Returns: Current search text as a string (empty if no search active)
+    /// - Throws: XCTestError if search field cannot be found
     func currentSearchText(win: XCUIElement? = nil) throws -> String {
         let searchField = try self.searchField(win: win)
         return searchField.value as? String ?? ""

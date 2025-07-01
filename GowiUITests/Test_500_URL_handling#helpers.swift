@@ -8,6 +8,43 @@ import Darwin
 import XCTest
 
 extension Test_500_URL_handling {
+    /// Tests whether URL routing correctly raises existing windows instead of creating new ones
+    ///
+    /// This is a comprehensive test helper that validates the core URL routing behavior: when a URL
+    /// is opened that matches the state of an existing window, that window should be raised to the
+    /// front rather than creating a duplicate window.
+    ///
+    /// ## Test Flow (6-Step Process):
+    /// 1. **Setup**: Start with a single window and clear any existing search state
+    /// 2. **Configure Target State**: Set the desired sidebar filter, item selection, and search text
+    /// 3. **URL Generation**: Create a URL that encodes the current window state
+    /// 4. **Window Creation**: Create a second window with *different* state to ensure proper window identification
+    /// 5. **URL Routing Test**: Open the URL and verify it raises the first window (not the second)
+    /// 6. **State Validation**: Confirm the raised window displays the correct item and search state
+    ///
+    /// ## Parameters:
+    /// - `scenarioName`: Test function name for error messages (typically `#function`)
+    /// - `sidebarFilter`: Which sidebar list to select (All/Waiting/Done), or nil for default
+    /// - `itemIdSelected`: Whether to select a specific item (uses row 5 as test item)
+    /// - `searchFor`: Search text to apply, or nil for no search
+    ///
+    /// ## Key Behaviors Tested:
+    /// - **Window Raising**: Existing windows with matching state are raised, not duplicated
+    /// - **Search Integration**: URLs with search parameters correctly match windows with active searches
+    /// - **State Preservation**: Raised windows maintain their item selection and search state
+    /// - **Multi-Window Handling**: Correct window identification when multiple windows exist
+    ///
+    /// ## Usage:
+    /// ```swift
+    /// func test_urlRoutesToItemInFilteredStatusListRaiseEquivalentIfExists() throws {
+    ///     try checkOpenedURLsRaiseEquivalentWindowsRatherThanCreatNewOnes(
+    ///         scenarioName: #function,
+    ///         sidebarFilter: .waiting,
+    ///         itemIdSelected: true,
+    ///         searchFor: "5"
+    ///     )
+    /// }
+    /// ```
     func checkOpenedURLsRaiseEquivalentWindowsRatherThanCreatNewOnes(
         scenarioName: String,
         sidebarFilter: SidebarFilterOpt?,

@@ -8,10 +8,31 @@
 import SwiftUI
 import XCTest
 
+/**
+ ## Menu Bar Testing Extensions
+ 
+ This extension provides access to all menu bar items and menu commands in the Gowi application.
+ All menu item accessors use the `validateElement()` pattern for robust error handling with timeouts
+ and detailed error messages.
+ 
+ ### Menu Structure:
+ - **Gowi Menu**: Application-level commands (Quit)
+ - **File Menu**: Document operations (Save/Revert Changes) 
+ - **Edit Menu**: Standard editing commands (Undo/Redo)
+ - **Items Menu**: Item-specific commands (New, Delete, Open in Window/Tab)
+ - **Window Menu**: Window management (New Window, Close operations)
+ 
+ ### Usage Pattern:
+ ```swift
+ // Access menu items with automatic validation and error handling
+ try app.menubarItemNew.click()
+ try app.menubarFileSaveChanges.click()
+ ```
+ 
+ All properties are throwing computed properties that will fail tests immediately if menu items
+ cannot be found, ensuring clear test failure messages rather than silent automation failures.
+ */
 extension XCUIApplication {
-    /*
-     App menu bar definitions
-     */
 
     // MARK: Gowi
 

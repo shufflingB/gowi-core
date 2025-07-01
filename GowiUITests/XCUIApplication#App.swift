@@ -115,7 +115,10 @@ extension XCUIApplication {
     }
     
 
+    /// @deprecated Use `urlEncodeShowItems()` from AppUrl.swift instead for consistent URL encoding
     var urlDefault: String { "gowi://main/" }
+    
+    /// @deprecated Use `urlEncodeNewItem()` from AppUrl.swift instead for consistent URL encoding
     var urlNewItem: String { "gowi://main/v1/newItem" }
 
     /*
@@ -171,8 +174,23 @@ extension XCUIApplication {
         dialogs["alert"].buttons["Cancel"]
     }
     
-    // Because NSWorkspace.shared.open is fire and forget and runs async of the tests; use this so that it will wait for t
-    // he expected number of windows to become available
+    /// Opens a URL via NSWorkspace and waits for the expected number of windows
+    ///
+    /// Since NSWorkspace.shared.open is fire-and-forget and runs asynchronously, this method provides
+    /// synchronous behavior for tests by waiting until the expected number of windows are available.
+    ///
+    /// - Parameters:
+    ///   - url: The URL to open (typically a custom gowi:// scheme URL)
+    ///   - waitForNumOfWindows: Expected number of windows after URL opens (default: 1)
+    ///   - timeout: Maximum time to wait for windows to appear (default: 5.0 seconds)
+    /// - Returns: Actual number of windows present when method completes
+    ///
+    /// ## Usage:
+    /// ```swift
+    /// let url = urlEncodeShowItems(sidebarFilter: .all, itemIdsSelected: nil, searchFilter: nil)!
+    /// let windowCount = app.openVia(url: url, waitForNumOfWindows: 2)
+    /// XCTAssertEqual(windowCount, 2, "URL should create/raise window")
+    /// ```
     func openVia(url: URL, waitForNumOfWindows: Int = 1, timeout: TimeInterval = 5.0) -> Int {
         NSWorkspace.shared.open(URL(string: url.absoluteString)!)
         
