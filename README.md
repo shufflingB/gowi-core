@@ -111,5 +111,3 @@ Your data is stored in your private iCloud container and is never shared with th
 ---
 
 **For Developers**: Technical documentation, architecture details, and contribution guidelines are available in [README_DEVS.md](README_DEVS.md).
-
-Enjoy getting things done with Gowi! 🚀
