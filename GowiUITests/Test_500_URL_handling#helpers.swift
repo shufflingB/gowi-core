@@ -81,7 +81,7 @@ extension Test_500_URL_handling {
         } else {
             itemIds = nil
         }
-        
+            
         // Enter something in the search filter
         if let searchFor = searchFor {
             try app.searchFor(searchFor)

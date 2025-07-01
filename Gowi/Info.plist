@@ -15,5 +15,9 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleHelpBookFolder</key>
+	<string>GowiHelp</string>
+	<key>CFBundleHelpBookName</key>
+	<string>Gowi Help</string>
 </dict>
 </plist>

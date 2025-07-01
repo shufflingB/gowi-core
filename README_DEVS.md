@@ -26,7 +26,46 @@ xcodebuild -scheme Gowi test -only-testing:GowiTests
 
 # Run only UI tests  
 xcodebuild -scheme Gowi test -only-testing:GowiUITests
+
+# Build help documentation manually
+./Help/build-help.sh
 ```
+
+### Help Documentation System
+
+Gowi includes a comprehensive help system that generates Apple Help Books from Markdown source files.
+
+**Build Dependencies:**
+- **pandoc**: Required for Markdown to HTML conversion
+  ```bash
+  brew install pandoc
+  ```
+
+**Help System Architecture:**
+- **Source**: Markdown files in `Help/Source/`
+- **Templates**: HTML templates and CSS in `Help/Templates/`
+- **Build Script**: `Help/build-help.sh` converts Markdown to Help Book format
+- **Integration**: Automatic build phase generates help during app compilation
+- **Output**: Apple Help Book deployed to app bundle at `Resources/GowiHelp/`
+
+**Help Content Structure:**
+- `index.md` - Main help page with overview and navigation
+- `getting-started.md` - Basic usage guide for new users
+- `features.md` - Comprehensive feature documentation
+- `tips-and-tricks.md` - Advanced workflows and power user techniques
+
+**Modifying Help Content:**
+1. Edit Markdown files in `Help/Source/`
+2. Update templates in `Help/Templates/` if needed
+3. Build app - help generation runs automatically
+4. Test help access via Help menu in running app
+
+**Build Process:**
+The help build system runs as an Xcode build phase and:
+1. Converts Markdown files to HTML using pandoc
+2. Applies custom styling and Apple Help Book structure
+3. Generates search index for help content
+4. Deploys complete help book to app bundle
 
 ## Architecture Overview
 

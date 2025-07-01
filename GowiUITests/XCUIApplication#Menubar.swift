@@ -208,4 +208,24 @@ extension XCUIApplication {
             ])
         }
     }
+
+    // MARK: Help
+
+    var menubarHelpMenu: XCUIElement {
+        get throws {
+            let element = menuBars.menuBarItems["Help"]
+            return try validateElement(element, description: "Menu bar 'Help'", additionalUserInfo: [
+                "menu_bar_item": "Help"
+            ])
+        }
+    }
+
+    var menubarGowiHelp: XCUIElement {
+        get throws {
+            let element = menuBars.menuItems["Gowi Help"]
+            return try validateElement(element, description: "Menu item 'Gowi Help'", additionalUserInfo: [
+                "menu_item": "Gowi Help"
+            ])
+        }
+    }
 }

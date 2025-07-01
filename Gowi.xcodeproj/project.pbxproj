@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BFA84807775A44D0AD3D7F7C /* Test_950_HelpDocumentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FAB7D96CEF4DB68C69EDDF /* Test_950_HelpDocumentation.swift */; };
 		FF02B0652DFDA9CC000695C1 /* ProcessInfo#App.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF02B0642DFDA9C1000695C1 /* ProcessInfo#App.swift */; };
 		FF09FC4E28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */; };
 		FF1A944428EC873D008303B8 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1A944328EC873D008303B8 /* AppModel.swift */; };
@@ -64,6 +65,20 @@
 		FFC950AA2E104A7400E27E26 /* AppStatusFilters.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC950A92E104A6000E27E26 /* AppStatusFilters.swift */; };
 		FFC950AB2E104A7400E27E26 /* AppStatusFilters.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC950A92E104A6000E27E26 /* AppStatusFilters.swift */; };
 		FFC950AD2E11A01A00E27E26 /* Test_500_URL_handling#helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC950AC2E119FD300E27E26 /* Test_500_URL_handling#helpers.swift */; };
+		FFC950C92E143E7200E27E26 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = FFC950B62E143E7200E27E26 /* index.html */; };
+		FFC950CA2E143E7200E27E26 /* help.css in Resources */ = {isa = PBXBuildFile; fileRef = FFC950C42E143E7200E27E26 /* help.css */; };
+		FFC950CB2E143E7200E27E26 /* features.md in Resources */ = {isa = PBXBuildFile; fileRef = FFC950BF2E143E7200E27E26 /* features.md */; };
+		FFC950CC2E143E7200E27E26 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFC950BC2E143E7200E27E26 /* Info.plist */; };
+		FFC950CD2E143E7200E27E26 /* search.helpindex in Resources */ = {isa = PBXBuildFile; fileRef = FFC950B82E143E7200E27E26 /* search.helpindex */; };
+		FFC950CE2E143E7200E27E26 /* help.css in Resources */ = {isa = PBXBuildFile; fileRef = FFC950B42E143E7200E27E26 /* help.css */; };
+		FFC950CF2E143E7200E27E26 /* features.html in Resources */ = {isa = PBXBuildFile; fileRef = FFC950B02E143E7200E27E26 /* features.html */; };
+		FFC950D02E143E7200E27E26 /* getting-started.html in Resources */ = {isa = PBXBuildFile; fileRef = FFC950B22E143E7200E27E26 /* getting-started.html */; };
+		FFC950D12E143E7200E27E26 /* help-page.html in Resources */ = {isa = PBXBuildFile; fileRef = FFC950C52E143E7200E27E26 /* help-page.html */; };
+		FFC950D22E143E7200E27E26 /* tips-and-tricks.md in Resources */ = {isa = PBXBuildFile; fileRef = FFC950C22E143E7200E27E26 /* tips-and-tricks.md */; };
+		FFC950D32E143E7200E27E26 /* tips-and-tricks.html in Resources */ = {isa = PBXBuildFile; fileRef = FFC950BA2E143E7200E27E26 /* tips-and-tricks.html */; };
+		FFC950D42E143E7200E27E26 /* index.md in Resources */ = {isa = PBXBuildFile; fileRef = FFC950C12E143E7200E27E26 /* index.md */; };
+		FFC950D52E143E7200E27E26 /* build-help.sh in Resources */ = {isa = PBXBuildFile; fileRef = FFC950C72E143E7200E27E26 /* build-help.sh */; };
+		FFC950D62E143E7200E27E26 /* getting-started.md in Resources */ = {isa = PBXBuildFile; fileRef = FFC950C02E143E7200E27E26 /* getting-started.md */; };
 		FFDE6CDD28EF109E009736E3 /* Menubar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDC28EF109E009736E3 /* Menubar.swift */; };
 		FFDE6CE128EF1488009736E3 /* KbShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */; };
 		FFDE6CE228EF1488009736E3 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */; };
@@ -94,6 +109,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75FAB7D96CEF4DB68C69EDDF /* Test_950_HelpDocumentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_950_HelpDocumentation.swift; sourceTree = "<group>"; };
 		FF02B0642DFDA9C1000695C1 /* ProcessInfo#App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProcessInfo#App.swift"; sourceTree = "<group>"; };
 		FF09FC4D28F0EBFE0094F35C /* Test020_AppModel_Item_Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test020_AppModel_Item_Deletion.swift; sourceTree = "<group>"; };
 		FF1A944328EC873D008303B8 /* AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
@@ -155,6 +171,20 @@
 		FFC950A92E104A6000E27E26 /* AppStatusFilters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStatusFilters.swift; sourceTree = "<group>"; };
 		FFC950AC2E119FD300E27E26 /* Test_500_URL_handling#helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test_500_URL_handling#helpers.swift"; sourceTree = "<group>"; };
 		FFC950AE2E1409D500E27E26 /* README_DEVS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_DEVS.md; sourceTree = "<group>"; };
+		FFC950AF2E143E7200E27E26 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = English; path = English.lproj/features.html; sourceTree = "<group>"; };
+		FFC950B12E143E7200E27E26 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = English; path = "English.lproj/getting-started.html"; sourceTree = "<group>"; };
+		FFC950B32E143E7200E27E26 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = English; path = English.lproj/help.css; sourceTree = "<group>"; };
+		FFC950B52E143E7200E27E26 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = English; path = English.lproj/index.html; sourceTree = "<group>"; };
+		FFC950B72E143E7200E27E26 /* English */ = {isa = PBXFileReference; lastKnownFileType = file; name = English; path = English.lproj/search.helpindex; sourceTree = "<group>"; };
+		FFC950B92E143E7200E27E26 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = English; path = "English.lproj/tips-and-tricks.html"; sourceTree = "<group>"; };
+		FFC950BC2E143E7200E27E26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FFC950BF2E143E7200E27E26 /* features.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = features.md; sourceTree = "<group>"; };
+		FFC950C02E143E7200E27E26 /* getting-started.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "getting-started.md"; sourceTree = "<group>"; };
+		FFC950C12E143E7200E27E26 /* index.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = index.md; sourceTree = "<group>"; };
+		FFC950C22E143E7200E27E26 /* tips-and-tricks.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "tips-and-tricks.md"; sourceTree = "<group>"; };
+		FFC950C42E143E7200E27E26 /* help.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = help.css; sourceTree = "<group>"; };
+		FFC950C52E143E7200E27E26 /* help-page.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "help-page.html"; sourceTree = "<group>"; };
+		FFC950C72E143E7200E27E26 /* build-help.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-help.sh"; sourceTree = "<group>"; };
 		FFDE6CDC28EF109E009736E3 /* Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menubar.swift; sourceTree = "<group>"; };
 		FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KbShortcuts.swift; sourceTree = "<group>"; };
 		FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
@@ -223,6 +253,7 @@
 		FFA62B7628EC7B8100868F77 = {
 			isa = PBXGroup;
 			children = (
+				FFC950C82E143E7200E27E26 /* Help */,
 				FFB7E0E92DF8B4DB00553A40 /* DevScripts */,
 				FF99805D2934E42A003F343E /* README.md */,
 				FFC950AE2E1409D500E27E26 /* README_DEVS.md */,
@@ -301,6 +332,7 @@
 				FFC950AC2E119FD300E27E26 /* Test_500_URL_handling#helpers.swift */,
 				FF215E62293A5B940021D936 /* Test_800_WindowsAndTabs.swift */,
 				FF3DC3F92E0ECDB4004759F9 /* Test_900_SearchAndFilter.swift */,
+				75FAB7D96CEF4DB68C69EDDF /* Test_950_HelpDocumentation.swift */,
 				FF99807A29356342003F343E /* XCUIApplication#App.swift */,
 				FF9980762935371E003F343E /* XCUIApplication#Menubar.swift */,
 				FF998078293537B6003F343E /* XCUIApplication#Toolbar.swift */,
@@ -318,6 +350,67 @@
 				FFB7E0E82DF8B4DB00553A40 /* generate-cloudkit-config.sh */,
 			);
 			path = DevScripts;
+			sourceTree = "<group>";
+		};
+		FFC950BB2E143E7200E27E26 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FFC950B02E143E7200E27E26 /* features.html */,
+				FFC950B22E143E7200E27E26 /* getting-started.html */,
+				FFC950B42E143E7200E27E26 /* help.css */,
+				FFC950B62E143E7200E27E26 /* index.html */,
+				FFC950B82E143E7200E27E26 /* search.helpindex */,
+				FFC950BA2E143E7200E27E26 /* tips-and-tricks.html */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		FFC950BD2E143E7200E27E26 /* Contents */ = {
+			isa = PBXGroup;
+			children = (
+				FFC950BB2E143E7200E27E26 /* Resources */,
+				FFC950BC2E143E7200E27E26 /* Info.plist */,
+			);
+			path = Contents;
+			sourceTree = "<group>";
+		};
+		FFC950BE2E143E7200E27E26 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				FFC950BD2E143E7200E27E26 /* Contents */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		FFC950C32E143E7200E27E26 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				FFC950BF2E143E7200E27E26 /* features.md */,
+				FFC950C02E143E7200E27E26 /* getting-started.md */,
+				FFC950C12E143E7200E27E26 /* index.md */,
+				FFC950C22E143E7200E27E26 /* tips-and-tricks.md */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		FFC950C62E143E7200E27E26 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				FFC950C42E143E7200E27E26 /* help.css */,
+				FFC950C52E143E7200E27E26 /* help-page.html */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		FFC950C82E143E7200E27E26 /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				FFC950BE2E143E7200E27E26 /* Generated */,
+				FFC950C32E143E7200E27E26 /* Source */,
+				FFC950C62E143E7200E27E26 /* Templates */,
+				FFC950C72E143E7200E27E26 /* build-help.sh */,
+			);
+			path = Help;
 			sourceTree = "<group>";
 		};
 		FFDE6CDE28EF1478009736E3 /* Defs */ = {
@@ -371,6 +464,7 @@
 			buildConfigurationList = FFA62BA928EC7B8300868F77 /* Build configuration list for PBXNativeTarget "Gowi" */;
 			buildPhases = (
 				FFB7E0E72DF8B38D00553A40 /* Generate CloudKit Config */,
+				FDCD76A095C141138207B8F2 /* Build Help Documentation */,
 				FFA62B7B28EC7B8100868F77 /* Sources */,
 				FFA62B7C28EC7B8100868F77 /* Frameworks */,
 				FFA62B7D28EC7B8100868F77 /* Resources */,
@@ -447,6 +541,7 @@
 			knownRegions = (
 				en,
 				Base,
+				English,
 			);
 			mainGroup = FFA62B7628EC7B8100868F77;
 			preferredProjectObjectVersion = 90;
@@ -466,6 +561,20 @@
 			isa = PBXResourcesBuildPhase;
 			files = (
 				FFA62B8A28EC7B8300868F77 /* Preview Assets.xcassets in Resources */,
+				FFC950C92E143E7200E27E26 /* index.html in Resources */,
+				FFC950CA2E143E7200E27E26 /* help.css in Resources */,
+				FFC950CB2E143E7200E27E26 /* features.md in Resources */,
+				FFC950CC2E143E7200E27E26 /* Info.plist in Resources */,
+				FFC950CD2E143E7200E27E26 /* search.helpindex in Resources */,
+				FFC950CE2E143E7200E27E26 /* help.css in Resources */,
+				FFC950CF2E143E7200E27E26 /* features.html in Resources */,
+				FFC950D02E143E7200E27E26 /* getting-started.html in Resources */,
+				FFC950D12E143E7200E27E26 /* help-page.html in Resources */,
+				FFC950D22E143E7200E27E26 /* tips-and-tricks.md in Resources */,
+				FFC950D32E143E7200E27E26 /* tips-and-tricks.html in Resources */,
+				FFC950D42E143E7200E27E26 /* index.md in Resources */,
+				FFC950D52E143E7200E27E26 /* build-help.sh in Resources */,
+				FFC950D62E143E7200E27E26 /* getting-started.md in Resources */,
 				FF99805C2934E403003F343E /* Credits.rtf in Resources */,
 				FFB7E0EA2DF8B4DB00553A40 /* generate-cloudkit-config.sh in Resources */,
 				FFA62B8728EC7B8300868F77 /* Assets.xcassets in Resources */,
@@ -484,6 +593,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		FDCD76A095C141138207B8F2 /* Build Help Documentation */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Help/Source/index.md",
+				"$(SRCROOT)/Help/Source/getting-started.md",
+				"$(SRCROOT)/Help/Source/features.md",
+				"$(SRCROOT)/Help/Source/tips-and-tricks.md",
+				"$(SRCROOT)/Help/Templates/help-page.html",
+				"$(SRCROOT)/Help/Templates/help.css",
+				"$(SRCROOT)/Help/build-help.sh",
+			);
+			name = "Build Help Documentation";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(CONTENTS_FOLDER_PATH)/Resources/English.lproj/GowiHelp/Contents/Info.plist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "# Build Help Documentation from Markdown\n$SRCROOT/Help/build-help.sh\n";
+		};
 		FFB7E0E72DF8B38D00553A40 /* Generate CloudKit Config */ = {
 			isa = PBXShellScriptBuildPhase;
 			name = "Generate CloudKit Config";
@@ -491,6 +626,7 @@
 			shellScript = (
 				"# Type a script or drag a script file from your workspace to insert its path.",
 				"$SRCROOT/DevScripts/generate-cloudkit-config.sh",
+				"",
 				"",
 				"",
 				"",
@@ -563,6 +699,7 @@
 				FFC950AA2E104A7400E27E26 /* AppStatusFilters.swift in Sources */,
 				FFB015E2292D0E2D0064289A /* KbShortcuts.swift in Sources */,
 				FF3DC3FA2E0ECDB4004759F9 /* Test_900_SearchAndFilter.swift in Sources */,
+				BFA84807775A44D0AD3D7F7C /* Test_950_HelpDocumentation.swift in Sources */,
 				FF9980752935311B003F343E /* XCUIApplication#Content.swift in Sources */,
 				FFB7DCE129375F2F00A0DACA /* Test_070_ItemDeletion.swift in Sources */,
 				FF998060293520A9003F343E /* Test_000_TestingEssentialsWork.swift in Sources */,
@@ -594,6 +731,57 @@
 			targetProxy = FFA62BA028EC7B8300868F77 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FFC950B02E143E7200E27E26 /* features.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFC950AF2E143E7200E27E26 /* English */,
+			);
+			name = features.html;
+			sourceTree = "<group>";
+		};
+		FFC950B22E143E7200E27E26 /* getting-started.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFC950B12E143E7200E27E26 /* English */,
+			);
+			name = "getting-started.html";
+			sourceTree = "<group>";
+		};
+		FFC950B42E143E7200E27E26 /* help.css */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFC950B32E143E7200E27E26 /* English */,
+			);
+			name = help.css;
+			sourceTree = "<group>";
+		};
+		FFC950B62E143E7200E27E26 /* index.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFC950B52E143E7200E27E26 /* English */,
+			);
+			name = index.html;
+			sourceTree = "<group>";
+		};
+		FFC950B82E143E7200E27E26 /* search.helpindex */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFC950B72E143E7200E27E26 /* English */,
+			);
+			name = search.helpindex;
+			sourceTree = "<group>";
+		};
+		FFC950BA2E143E7200E27E26 /* tips-and-tricks.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFC950B92E143E7200E27E26 /* English */,
+			);
+			name = "tips-and-tricks.html";
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		FFA62BA728EC7B8300868F77 /* Debug configuration for PBXProject "Gowi" */ = {
