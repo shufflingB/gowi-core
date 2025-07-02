@@ -185,6 +185,7 @@
 		FFC950C42E143E7200E27E26 /* help.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = help.css; sourceTree = "<group>"; };
 		FFC950C52E143E7200E27E26 /* help-page.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "help-page.html"; sourceTree = "<group>"; };
 		FFC950C72E143E7200E27E26 /* build-help.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "build-help.sh"; sourceTree = "<group>"; };
+		FFC950E32E1533F500E27E26 /* TODO.local.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.local.md; sourceTree = "<group>"; };
 		FFDE6CDC28EF109E009736E3 /* Menubar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menubar.swift; sourceTree = "<group>"; };
 		FFDE6CDF28EF1488009736E3 /* KbShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KbShortcuts.swift; sourceTree = "<group>"; };
 		FFDE6CE028EF1488009736E3 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
@@ -253,6 +254,7 @@
 		FFA62B7628EC7B8100868F77 = {
 			isa = PBXGroup;
 			children = (
+				FFC950E32E1533F500E27E26 /* TODO.local.md */,
 				FFC950C82E143E7200E27E26 /* Help */,
 				FFB7E0E92DF8B4DB00553A40 /* DevScripts */,
 				FF99805D2934E42A003F343E /* README.md */,
@@ -595,11 +597,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		FDCD76A095C141138207B8F2 /* Build Help Documentation */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"$(SRCROOT)/Help/Source/index.md",
 				"$(SRCROOT)/Help/Source/getting-started.md",
@@ -610,14 +607,15 @@
 				"$(SRCROOT)/Help/build-help.sh",
 			);
 			name = "Build Help Documentation";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(CONTENTS_FOLDER_PATH)/Resources/English.lproj/GowiHelp/Contents/Info.plist",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "# Build Help Documentation from Markdown\n$SRCROOT/Help/build-help.sh\n";
+			shellScript = (
+				"# Build Help Documentation from Markdown",
+				"$SRCROOT/Help/build-help.sh",
+				"",
+			);
 		};
 		FFB7E0E72DF8B38D00553A40 /* Generate CloudKit Config */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -626,6 +624,7 @@
 			shellScript = (
 				"# Type a script or drag a script file from your workspace to insert its path.",
 				"$SRCROOT/DevScripts/generate-cloudkit-config.sh",
+				"",
 				"",
 				"",
 				"",
