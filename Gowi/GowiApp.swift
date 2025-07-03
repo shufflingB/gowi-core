@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GowiAppModel
 
 /**
  ## Gowi Application Entry Point

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GowiAppModel
 
 /**
  ## Content Area Data and Filtering Logic

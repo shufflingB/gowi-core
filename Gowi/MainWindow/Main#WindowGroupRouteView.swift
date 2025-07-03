@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GowiAppModel
 
 import os
 fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: URL(fileURLWithPath: #file).deletingPathExtension().lastPathComponent)

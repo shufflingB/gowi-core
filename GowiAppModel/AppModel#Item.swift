@@ -15,7 +15,7 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 // AppModel public functionallity specifically associated with the handling of `Item`s
 extension AppModel {
     /// Persists changes made against `AppModel#viewContext`
-    func saveToCoreData() {
+    public func saveToCoreData() {
         Self.saveToCoreData(viewContext)
     }
 
@@ -90,7 +90,7 @@ extension AppModel {
     ///   - notes: The notes for the new `Item`
     ///   - children: The list of child `Items` to assign to the new `Item`
     /// - Returns: he newly created, and as yet, unpersisted `Item`
-    func itemNewInsertInPriority(
+    public func itemNewInsertInPriority(
         externalUM: UndoManager?,
         parent: Item, list items: Array<Item>, where tgtIdxsEdge: Int,
         title: String, complete: Date?, notes: String, children: Set<Item>
@@ -119,7 +119,7 @@ extension AppModel {
     /// - Parameters:
     ///   - externalUM: Add an entry to undo the deletion of the `Item`s with this `UndoManager`
     ///   - items: List of `Items` to delete
-    func itemsDelete(
+    public func itemsDelete(
         externalUM: UndoManager?,
         list items: Array<Item>
     ) {
@@ -142,7 +142,7 @@ extension AppModel {
     ///   - externalUM: Add an entry to undo the setting of the completion `Date` for these `Item`s with this `UndoManager`
     ///   - items: The list of a `Item` to assign the completion `Date` to.
     ///   - date: The `Date` to assign to the `Item`s
-    func itemsSetCompletionDate(
+    public func itemsSetCompletionDate(
         externalUM: UndoManager?,
         items: Array<Item>,
         date: Date?
@@ -207,7 +207,7 @@ extension AppModel {
      ------------------- tgt edge idx = N
 
       */
-    func rearrangeUsingPriority(
+    public func rearrangeUsingPriority(
         externalUM: UndoManager?,
         items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int
     ) {

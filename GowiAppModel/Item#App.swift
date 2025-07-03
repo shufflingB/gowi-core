@@ -14,13 +14,13 @@ import SwiftUI
 
 // App level extension of `Item`
 extension Item {
-    var ourIdS: UUID {
+    public var ourIdS: UUID {
         get { ourId ?? UUID() }
 
         set(nv) { ourId = nv }
     }
 
-    var titleS: String {
+    public var titleS: String {
         get { title ?? "" }
 
         set(nv) {
@@ -30,7 +30,7 @@ extension Item {
         }
     }
 
-    var notesS: String {
+    public var notesS: String {
         get { notes ?? "" }
 
         set(nv) {
@@ -40,11 +40,11 @@ extension Item {
         }
     }
 
-    var parentListAsSet: Set<Item> {
+    public var parentListAsSet: Set<Item> {
         parentList as? Set<Item> ?? []
     }
 
-    var childrenListAsSet: Set<Item> {
+    public var childrenListAsSet: Set<Item> {
         childrenList as? Set<Item> ?? []
     }
 }

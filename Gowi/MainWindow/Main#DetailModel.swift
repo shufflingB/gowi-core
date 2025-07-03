@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import GowiAppModel
 /**
  ## Detail View Data Logic for Main Window
  

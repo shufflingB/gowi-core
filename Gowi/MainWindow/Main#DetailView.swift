@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GowiAppModel
 
 /**
  ## Detail View - Right Pane of Main Window

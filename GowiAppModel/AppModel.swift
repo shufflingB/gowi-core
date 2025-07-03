@@ -42,27 +42,27 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
  - Background sync operations handled by CoreData/CloudKit
  - Published properties automatically update UI via @ObservableObject
  */
-final class AppModel: ObservableObject, Identifiable {
+public final class AppModel: ObservableObject, Identifiable {
     /// Hierarchical root item for all user-created items
     ///
     /// This special Item serves as the parent for all user items but is never displayed in the UI.
     /// It provides a consistent hierarchical structure and simplifies CoreData relationships.
     /// All business logic operations traverse from this root to find and manipulate user items.
-    let systemRootItem: Item
+    public let systemRootItem: Item
 
     /// Real-time indicator of unsaved changes
     ///
     /// Automatically tracks CoreData's `hasChanges` state and publishes updates to the UI.
     /// Used by the save/revert toolbar buttons and the exit confirmation dialog.
     /// Updated via Combine publisher that monitors `viewContext.hasChanges`.
-    @Published private(set) var hasUnPushedChanges: Bool = false
+    @Published public private(set) var hasUnPushedChanges: Bool = false
 
     /// Main thread CoreData context for all UI operations
     ///
     /// This is the primary context for reading and writing data from SwiftUI views.
     /// Automatically merges changes from CloudKit sync operations and publishes
     /// changes to trigger UI updates via @FetchRequest and other CoreData/SwiftUI integrations.
-    var viewContext: NSManagedObjectContext {
+    public var viewContext: NSManagedObjectContext {
         container.viewContext
     }
     
@@ -71,7 +71,7 @@ final class AppModel: ObservableObject, Identifiable {
     /// Prints detailed information about all items in the system to the console.
     /// Useful for debugging test failures, data corruption issues, and understanding
     /// the current state of the item hierarchy during development.
-    func debugPrintAllItems() {
+    public func debugPrintAllItems() {
         let allItems = Array(systemRootItem.childrenListAsSet)
         print("=== DEBUG: All Items Data ===")
         print("Total items: \(allItems.count)")
@@ -106,7 +106,7 @@ final class AppModel: ObservableObject, Identifiable {
     /// # For testing with sample data
     /// GOWI_TESTMODE=1 xcodebuild test
     /// ```
-    static let shared: AppModel = {
+    public static let shared: AppModel = {
         if let testMode = ProcessInfo.processInfo.environment["GOWI_TESTMODE"] {
             switch testMode {
             case "0": // inMemory only
@@ -135,7 +135,7 @@ final class AppModel: ObservableObject, Identifiable {
     /// Lazy-loaded instance for tests that need sample data to work with. Creates 10 test items
     /// with one item having a predictable ID (testingMode1ourIdPresent) for reliable testing.
     /// The other 9 items have random UUIDs but provide a realistic data set for UI testing.
-    static var sharedInMemoryWithTestData: AppModel = {
+    public static var sharedInMemoryWithTestData: AppModel = {
         let am = AppModel(inMemory: true)
         am.addTestData(.one)  // Adds 10 items, with one having a known ID for testing
         return am
@@ -197,7 +197,15 @@ final class AppModel: ObservableObject, Identifiable {
     ///   - inMemory: whether to in memory, non-live data or not
     /// - Returns: The initiallised `NSPersistentCloudKitContainer`
     private static func CKContainerGet(modelName: String, cloudKitContainerName: String, inMemory: Bool) -> NSPersistentCloudKitContainer {
-        let ckc = NSPersistentCloudKitContainer(name: modelName)
+        guard let modelURL = Bundle(for: AppModel.self).url(forResource: modelName, withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: modelURL)
+        else {
+            fatalError("Failed to load model named \(modelName) from bundle")
+        }
+
+        let ckc = NSPersistentCloudKitContainer(name: modelName, managedObjectModel: model)
+
+//        let ckc = NSPersistentCloudKitContainer(name: modelName)
 
         log.debug("\(#function) using modelName: \(modelName), cloudKitContainerName: \(cloudKitContainerName), inMemory: \(inMemory)")
 

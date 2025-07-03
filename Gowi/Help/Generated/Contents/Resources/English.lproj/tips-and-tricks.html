@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <!-- Apple Help Book Meta Tags -->
+  <meta name="AppleTitle" content="Tips and Tricks" />
+  <meta name="AppleIcon" content="help-icon.png" />
+  <meta name="AppleOrder" content="1" />
+  <title>tips-and-tricks</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+/* The extra [class] is a hack that increases specificity enough to
+   override a similar rule in reveal.js */
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  font-size: inherit;
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="help.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="help-container">
+  <header class="help-header">
+    <h1 class="app-title">Gowi</h1>
+    <nav class="help-nav">
+      <a href="index.html">Home</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="features.html">Features</a>
+      <a href="tips-and-tricks.html">Tips & Tricks</a>
+    </nav>
+  </header>
+  
+  <main class="help-content">
+    <header id="title-block-header">
+      <h1 class="title">Tips and Tricks</h1>
+    </header>
+    <h1 id="tips-tricks">Tips &amp; Tricks</h1>
+    <p>Master Gowi with these power user techniques and advanced
+    workflows.</p>
+    <h2 id="productivity-workflows">Productivity Workflows</h2>
+    <h3 id="quick-capture-workflow">Quick Capture Workflow</h3>
+    <p>For rapid todo entry:</p>
+    <ol type="1">
+    <li>Use <kbd>⌘N</kbd> to create a new todo</li>
+    <li>Type the essential information quickly</li>
+    <li>Press <kbd>Enter</kbd> to confirm</li>
+    <li>Use <kbd>⌘N</kbd> again for the next item</li>
+    </ol>
+    <p><strong>Pro tip</strong>: Don’t worry about perfect formatting
+    initially - you can always add details later.</p>
+    <h3 id="gtd-getting-things-done-setup">GTD (Getting Things Done)
+    Setup</h3>
+    <p>Organize todos using the Getting Things Done methodology:</p>
+    <ul>
+    <li>Use <strong>Waiting</strong> for “Next Actions”</li>
+    <li>Add detailed notes for “Project Support Material”<br />
+    </li>
+    <li>Use completion dates for “Tickler File” items</li>
+    <li>Search to create custom “Context” views</li>
+    </ul>
+    <h3 id="weekly-review-process">Weekly Review Process</h3>
+    <ol type="1">
+    <li>Open the <strong>Done</strong> list to review completed
+    work</li>
+    <li>Use search to find todos by project keywords</li>
+    <li>Archive completed projects by deleting old todos</li>
+    <li>Plan the next week by setting completion dates</li>
+    </ol>
+    <h2 id="advanced-search-techniques">Advanced Search Techniques</h2>
+    <h3 id="search-operators">Search Operators</h3>
+    <ul>
+    <li><strong>Exact phrases</strong>: Use quotes -
+    <code>"important meeting"</code></li>
+    <li><strong>Multiple terms</strong>: All terms must match -
+    <code>project deadline</code></li>
+    <li><strong>Partial matching</strong>: Find fragments -
+    <code>proj</code> matches “project”</li>
+    </ul>
+    <h3 id="search-shortcuts">Search Shortcuts</h3>
+    <ul>
+    <li><kbd>⌘F</kbd> instantly focuses the search box</li>
+    <li><kbd>Escape</kbd> clears the current search</li>
+    <li>Search is case-insensitive by default</li>
+    </ul>
+    <h3 id="creating-virtual-lists">Creating Virtual Lists</h3>
+    <p>Use search to create custom “lists”:</p>
+    <ul>
+    <li>Search <code>@home</code> for location-based todos</li>
+    <li>Search <code>urgent</code> for priority items</li>
+    <li>Search <code>2025</code> for year-specific goals</li>
+    </ul>
+    <h2 id="multi-window-mastery">Multi-Window Mastery</h2>
+    <h3 id="project-windows">Project Windows</h3>
+    <p>Open separate windows for different projects:</p>
+    <ol type="1">
+    <li>Use <kbd>⇧⌘N</kbd> to create a new window</li>
+    <li>Search for project-specific terms in each window</li>
+    <li>Keep windows organized on different desktop spaces</li>
+    </ol>
+    <h3 id="reference-windows">Reference Windows</h3>
+    <p>Keep a “Done” window open for reference:</p>
+    <ol type="1">
+    <li>Open a new window with <kbd>⇧⌘N</kbd></li>
+    <li>Switch to the <strong>Done</strong> list</li>
+    <li>Use this for checking completed work</li>
+    </ol>
+    <h3 id="comparison-windows">Comparison Windows</h3>
+    <p>Compare different time periods:</p>
+    <ul>
+    <li>One window showing current month’s todos</li>
+    <li>Another showing last month’s completed items</li>
+    <li>Use search with dates for temporal filtering</li>
+    </ul>
+    <h2 id="keyboard-shortcuts-mastery">Keyboard Shortcuts Mastery</h2>
+    <h3 id="navigation-shortcuts">Navigation Shortcuts</h3>
+    <table>
+    <thead>
+    <tr>
+    <th>Shortcut</th>
+    <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><kbd>⌘1</kbd></td>
+    <td>Switch to All list</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘2</kbd></td>
+    <td>Switch to Waiting list</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘3</kbd></td>
+    <td>Switch to Done list</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘F</kbd></td>
+    <td>Focus search field</td>
+    </tr>
+    <tr>
+    <td><kbd>Tab</kbd></td>
+    <td>Move between interface areas</td>
+    </tr>
+    </tbody>
+    </table>
+    <h3 id="editing-shortcuts">Editing Shortcuts</h3>
+    <table>
+    <thead>
+    <tr>
+    <th>Shortcut</th>
+    <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><kbd>⌘N</kbd></td>
+    <td>New todo</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘⌫</kbd></td>
+    <td>Delete selected todo</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘Z</kbd></td>
+    <td>Undo last action</td>
+    </tr>
+    <tr>
+    <td><kbd>⇧⌘Z</kbd></td>
+    <td>Redo last undone action</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘S</kbd></td>
+    <td>Save pending changes</td>
+    </tr>
+    </tbody>
+    </table>
+    <h3 id="window-management">Window Management</h3>
+    <table>
+    <thead>
+    <tr>
+    <th>Shortcut</th>
+    <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><kbd>⇧⌘N</kbd></td>
+    <td>New window</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘W</kbd></td>
+    <td>Close current window</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘M</kbd></td>
+    <td>Minimize window</td>
+    </tr>
+    <tr>
+    <td><kbd>⌘`</kbd></td>
+    <td>Cycle between Gowi windows</td>
+    </tr>
+    </tbody>
+    </table>
+    <h2 id="data-organization-strategies">Data Organization
+    Strategies</h2>
+    <h3 id="hierarchical-organization">Hierarchical Organization</h3>
+    <p>Use indentation and grouping in notes:</p>
+    <pre><code>Project: Website Redesign
+  - Research competitor sites
+  - Create wireframes
+  - Design mockups
+  - Implement frontend
+  - Test and deploy</code></pre>
+    <h3 id="tagging-system">Tagging System</h3>
+    <p>Create a consistent tagging system in notes:</p>
+    <ul>
+    <li><code>#work</code> - Work-related todos</li>
+    <li><code>#personal</code> - Personal todos</li>
+    <li><code>#urgent</code> - High priority items</li>
+    <li><code>#waiting</code> - Blocked or waiting for others</li>
+    </ul>
+    <h3 id="date-based-organization">Date-Based Organization</h3>
+    <p>Use completion dates strategically:</p>
+    <ul>
+    <li><strong>This week</strong>: Set specific dates for immediate
+    todos</li>
+    <li><strong>This month</strong>: Set end-of-month dates for larger
+    goals</li>
+    <li><strong>Someday</strong>: Leave completion date empty for
+    “someday/maybe” items</li>
+    </ul>
+    <h2 id="cloudkit-sync-tips">CloudKit Sync Tips</h2>
+    <h3 id="conflict-resolution">Conflict Resolution</h3>
+    <p>When the same todo is edited on multiple devices:</p>
+    <ul>
+    <li>Gowi automatically merges non-conflicting changes</li>
+    <li>For conflicts, the most recent change wins</li>
+    <li>Keep important devices connected to iCloud</li>
+    </ul>
+    <h3 id="offline-work">Offline Work</h3>
+    <p>Working without internet:</p>
+    <ul>
+    <li>All editing continues normally offline</li>
+    <li>Changes sync automatically when connection returns</li>
+    <li>No data loss occurs during offline periods</li>
+    </ul>
+    <h3 id="multi-device-workflows">Multi-Device Workflows</h3>
+    <p>Optimize for multiple devices:</p>
+    <ul>
+    <li>Use iPhone for quick capture on the go</li>
+    <li>Use Mac for detailed planning and organization</li>
+    <li>Use iPad for review and processing</li>
+    </ul>
+    <h2 id="automation-and-integration">Automation and Integration</h2>
+    <h3 id="url-schemes">URL Schemes</h3>
+    <p>Automate todo creation from other apps:</p>
+    <div class="sourceCode" id="cb2"><pre
+    class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new todo</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> <span class="st">&quot;gowi://main/v1/newItem&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Open specific list</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> <span class="st">&quot;gowi://main/v1/showitems?fid=Waiting&quot;</span></span></code></pre></div>
+    <h3 id="text-expansion">Text Expansion</h3>
+    <p>Use text expansion tools for common patterns:</p>
+    <ul>
+    <li><code>;meet</code> → “Meeting with [person] about [topic]”</li>
+    <li><code>;proj</code> → “Project: [name] - [description]”</li>
+    <li><code>;call</code> → “Call [person] regarding [topic]”</li>
+    </ul>
+    <h3 id="backup-strategies">Backup Strategies</h3>
+    <p>Protect your data:</p>
+    <ul>
+    <li>CloudKit provides automatic backup</li>
+    <li>Export important data periodically</li>
+    <li>Keep devices regularly synced with iCloud</li>
+    </ul>
+    <h2 id="troubleshooting-tips">Troubleshooting Tips</h2>
+    <h3 id="sync-issues">Sync Issues</h3>
+    <p>If todos aren’t syncing:</p>
+    <ol type="1">
+    <li>Check iCloud settings in System Preferences</li>
+    <li>Ensure you’re signed into the same iCloud account</li>
+    <li>Check internet connection on all devices</li>
+    <li>Force quit and restart Gowi</li>
+    </ol>
+    <h3 id="performance-optimization">Performance Optimization</h3>
+    <p>For large todo collections:</p>
+    <ul>
+    <li>Use search instead of browsing all todos</li>
+    <li>Regularly archive completed todos</li>
+    <li>Keep individual notes reasonably sized</li>
+    </ul>
+    <h3 id="undo-problems">Undo Problems</h3>
+    <p>If undo isn’t working as expected:</p>
+    <ul>
+    <li>Remember that undo is context-sensitive</li>
+    <li>Switching between areas clears the undo stack</li>
+    <li>Use <kbd>⌘S</kbd> to save important changes</li>
+    </ul>
+    <hr />
+    <p><em>These techniques will help you get the most out of Gowi.
+    Experiment with different approaches to find what works best for
+    your workflow!</em></p>
+  </main>
+  
+  <footer class="help-footer">
+    <p>&copy; 2025 Gowi. All rights reserved.</p>
+  </footer>
+</div>
+</body>
+</html>

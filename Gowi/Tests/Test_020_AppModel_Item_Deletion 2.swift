@@ -6,10 +6,10 @@
 //
 
 
-@testable import Gowi
+@testable import GowiAppModel
 import XCTest
 
-final class Test020_AppModel_Item_Deletion: XCTestCase {
+final class Test_020_AppModel_Item_Deletion: XCTestCase {
     var appModel = AppModel(inMemory: true)
     override func setUpWithError() throws {
         appModel = AppModel(inMemory: true)
