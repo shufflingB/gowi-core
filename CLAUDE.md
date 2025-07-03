@@ -12,34 +12,48 @@ Gowi is a SwiftUI-based todo application for macOS that demonstrates comprehensi
 
 ## Build and Test Commands
 
-This is an Xcode project. Common development commands:
+This is an Xcode project with multiple schemes. Common development commands:
 
 ```bash
-# Build the application
-xcodebuild -scheme Gowi -configuration Debug build
+# Build the main application
+xcodebuild -scheme GowiAppScheme -configuration Debug build
+
+# Build the AppModel framework
+xcodebuild -scheme AppModelScheme -configuration Debug build
 
 # Run all tests
-xcodebuild -scheme Gowi -destination 'platform=macOS' test
+xcodebuild -scheme GowiAppScheme -destination 'platform=macOS' test
 
-# Run only unit tests
-xcodebuild -scheme Gowi -destination 'platform=macOS' test -only-testing:GowiTests
+# Run only AppModel framework tests
+xcodebuild -scheme AppModelScheme -destination 'platform=macOS' test -only-testing:GowiAppModelTests
 
-# Run only UI tests  
-xcodebuild -scheme Gowi -destination 'platform=macOS' test -only-testing:GowiUITests
+# Run only app UI tests  
+xcodebuild -scheme GowiAppScheme -destination 'platform=macOS' test -only-testing:GowiAppTests
 
 # Clean build
-xcodebuild -scheme Gowi clean
+xcodebuild -scheme GowiAppScheme clean
 ```
 
 ## Architecture
 
+### Framework Structure
+- **GowiAppModel**: Standalone framework containing all data layer components
+  - `AppModel`: Business logic and data management
+  - CoreData model and extensions
+  - Item management and priority system
+  - CloudKit integration
+- **Gowi**: Main application containing UI and interaction layer
+  - SwiftUI views and components
+  - Window management and routing
+  - Menu system and user interactions
+
 ### MSV (Model StateView View) Pattern
-- **Model**: `AppModel` handles business logic and data (`Gowi/Models/AppModel.swift`)
+- **Model**: `AppModel` handles business logic and data (now in `GowiAppModel` framework)
 - **StateView**: High-level views that centralize state management (e.g., `Main`)  
 - **Views**: Stateless UI components that receive data and intents from StateViews
 
 ### Key Components
-- **AppModel**: Singleton managing CoreData stack, business logic, and app state
+- **AppModel**: Singleton managing CoreData stack, business logic, and app state (GowiAppModel framework)
 - **Main**: Root StateView handling window routing, state coordination, and sub-view intents
 - **Item**: CoreData entity representing todo items with hierarchical relationships
 - **URL Routing**: Custom `gowi://` scheme for deep linking to specific views and items
@@ -58,17 +72,17 @@ Set environment variable `GOWI_TESTMODE` to control test data:
 - `GOWI_TESTMODE=1` - Pre-populated with 10 test items
 
 ### Test Structure
-- **Unit Tests** (`GowiTests/`): Test business logic, data models, and core functionality
-- **UI Tests** (`GowiUITests/`): Test complete user workflows and UI interactions
+- **AppModel Framework Tests** (`GowiAppModel/Tests/`): Test business logic, data models, and core functionality
+- **App UI Tests** (`GowiAppTests/`): Test complete user workflows and UI interactions
 - **Test Utilities**: `AppModel#Testing.swift` provides consistent test fixtures
 
 ### Running Single Tests
 ```bash
-# Run specific test class
-xcodebuild -scheme Gowi test -only-testing:GowiTests/Test010_AppModel_Item_Creation
+# Run specific AppModel framework test
+xcodebuild -scheme AppModelScheme test -only-testing:GowiAppModelTests/Test_010_AppModel_Item_Creation
 
-# Run specific UI test
-xcodebuild -scheme Gowi test -only-testing:GowiUITests/Test_050_ItemCreation
+# Run specific app UI test
+xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests/Test_050_ItemCreation
 ```
 
 ## Development Notes

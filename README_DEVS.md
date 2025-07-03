@@ -10,25 +10,28 @@ This document contains technical information for developers working on or contri
 - **CloudKit**: Requires paid Apple Developer Account for sync functionality
 
 ### Test Targets
-- **Unit Tests**: `GowiTests` - Business logic and model testing
-- **UI Tests**: `GowiUITests` - Complete user workflow validation
+- **AppModel Framework Tests**: `GowiAppModelTests` - Business logic and model testing
+- **App UI Tests**: `GowiAppTests` - Complete user workflow validation
 
 ### Key Commands
 ```bash
-# Build the application
-xcodebuild -scheme Gowi -configuration Debug build
+# Build the main application
+xcodebuild -scheme GowiAppScheme -configuration Debug build
+
+# Build the AppModel framework
+xcodebuild -scheme AppModelScheme -configuration Debug build
 
 # Run all tests
-xcodebuild -scheme Gowi -destination 'platform=macOS' test
+xcodebuild -scheme GowiAppScheme -destination 'platform=macOS' test
 
-# Run only unit tests
-xcodebuild -scheme Gowi test -only-testing:GowiTests
+# Run only AppModel framework tests
+xcodebuild -scheme AppModelScheme test -only-testing:GowiAppModelTests
 
-# Run only UI tests  
-xcodebuild -scheme Gowi test -only-testing:GowiUITests
+# Run only app UI tests  
+xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests
 
 # Build help documentation manually
-./Help/build-help.sh
+./Gowi/Help/build-help.sh
 ```
 
 ### Help Documentation System
@@ -42,11 +45,11 @@ Gowi includes a comprehensive help system that generates Apple Help Books from M
   ```
 
 **Help System Architecture:**
-- **Source**: Markdown files in `Help/Source/`
-- **Templates**: HTML templates and CSS in `Help/Templates/`
-- **Build Script**: `Help/build-help.sh` converts Markdown to Help Book format
+- **Source**: Markdown files in `Gowi/Help/Source/`
+- **Templates**: HTML templates and CSS in `Gowi/Help/Templates/`
+- **Build Script**: `Gowi/Help/build-help.sh` converts Markdown to Help Book format
 - **Integration**: Automatic build phase generates help during app compilation
-- **Output**: Apple Help Book deployed to app bundle at `Resources/GowiHelp/`
+- **Output**: Apple Help Book deployed to app bundle at `Gowi/Help/Generated/`
 
 **Help Content Structure:**
 - `index.md` - Main help page with overview and navigation
@@ -55,8 +58,8 @@ Gowi includes a comprehensive help system that generates Apple Help Books from M
 - `tips-and-tricks.md` - Advanced workflows and power user techniques
 
 **Modifying Help Content:**
-1. Edit Markdown files in `Help/Source/`
-2. Update templates in `Help/Templates/` if needed
+1. Edit Markdown files in `Gowi/Help/Source/`
+2. Update templates in `Gowi/Help/Templates/` if needed
 3. Build app - help generation runs automatically
 4. Test help access via Help menu in running app
 
@@ -69,6 +72,37 @@ The help build system runs as an Xcode build phase and:
 
 ## Architecture Overview
 
+### Framework Structure
+
+**GowiAppModel Framework**:
+- **Purpose**: Standalone framework containing all data layer components
+- **Location**: `GowiAppModel/` directory
+- **Components**:
+  - `AppModel.swift` - Core business logic and data management
+  - `AppModel#Item.swift` - Item-specific operations and CRUD
+  - `AppModel#Testing.swift` - Test utilities and fixtures
+  - `Item#App.swift` - Item extensions for application use
+  - `Gowi.xcdatamodeld/` - CoreData model definition
+  - `CloudKitConfig.swift` - CloudKit configuration
+  - `Tests/` - Framework-specific unit tests
+
+**Gowi Application**:
+- **Purpose**: Main application containing UI and interaction layer
+- **Location**: `Gowi/` directory
+- **Components**:
+  - SwiftUI views and components
+  - Window management and routing
+  - Menu system and user interactions
+  - Help documentation system
+  - Application-specific tests
+
+**Benefits of Framework Separation**:
+- **Decoupling**: Clear separation between data layer and UI
+- **Independent Development**: AppModel can be developed and tested separately
+- **Reusability**: Framework could potentially be used in other applications
+- **Testability**: Framework tests run independently of UI complexity
+- **Build Performance**: Framework can be built separately and cached
+
 ### Model StateView View (MSV) Pattern
 
 ![Model StateView View architecture](DevAssets/ModelStateViewViewDiagram.png)
@@ -77,7 +111,7 @@ Gowi uses an empirically derived **Model StateView View (MSV)** architecture tha
 
 **Architecture Components:**
 
-- **Model**: Business logic and data (`AppModel`)
+- **Model**: Business logic and data (`AppModel` in GowiAppModel framework)
   - Singleton pattern for shared state
   - CoreData + CloudKit integration
   - Comprehensive undo support
@@ -207,9 +241,9 @@ This layered approach enables Gowi's sophisticated features:
 
 ### UWFA Concept
 
-UWFA groups undoable changes to ensure they are:
-1. **Contextually Appropriate**: Only undo changes relevant to current work
-2. **Properly Granular**: Operate at meaningful semantic levels
+UWFA groups undoable changes to attempt to ensure they are:
+1. **Contextually Appropriate**: Only undo changes relevant to focus of the user's current work
+2. **Properly Granular**: Attempts to operate at meaningful semantic levels according to activity.
 3. **Session Isolated**: Different UI areas have independent undo stacks
 
 **Example Scenarios**:
@@ -392,6 +426,7 @@ let route = Main.urlDecode(incomingURL)
 ```
 
 **Smart Routing Matrix**:
+Key concept is don't change the contents of windows that user already has setup as it will be annoying. Which translates as only ever raising windows showing exactly what is requested, anything else gets a new window opened (maybe at some point may give option to add tab instead ...). 
 - **List Views**: Reuse if same content, otherwise create new
 - **Specific Items**: Reuse if same item, otherwise create new  
 - **New Items**: Always create new window
@@ -421,29 +456,29 @@ GOWI_TESTMODE=1  // Enables test fixtures
 ## Key Implementation Files
 
 **Core Architecture**:
-- `AppModel.swift` - Central business logic and data management
-- `Main.swift` - Primary StateView for main window
-- `Main#Model.swift` - Business logic intents
+- `GowiAppModel/AppModel.swift` - Central business logic and data management
+- `Gowi/MainWindow/Main.swift` - Primary StateView for main window
+- `Gowi/MainWindow/Main#Model.swift` - Business logic intents
 
 **Routing System**:
-- `Main#WindowGroupRouteView.swift` - URL routing and window coordination
-- `Main#UrlHandlingModel.swift` - URL encoding/decoding logic
-- `AppUrl.swift` - URL scheme definitions
+- `Gowi/MainWindow/Main#WindowGroupRouteView.swift` - URL routing and window coordination
+- `Gowi/MainWindow/Main#UrlHandlingModel.swift` - URL encoding/decoding logic
+- `Gowi/AppUrl.swift` - URL scheme definitions
 
 **Undo Management**:
-- `Main#WindowGroupUndoView.swift` - UWFA implementation
-- `FocusedValues#App.swift` - Focus chain definitions
+- `Gowi/MainWindow/Main#WindowGroupUndoView.swift` - UWFA implementation
+- `Gowi/FocusedValues#App.swift` - Focus chain definitions
 
 **UI Components**:
-- `Main#ContentView.swift` - Item list with search
-- `Main#DetailView.swift` - Multi-selection detail view
-- `ItemView.swift` - Individual item editing
+- `Gowi/MainWindow/Main#ContentView.swift` - Item list with search
+- `Gowi/MainWindow/Main#DetailView.swift` - Multi-selection detail view
+- `Gowi/MainWindow/ItemView.swift` - Individual item editing
 
 **Menu System**:
-- `Menubar.swift` - Menu coordination
-- `Menubar#fileCommands.swift` - File operations
-- `Menubar#itemCommands.swift` - Item management
-- `Menubar#windowCommands.swift` - Window operations
+- `Gowi/Menubars/Menubar.swift` - Menu coordination
+- `Gowi/Menubars/Menubar#fileCommands.swift` - File operations
+- `Gowi/Menubars/Menubar#itemCommands.swift` - Item management
+- `Gowi/Menubars/Menubar#windowCommands.swift` - Window operations
 
 ## Development Tips
 
