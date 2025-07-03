@@ -5,7 +5,6 @@
 //  Created by Jonathan Hume on 02/12/2022.
 //
 
-import CoreData
 import SwiftUI
 import os
 import GowiAppModel

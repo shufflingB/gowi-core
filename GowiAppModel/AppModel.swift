@@ -128,7 +128,7 @@ public final class AppModel: ObservableObject, Identifiable {
     ///
     /// Lazy-loaded instance for unit tests that need a clean slate without any pre-existing data.
     /// Uses in-memory storage so tests don't affect the user's real data or require cleanup.
-    static var sharedInMemoryNoTestData: AppModel = AppModel(inMemory: true)
+    public static var sharedInMemoryNoTestData: AppModel = AppModel(inMemory: true)
 
     /// Testing instance with pre-populated test data
     ///
@@ -149,7 +149,7 @@ public final class AppModel: ObservableObject, Identifiable {
     ///
     /// - Parameter inMemory: When true, uses in-memory storage for testing (disables CloudKit)
     ///                      When false, uses persistent storage with full CloudKit sync
-    init(inMemory: Bool = false) {
+    public init(inMemory: Bool = false) {
         // Workaround for macOS Monterey+ startup crashes in SwiftUI apps
         // Force NSApplication initialization on main thread to prevent race conditions
         // See: https://www.hackingwithswift.com/forums/macos/app-sometimes-crashes-on-launch-since-monterey/10918/15476

@@ -6,7 +6,8 @@
 //
 
 
-@testable import GowiAppModel
+@testable import Gowi
+import GowiAppModel
 import XCTest
 
 final class Test_020_AppModel_Item_Deletion: XCTestCase {

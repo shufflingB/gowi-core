@@ -130,7 +130,7 @@ extension AppModel {
     }
 
     /// As `AppModel#itemsDelete`, except not undoable and works with arbitrary moc
-    static func itemsDelete(_ moc: NSManagedObjectContext, items: Array<Item>) {
+    public static func itemsDelete(_ moc: NSManagedObjectContext, items: Array<Item>) {
         items.forEach { item in
             item.parentList = nil /// Just deleting the item is not enough as it doesn't get removed  from  the parent's children lists until after the moc is saved
             moc.delete(item)
@@ -156,7 +156,7 @@ extension AppModel {
     }
 
     /// As `AppModel#itemsSetCompletionDate`, except not undoable and works with arbitrary moc
-    static func itemsSetCompletionDate(_ moc: NSManagedObjectContext, items: Array<Item>, date: Date?) {
+    public static func itemsSetCompletionDate(_ moc: NSManagedObjectContext, items: Array<Item>, date: Date?) {
         items.forEach { item in
             item.completed = date
             item.objectWillChange.send()

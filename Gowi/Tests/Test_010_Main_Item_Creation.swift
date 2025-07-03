@@ -8,6 +8,7 @@
 import AppKit
 import Foundation
 @testable import Gowi
+import GowiAppModel
 
 import os
 import XCTest

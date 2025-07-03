@@ -15,11 +15,11 @@ extension AppModel {
     /// Available data test modes
     /// - options:
     ///
-    enum TestModeData {
+    public enum TestModeData {
         case one
     }
 
-    func addTestData(_ testMode: TestModeData) {
+    public func addTestData(_ testMode: TestModeData) {
         switch testMode {
         case .one: // Same as inMemory
             testMode1()

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GowiAppModel
 
 // The Main window's Toolbar menu builder
 extension Main {

@@ -28,6 +28,9 @@
 		FF52C45B2E15E969006D4EC2 /* GowiAppModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF52C4462E15E968006D4EC2 /* GowiAppModel.framework */; };
 		FF52C4812E167831006D4EC2 /* Test_010_Main_Item_Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF52C47E2E167795006D4EC2 /* Test_010_Main_Item_Creation.swift */; };
 		FF61397F293E6AB60048130B /* GowiApp#AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF61397E293E6AB60048130B /* GowiApp#AppDelegate.swift */; };
+		FF77BF6F2E17019E00E1B115 /* Test_020_AppModel_Item_Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF52C4822E1678F0006D4EC2 /* Test_020_AppModel_Item_Deletion.swift */; };
+		FF77BF772E170E6400E1B115 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF77BF762E170E6400E1B115 /* CoreData.framework */; };
+		FF77BF792E170E6D00E1B115 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF77BF782E170E6D00E1B115 /* CloudKit.framework */; };
 		FF7CA02029197AFF0018C958 /* Main#ModalAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7CA01F29197AFF0018C958 /* Main#ModalAlerts.swift */; };
 		FF80AF1E2912EBB700D1D910 /* AppUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF80AF1D2912EBB700D1D910 /* AppUrl.swift */; };
 		FF99805C2934E403003F343E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = FF99805B2934E403003F343E /* Credits.rtf */; };
@@ -91,7 +94,7 @@
 			remoteGlobalIDString = FF52C4452E15E968006D4EC2;
 			remoteInfo = GowiAppModel;
 		};
-		FF52C4592E15E969006D4EC2 /* PBXContainerItemProxy */ = {
+		FF77BF722E170D9500E1B115 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FFA62B7728EC7B8100868F77 /* Project object */;
 			proxyType = 1;
@@ -134,8 +137,10 @@
 		FF52C4462E15E968006D4EC2 /* GowiAppModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GowiAppModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF52C4502E15E969006D4EC2 /* GowiAppModelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GowiAppModelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF52C47E2E167795006D4EC2 /* Test_010_Main_Item_Creation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_010_Main_Item_Creation.swift; sourceTree = "<group>"; };
-		FF52C4822E1678F0006D4EC2 /* Test_020_AppModel_Item_Deletion 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test_020_AppModel_Item_Deletion 2.swift"; sourceTree = "<group>"; };
+		FF52C4822E1678F0006D4EC2 /* Test_020_AppModel_Item_Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_020_AppModel_Item_Deletion.swift; sourceTree = "<group>"; };
 		FF61397E293E6AB60048130B /* GowiApp#AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GowiApp#AppDelegate.swift"; sourceTree = "<group>"; };
+		FF77BF762E170E6400E1B115 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		FF77BF782E170E6D00E1B115 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		FF7CA01F29197AFF0018C958 /* Main#ModalAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Main#ModalAlerts.swift"; sourceTree = "<group>"; };
 		FF80AF1D2912EBB700D1D910 /* AppUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUrl.swift; sourceTree = "<group>"; };
 		FF86E89528F76E3F0098A335 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -239,6 +244,8 @@
 		FF52C4432E15E968006D4EC2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				FF77BF772E170E6400E1B115 /* CoreData.framework in Frameworks */,
+				FF77BF792E170E6D00E1B115 /* CloudKit.framework in Frameworks */,
 			);
 		};
 		FF52C44D2E15E969006D4EC2 /* Frameworks */ = {
@@ -288,6 +295,15 @@
 			path = MainWindow;
 			sourceTree = "<group>";
 		};
+		FF77BF702E17081C00E1B115 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FF77BF782E170E6D00E1B115 /* CloudKit.framework */,
+				FF77BF762E170E6400E1B115 /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FFA62B7628EC7B8100868F77 = {
 			isa = PBXGroup;
 			children = (
@@ -301,6 +317,7 @@
 				FFA62B8128EC7B8100868F77 /* Gowi */,
 				FF52C4472E15E968006D4EC2 /* GowiAppModel */,
 				FFA62BA228EC7B8300868F77 /* GowiAppTests */,
+				FF77BF702E17081C00E1B115 /* Frameworks */,
 				FFA62B8028EC7B8100868F77 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -348,7 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				FF52C47E2E167795006D4EC2 /* Test_010_Main_Item_Creation.swift */,
-				FF52C4822E1678F0006D4EC2 /* Test_020_AppModel_Item_Deletion 2.swift */,
+				FF52C4822E1678F0006D4EC2 /* Test_020_AppModel_Item_Deletion.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -543,7 +560,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				FF52C45A2E15E969006D4EC2 /* PBXTargetDependency */,
+				FF77BF732E170D9500E1B115 /* PBXTargetDependency */,
 			);
 			name = Gowi;
 			productName = Gowi;
@@ -607,6 +624,7 @@
 					};
 					FFA62B9428EC7B8300868F77 = {
 						CreatedOnToolsVersion = 14.0.1;
+						TestTargetID = FFA62B7E28EC7B8100868F77;
 					};
 					FFA62B9E28EC7B8300868F77 = {
 						CreatedOnToolsVersion = 14.0.1;
@@ -759,6 +777,7 @@
 			isa = PBXSourcesBuildPhase;
 			files = (
 				FFB015E1292D0E2C0064289A /* KbShortcuts.swift in Sources */,
+				FF77BF6F2E17019E00E1B115 /* Test_020_AppModel_Item_Deletion.swift in Sources */,
 				FF52C4812E167831006D4EC2 /* Test_010_Main_Item_Creation.swift in Sources */,
 			);
 		};
@@ -799,10 +818,10 @@
 			target = FF52C4452E15E968006D4EC2 /* GowiAppModel */;
 			targetProxy = FF52C4522E15E969006D4EC2 /* PBXContainerItemProxy */;
 		};
-		FF52C45A2E15E969006D4EC2 /* PBXTargetDependency */ = {
+		FF77BF732E170D9500E1B115 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FF52C4452E15E968006D4EC2 /* GowiAppModel */;
-			targetProxy = FF52C4592E15E969006D4EC2 /* PBXContainerItemProxy */;
+			targetProxy = FF77BF722E170D9500E1B115 /* PBXContainerItemProxy */;
 		};
 		FFA62B9728EC7B8300868F77 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1208,6 +1227,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -1219,6 +1239,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gowi.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Gowi";
 			};
 			name = Debug;
 		};
@@ -1226,6 +1247,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -1237,6 +1259,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Gowi.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Gowi";
 			};
 			name = Release;
 		};
