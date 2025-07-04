@@ -208,7 +208,6 @@
 		FF7E21C02E16BB04006E9F46 /* Exceptions for "GowiAppModel" folder in "GowiAppModel" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				GowiAppModel.swift,
 				Tests/Test_000_System_Init.swift,
 				Tests/Test_010_AppModel_Item_Creation.swift,
 				Tests/Test_020_AppModel_Item_Deletion.swift,
