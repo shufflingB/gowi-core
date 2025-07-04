@@ -201,7 +201,7 @@ extension Main {
                     routeWindow(route)
                 }
 
-                .onChange(of: windowUM) { newValue in
+                .onChange(of: windowUM) { _, newValue in
                     // UndoManager availability signals that the window is fully initialized
                     // and @State variables are ready for use. This is the right time to handle
                     // operations that were deferred during onAppear due to UndoManager dependency.
@@ -265,7 +265,7 @@ extension Main {
                         }
                     }
                 })
-                .onChange(of: visibleItemIdsSelected, perform: { newValue in
+                .onChange(of: visibleItemIdsSelected) {_, newValue in
                     // Update route when item selection changes
                     if let route = windowGroupRoute {
                         switch route {
@@ -284,8 +284,8 @@ extension Main {
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
                                                       contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
-                })
-                .onChange(of: sideBarFilterSelected, perform: { newValue in
+                }
+                .onChange(of: sideBarFilterSelected) {_,  newValue in
                     // Update route when sidebar filter selection changes
                     if let route = windowGroupRoute {
                         switch route {
@@ -304,15 +304,15 @@ extension Main {
                         windowGroupRoute = .showItems(openNewWindow: false, sideBarFilterSelected: sideBarFilterSelected,
                                                       contentItemIdsSelected: visibleItemIdsSelected, searchText: currentSearchText)
                     }
-                })
+                }
                 // Update route when search text changes for any filter
-                .onChange(of: searchTextAll) { newValue in
+                .onChange(of: searchTextAll) { _, newValue in
                     updateWindowRouteSearchText(for: .all, searchText: newValue)
                 }
-                .onChange(of: searchTextDone) { newValue in
+                .onChange(of: searchTextDone) { _, newValue in
                     updateWindowRouteSearchText(for: .done, searchText: newValue)
                 }
-                .onChange(of: searchTextWaiting) { newValue in
+                .onChange(of: searchTextWaiting) { _, newValue in
                     updateWindowRouteSearchText(for: .waiting, searchText: newValue)
                 }
         }

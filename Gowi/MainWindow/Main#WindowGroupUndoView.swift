@@ -90,14 +90,14 @@ extension Main {
 
         var body: some View {
             content
-                .onChange(of: wfa) { newWFA in
+                .onChange(of: wfa) { oldWFA, newWFA in
                     // DatePicker popover workaround: prevent undo clearing during normal popover cycles
-                    if hackedWFA == .detailCompletedDate && newWFA == nil {
+                    if oldWFA == .detailCompletedDate && newWFA == nil {
                         // Transitioning from date control to popover - don't clear undo
 //                        log.debug("Not clearing undo stack: Detected Date flat View to Pop Up transition")
                         return
                     }
-                    if wfa == nil && hackedWFA == .detailCompletedDate {
+                    if oldWFA == nil && hackedWFA == .detailCompletedDate {
                         // Transitioning from popover back to date control - don't clear undo
 //                        log.debug("Not clearing undo stack: Detected Date Pop Up to flat View transition")
                         return
@@ -106,11 +106,11 @@ extension Main {
                     // Normal focus area transition - update tracked state
                     hackedWFA = newWFA
                 }
-                .onChange(of: hackedWFA, perform: { _ in
+                .onChange(of: hackedWFA) {
                     // Clear undo stack when work focus area changes
 //                    log.debug("Got new hackedWFA, clearing window undo stack")
                     windowUM?.removeAllActions()
-                })
+                }
                 .onReceive(NSApplication.shared.publisher(for: \.keyWindow)) { _ in
                     // Clear undo stack when user switches to different window
                     windowUM?.removeAllActions()

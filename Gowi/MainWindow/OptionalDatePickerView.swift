@@ -95,7 +95,7 @@ struct OptionalDatePickerView: View {
 
     var body: some View {
         return Layout(setLabel: setLabel, date: displayDate, isDone: isDoneBinding)
-            .onChange(of: ourId) { _ in
+            .onChange(of: ourId) {
                 localDate = Date()
                 userMadeNoLocalChanges = true
             }

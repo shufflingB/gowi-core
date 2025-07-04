@@ -8,7 +8,9 @@
 import Foundation
 
 /// `Set` extended with `RawRepresentable` so that the set of ID's selected by the content view can be persisted in `@SceneStorage`
-extension Set: RawRepresentable where Element == UUID {
+/// Retroactive conformance to support @SceneStorage.
+/// Delete if Swift/Apple introduces native conformance.
+extension Set: @retroactive RawRepresentable where Element == UUID {
     public init?(rawValue: String) {
         self = Set(rawValue.components(separatedBy: ",").compactMap { str in
             guard let id: UUID = UUID(uuidString: str) else {
