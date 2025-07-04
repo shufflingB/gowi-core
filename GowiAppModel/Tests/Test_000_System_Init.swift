@@ -6,7 +6,6 @@
 //
 
 @testable import GowiAppModel
-// import Gowi
 import XCTest
 
 

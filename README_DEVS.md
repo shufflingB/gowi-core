@@ -97,6 +97,7 @@ The help build system runs as an Xcode build phase and:
   - Application-specific tests
 
 **Benefits of Framework Separation**:
+- **SwiftUI friendly**: Much of SwiftUI's built in functionallity is only available in its `View` structs.
 - **Decoupling**: Clear separation between data layer and UI
 - **Independent Development**: AppModel can be developed and tested separately
 - **Reusability**: Framework could potentially be used in other applications
@@ -116,15 +117,15 @@ Gowi uses an empirically derived **Model StateView View (MSV)** architecture tha
   - CoreData + CloudKit integration
   - Comprehensive undo support
 
-- **StateView**: High-level SwiftUI views (e.g., `Main`)
+- **StateView**: High-level SwiftUI View (e.g., `Main`)
   - Minimal UI layout
-  - Centralizes access to app model and SwiftUI stores
-  - Derives state and intents for sub-views
+  - Centralizes access to the app model and SwiftUI specific stores
+  - Derives state and intents from app model and SwiftUI injected data for sub-Views
   - Reduces "prop-drilling" boilerplate
   - Example: `Main`, `Main#Model`, `Main#SidebarModel`
 
-- **Views**: Stateless UI components
-  - StateView adapter + Layout pattern
+- **Views**: UI components
+  - Derives state and intents from injected StateView properties and local state for pure one to one Layout View.
   - Easily testable with previews
   - Examples: `Main#DetailView`, `ItemView`
 

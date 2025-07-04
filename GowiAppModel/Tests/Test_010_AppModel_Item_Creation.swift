@@ -5,11 +5,8 @@
 //  Created by Jonathan Hume on 02/12/2022.
 //
 
-import AppKit
-import Foundation
-@testable import GowiAppModel
 
-import os
+@testable import GowiAppModel
 import XCTest
 
 class Test_010_AppModel_Item_Creation: XCTestCase {
