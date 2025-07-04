@@ -51,10 +51,7 @@ struct Main: View {
     ///   - root: Item from which all `Item`s rendered in this view are descendants of.
     ///   - route: binding to the route assigned to  the view  by `WindowGroup(id:for:content)`
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
-        _itemsAllFromFetchRequest = FetchRequest<Item>(
-            sortDescriptors: [],
-            predicate: NSPredicate(format: "parentList CONTAINS %@", root as CVarArg)
-        )
+        _itemsAllFromFetchRequest = AppModel.fetchRequestForChildrenOf(root)
         _windowGroupRoute = route
 
         _winId = State(initialValue: Self.instantiationCount)

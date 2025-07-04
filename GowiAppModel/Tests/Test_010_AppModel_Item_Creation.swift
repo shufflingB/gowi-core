@@ -7,6 +7,7 @@
 
 
 @testable import GowiAppModel
+
 import XCTest
 
 class Test_010_AppModel_Item_Creation: XCTestCase {

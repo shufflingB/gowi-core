@@ -25,6 +25,64 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
  - **Testability**: Enables unit testing of fetch logic independently
  */
 extension AppModel {
+    
+    /// Configuration structure for FetchRequest that exposes predicate and sort descriptors for testing
+    public struct FetchRequestConfiguration {
+        public let predicate: NSPredicate?
+        public let sortDescriptors: [NSSortDescriptor]
+        
+        internal init(predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]) {
+            self.predicate = predicate
+            self.sortDescriptors = sortDescriptors
+        }
+    }
+    
+    /// Creates the predicate and sort descriptors for fetching children of a specific root item
+    ///
+    /// This method provides the CoreData configuration for child item fetching.
+    /// It's primarily intended for testing purposes, where you need access to the 
+    /// predicate and sort descriptors directly.
+    ///
+    /// - Parameter root: The parent Item whose children should be fetched
+    /// - Returns: A configuration object with predicate and sort descriptors
+    ///
+    /// ### Configuration:
+    /// - **Predicate**: Fetches items where `parentList CONTAINS root`
+    /// - **Sort Descriptors**: unordered
+    public static func makeFetchRequestConfigForChildrenOf(_ parent: Item) -> FetchRequestConfiguration {
+        return FetchRequestConfiguration(
+            predicate: NSPredicate(format: "parentList CONTAINS %@", parent as CVarArg),
+            sortDescriptors: []
+        )
+    }
+    
+    /// Creates a properly configured FetchRequest for fetching children of a specific root item
+    ///
+    /// This factory method encapsulates the CoreData predicate and sort descriptor logic
+    /// required to fetch child items, providing a clean interface for SwiftUI views
+    /// while maintaining separation between the data layer and UI layer.
+    ///
+    /// - Parameter root: The parent Item whose children should be fetched
+    /// - Returns: A configured FetchRequest ready for use with SwiftUI's @FetchRequest based on makeFetchRequestConfigForChildrenOf setup
+    ///
+    /// ### Usage:
+    /// ```swift
+    /// // In SwiftUI view initialization:
+    /// _itemsFromRoot = AppModel.fetchRequestForChildrenOf(rootItem)
+    /// ```
+    ///
+    /// ### Configuration:
+    /// - **Predicate**: Fetches items where `parentList CONTAINS root`
+    /// - **Sort Descriptors**: Orders by priority descending (highest priority first)
+    /// - **Animation**: Uses default SwiftUI animation for changes
+    public static func fetchRequestForChildrenOf(_ parent: Item) -> FetchRequest<Item> {
+        let config = makeFetchRequestConfigForChildrenOf(parent)
+        return FetchRequest<Item>(
+            sortDescriptors: config.sortDescriptors,
+            predicate: config.predicate,
+            animation: .default
+        )
+    }
         
     /// Pass-through undo operations boiler-plate
     private static func undoPreFlight(externalUM: UndoManager?, contextUM: UndoManager?)

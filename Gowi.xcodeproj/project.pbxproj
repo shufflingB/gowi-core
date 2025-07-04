@@ -210,6 +210,7 @@
 			membershipExceptions = (
 				Tests/Test_000_System_Init.swift,
 				Tests/Test_010_AppModel_Item_Creation.swift,
+				Tests/Test_015_AppModel_SwiftUI_FetchRequest.swift,
 				Tests/Test_020_AppModel_Item_Deletion.swift,
 				Tests/Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift,
 			);
@@ -220,6 +221,7 @@
 			membershipExceptions = (
 				Tests/Test_000_System_Init.swift,
 				Tests/Test_010_AppModel_Item_Creation.swift,
+				Tests/Test_015_AppModel_SwiftUI_FetchRequest.swift,
 				Tests/Test_020_AppModel_Item_Deletion.swift,
 				Tests/Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift,
 			);
