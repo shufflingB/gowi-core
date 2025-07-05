@@ -18,6 +18,7 @@ enum AccessId: String {
 
     case FileMenuSave
     case FileMenuRevert
+    case FileMenuExportJSON
 
     // MARK: Main AppMenu Items
 

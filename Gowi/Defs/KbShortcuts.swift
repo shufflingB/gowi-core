@@ -34,6 +34,7 @@ import SwiftUI
 /// Application-specific keyboard shortcuts
 struct KbShortcuts {
     static let fileSaveChanges = KeyboardShortcut("s", modifiers: .command)
+    static let fileExportJSON = KeyboardShortcut("e", modifiers: .command) // Standard export shortcut
 
     static let itemsNew = KeyboardShortcut("n", modifiers: .command) // Reminders'
     static let itemsDuplicate = KeyboardShortcut("d", modifiers: .command) // Finder and other

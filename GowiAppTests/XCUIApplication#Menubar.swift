@@ -90,6 +90,15 @@ extension XCUIApplication {
         }
     }
 
+    var menubarFileExportJSON: XCUIElement {
+        get throws {
+            let element = menuBars.menuItems["Export JSON"]
+            return try validateElement(element, description: "Menu item 'Export JSON'", additionalUserInfo: [
+                "menu_item": "Export JSON"
+            ])
+        }
+    }
+
     // MARK: Edit
 
 

@@ -29,7 +29,7 @@ class Test_015_AppModel_SwiftUI_FetchRequest: XCTestCase {
     
   
     
-    func test_makeFetchRequestForChildrenOf_shouldFetchChildrenOfSpecifiedRoot() throws {
+    func test_010_makeFetchRequestForChildrenOf_shouldFetchChildrenOfSpecifiedRoot() throws {
         // Create a second root item
         let secondRoot = appModel.itemAddNewTo(
             externalUM: nil,

@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import AppKit
+import UniformTypeIdentifiers
+import GowiAppModel
 
 /**
  ## File Menu Commands
@@ -35,8 +38,21 @@ extension Menubar {
     var fileCommands: some Commands {
         CommandGroup(replacing: CommandGroupPlacement.newItem) {
             Section {
-                // Placeholder for future import/export functionality
-                Text("TODO: JSON import and export")
+                // JSON Export functionality
+                Button("Export JSON") {
+                    // Get first selected item for export
+                    guard let selectedItems = mainStateView?.contentItemsSelected,
+                          let firstSelectedItem = selectedItems.first else {
+                        return
+                    }
+                    
+                    // Trigger file export dialog
+                    exportJSONItem(firstSelectedItem)
+                }
+                .disabled(mainStateView?.contentItemsSelected == nil || 
+                         mainStateView?.contentItemsSelected.count ?? 0 < 1)
+                .accessibilityIdentifier(AccessId.FileMenuExportJSON.rawValue)
+                .keyboardShortcut(KbShortcuts.fileExportJSON)
                 
                 // Manual save command for CoreData changes
                 Button("Save Changes") {
@@ -62,6 +78,42 @@ extension Menubar {
                 .accessibilityIdentifier(AccessId.FileMenuRevert.rawValue)
                 // TODO: Determine appropriate keyboard shortcut for revert operation
                 // .keyboardShortcut(KbShortcuts.fileRevertChanges)
+            }
+        }
+    }
+    
+    /// Exports a single Item as JSON using native macOS save dialog
+    /// - Parameter item: The Item to export
+    private func exportJSONItem(_ item: Item) {
+        // Create save panel
+        let savePanel = NSSavePanel()
+        savePanel.allowedContentTypes = [.json]
+        savePanel.canCreateDirectories = true
+        savePanel.isExtensionHidden = false
+        savePanel.title = "Export Item as JSON"
+        savePanel.message = "Choose a location to save the JSON export"
+        savePanel.nameFieldStringValue = "\(item.titleS).json"
+        
+        // Show save panel
+        savePanel.begin { result in
+            guard result == .OK, let url = savePanel.url else {
+                return
+            }
+            
+            do {
+                // Export item to JSON
+                let jsonData = try item.exportAsJSON()
+                try jsonData.write(to: url)
+            } catch {
+                // Show error dialog
+                DispatchQueue.main.async {
+                    let alert = NSAlert()
+                    alert.messageText = "Export Failed"
+                    alert.informativeText = "Failed to export JSON: \(error.localizedDescription)"
+                    alert.alertStyle = .warning
+                    alert.addButton(withTitle: "OK")
+                    alert.runModal()
+                }
             }
         }
     }

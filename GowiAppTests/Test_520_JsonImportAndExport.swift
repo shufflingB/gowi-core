@@ -6,58 +6,304 @@
 //
 
 import XCTest
+import SwiftUI
 
 final class Test_520_JsonImportAndExport: XCTestCase {
     let app = XCUIApplication()
-
+    
     override func setUpWithError() throws {
-
+        
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-     
+        
+        
     }
-
+    
     override func tearDownWithError() throws {
         // Clean up any help windows that might be open
         app.terminate()
     }
-
+    
     func test_000_jsonExportMenuBarEntryGreyedOut() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "0"]
-        app.launch()
+        app.launchAndSanitiseWindowsAndIdentifiers()
         
-        /**
-         with no items select in the window there should be a menubar entry under File for JSON export, but it should be greyed.
-         */
-        XCTFail("Test not implemented")
-    
+        // Open File menu to make menu items accessible
+        try app.menubarFileMenu.click()
+        
+        // Check that Export JSON menu item exists
+        let exportJSONItem = try app.menubarFileExportJSON
+        XCTAssertTrue(exportJSONItem.exists, "Export JSON menu item should exist in File menu")
+        
+        // Check that it's disabled when no items are selected
+        XCTAssertFalse(exportJSONItem.isEnabled, "Export JSON menu item should be disabled when no items are selected")
+        
+        // Close the menu by clicking elsewhere
+        try app.win1.click()
     }
     
     func test_020_jsonExport() throws {
         app.launchEnvironment = ["GOWI_TESTMODE": "1"]
-        app.launch()
+        app.launchAndSanitiseWindowsAndIdentifiers()
         
-        /**
-         0) If necessary setup a temporary directory where output  files can be written and ensure that there are no artefacts from previous runs of this test present (such as test_020.json )
-         1) Pick an Item to export
-            - Click All in sidebar
-            - Click row 3 in content rows
-            - Mark the item selected as completed
-         2) Capture the  Item's Title, Creation date, Completion Date, and Notes.
-         3) Open the File menu and their should be a JSON export entry.
-         4) Select the JSON entry, this should open a modal file save dialogue.
-         5) Modal dialogue should suggest a default filename that ends with the sufficx ".json"
-         6) Change the  filename to be test_020.json and update the save directory path  to be under the  temporary testing location.
-         7) Click the proceed button
-         8) After one second verify that the requested file has been created in the output directory.
-         9) Check the output format of the file is valid JSON
-         10) Verify that it  contains keys and values that correspond to those of the exported Item (captured in 2) )
-         
-            
-         */
-        XCTFail("Test not implemented")
-    
-    }
+        // 0) Setup temporary directory and clean up any artifacts from previous runs
+        let tempDir = createTempDirectory()
+        let outputFilePath = tempDir.appendingPathComponent("test_020.json")
+        
+        // Remove any existing file from previous test runs
+        try? FileManager.default.removeItem(at: outputFilePath)
+        
+        // 1) Pick an Item to export
+        // Click All in sidebar
+        try app.sidebarAllList().click()
+        
+        // Click row 3 in content rows (assuming at least 4 items exist in test mode)
+        let contentRows = try app.contentRows()
+        XCTAssertGreaterThanOrEqual(contentRows.count, 4, "Test mode should have at least 4 items for row 3 to exist")
+        
+        try app.contentRowTextField(3).click()
+        
+        // Mark the item selected as completed
+        try app.detailCompletionCheckBox().click()
+        
+        // 2) Capture the Item's Title, Creation date, Completion Date, and Notes
+        let capturedData = try captureItemData()
+        
+        // 3) Open the File menu and verify JSON export entry exists
+        try app.menubarFileMenu.click()
+        let exportJSONItem = try app.menubarFileExportJSON
+        XCTAssertTrue(exportJSONItem.exists, "Export JSON menu item should exist in File menu")
+        XCTAssertTrue(exportJSONItem.isEnabled, "Export JSON menu item should be enabled when an item is selected")
+        
+        // 4) Select the JSON entry - this should open a modal file save dialogue
+        exportJSONItem.click()
 
+        
+        // 5) Modal dialogue should suggest a default filename that ends with ".json"
+        let defaultFileName = try app.savePanelSaveAsTextFieldValue
+        XCTAssertTrue(defaultFileName.hasSuffix(".json"), "Default filename should end with .json, got: \(defaultFileName)")
+        
+        // 6) Change the filename to be test_020.json and update the save directory path
+        
+        let fileLocationShortcut = KeyboardShortcut("g", modifiers: [.command, .shift])
+        app.typeKeyboardShortcut(fileLocationShortcut)
+        app.typeText(outputFilePath.path())
+        app.typeKey(.return, modifierFlags: [])
+        
+        // 7) Save the file
+        try app.savePanelSaveButton.click()
+    
+        XCTAssertTrue(FileManager.default.fileExists(atPath: outputFilePath.path),
+                      "JSON file should be created at: \(outputFilePath.path)")
+        
+        
+        // 9) Check the output format of the file is valid JSON
+        let jsonData = try Data(contentsOf: outputFilePath)
+        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+        XCTAssertNotNil(jsonObject, "File should contain valid JSON")
+        
+        // 10) Verify that it contains keys and values that correspond to those of the exported Item
+        try validateJSONContent(jsonObject, expectedData: capturedData)
+    }
+    
+    
+    
+    func test_030_jsonExportToExistingFile() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "1"]
+        app.launchAndSanitiseWindowsAndIdentifiers()
+        
+        // 1) Setup temporary directory and create empty pre-existing file
+        let tempDir = createTempDirectory()
+        let outputFilePath = tempDir.appendingPathComponent("test030.json")
+        
+        // Create empty file to simulate existing file
+        let emptyData = Data()
+        try emptyData.write(to: outputFilePath)
+        
+        // Verify file exists and is empty
+        XCTAssertTrue(FileManager.default.fileExists(atPath: outputFilePath.path),
+                      "Pre-existing file should be created")
+        
+        let fileSize = try FileManager.default.attributesOfItem(atPath: outputFilePath.path)[.size] as! Int
+        XCTAssertEqual(fileSize, 0, "Pre-existing file should be empty (0 bytes)")
+        
+        // 2) Select an item and capture its data (same workflow as test_020)
+        try app.sidebarAllList().click()
+        
+        let contentRows = try app.contentRows()
+        XCTAssertGreaterThanOrEqual(contentRows.count, 4, "Test mode should have at least 4 items for row 3 to exist")
+        
+        try app.contentRowTextField(3).click()
+        try app.detailCompletionCheckBox().click()
+        
+        let capturedData = try captureItemData()
+        
+        // 3) Start export process
+        try app.menubarFileMenu.click()
+        let exportJSONItem = try app.menubarFileExportJSON
+        XCTAssertTrue(exportJSONItem.isEnabled, "Export JSON should be enabled when item is selected")
+        
+        try exportJSONItem.click()
+        
+        // Wait for save panel
+        let savePanel = app.sheets.firstMatch
+        XCTAssertTrue(savePanel.waitForExistence(timeout: 3), "Save panel should appear")
+        
+        // Navigate to existing file
+        let fileNameField = savePanel.textFields.firstMatch
+        fileNameField.click()
+        fileNameField.typeText("test030.json")
+        
+        // Navigate to temp directory (simplified navigation)
+        let goToFolderButton = savePanel.buttons["Go to Folder"]
+        if goToFolderButton.exists {
+            goToFolderButton.click()
+            let pathField = app.sheets.textFields.firstMatch
+            pathField.typeText(tempDir.path)
+            app.sheets.buttons["Go"].click()
+        }
+        
+        // 4) First export attempt - Click Save to trigger overwrite dialog
+        let saveButton = savePanel.buttons["Save"]
+        XCTAssertTrue(saveButton.exists, "Save button should exist")
+        saveButton.click()
+        
+        // 5) Verify overwrite dialog appears
+        let overwriteDialog = app.sheets.element(boundBy: 1) // Second sheet (dialog over save panel)
+        XCTAssertTrue(overwriteDialog.waitForExistence(timeout: 3), "Overwrite confirmation dialog should appear")
+        
+        // Verify dialog mentions the filename
+        let dialogText = overwriteDialog.staticTexts.allElementsBoundByIndex.map { $0.value as? String ?? "" }.joined(separator: " ")
+        XCTAssertTrue(dialogText.contains("test030.json"), "Overwrite dialog should mention the filename 'test030.json'")
+        
+        // 6) Cancel the overwrite
+        let cancelButton = overwriteDialog.buttons["Cancel"]
+        XCTAssertTrue(cancelButton.exists, "Cancel button should exist in overwrite dialog")
+        cancelButton.click()
+        
+        // 7) Verify file remains untouched
+        Thread.sleep(forTimeInterval: 0.5) // Brief pause for file system
+        let fileSizeAfterCancel = try FileManager.default.attributesOfItem(atPath: outputFilePath.path)[.size] as! Int
+        XCTAssertEqual(fileSizeAfterCancel, 0, "File should remain empty after canceling overwrite")
+        
+        // 8) Verify save dialog remains open
+        XCTAssertTrue(savePanel.exists, "Save panel should remain open after canceling overwrite")
+        
+        // 9) Second export attempt - Click Save again (same dialog)
+        saveButton.click()
+        
+        // 10) Verify overwrite dialog appears again
+        XCTAssertTrue(overwriteDialog.waitForExistence(timeout: 3), "Overwrite confirmation dialog should appear again")
+        
+        // 11) This time, proceed with overwrite
+        let overwriteButton = overwriteDialog.buttons["Overwrite"]
+        XCTAssertTrue(overwriteButton.exists, "Overwrite button should exist in confirmation dialog")
+        overwriteButton.click()
+        
+        // 12) Verify file was created with proper content
+        Thread.sleep(forTimeInterval: 1.0) // Allow time for file write
+        XCTAssertTrue(FileManager.default.fileExists(atPath: outputFilePath.path),
+                      "JSON file should exist after overwrite")
+        
+        // 13) Verify file is no longer empty
+        let finalFileSize = try FileManager.default.attributesOfItem(atPath: outputFilePath.path)[.size] as! Int
+        XCTAssertGreaterThan(finalFileSize, 0, "File should contain data after successful export")
+        
+        // 14) Validate JSON content
+        let jsonData = try Data(contentsOf: outputFilePath)
+        let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+        XCTAssertNotNil(jsonObject, "File should contain valid JSON")
+        
+        // 15) Verify content matches captured item data
+        try validateJSONContent(jsonObject, expectedData: capturedData)
+    }
+}
+
+
+// MARK: - Helper Methods
+extension Test_520_JsonImportAndExport {
+    
+    /// Data structure to hold captured item properties for validation
+    struct CapturedItemData {
+        let title: String
+        let creationDate: String
+        let completionDate: String
+        let notes: String
+        let ourId: String
+    }
+    
+    /// Creates a temporary directory for test file operations
+    /// - Returns: URL pointing to the temporary directory
+    func createTempDirectory() -> URL {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("GowiJsonExportTests")
+            .appendingPathComponent(UUID().uuidString)
+        
+        try! FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+        return tempDir
+    }
+    
+    /// Captures the current item's data from the detail view
+    /// - Returns: CapturedItemData containing all relevant item properties
+    func captureItemData() throws -> CapturedItemData {
+        let title = try app.detailTitleValue()
+        let creationDate = try app.detailCreateDateValue()
+        let completionDate = try app.detailCompletedDateValue()
+        let notes = try app.detailNotesValue()
+        let ourId = try app.detailIDValue() ?? ""
+        
+        return CapturedItemData(
+            title: title,
+            creationDate: creationDate,
+            completionDate: completionDate,
+            notes: notes,
+            ourId: ourId
+        )
+    }
+    
+    /// Validates that the JSON content matches the expected item data
+    /// - Parameters:
+    ///   - jsonObject: The parsed JSON object from the exported file
+    ///   - expectedData: The captured item data to validate against
+    func validateJSONContent(_ jsonObject: Any, expectedData: CapturedItemData) throws {
+        guard let jsonDict = jsonObject as? [String: Any] else {
+            XCTFail("JSON should be a dictionary/object")
+            return
+        }
+        
+        // Validate title
+        if let title = jsonDict["title"] as? String {
+            XCTAssertEqual(title, expectedData.title, "JSON title should match captured title")
+        } else {
+            XCTFail("JSON should contain 'title' field")
+        }
+        
+        // Validate creation date
+        if let creationDate = jsonDict["creationDate"] as? String {
+            XCTAssertEqual(creationDate, expectedData.creationDate, "JSON creation date should match captured date")
+        } else {
+            XCTFail("JSON should contain 'creationDate' field")
+        }
+        
+        // Validate completion date
+        if let completionDate = jsonDict["completionDate"] as? String {
+            XCTAssertEqual(completionDate, expectedData.completionDate, "JSON completion date should match captured date")
+        } else {
+            XCTFail("JSON should contain 'completionDate' field")
+        }
+        
+        // Validate notes
+        if let notes = jsonDict["notes"] as? String {
+            XCTAssertEqual(notes, expectedData.notes, "JSON notes should match captured notes")
+        } else {
+            XCTFail("JSON should contain 'notes' field")
+        }
+        
+        // Validate ourId
+        if let ourId = jsonDict["ourId"] as? String {
+            XCTAssertEqual(ourId, expectedData.ourId, "JSON ourId should match captured ourId")
+        } else {
+            XCTFail("JSON should contain 'ourId' field")
+        }
+    }
 }
