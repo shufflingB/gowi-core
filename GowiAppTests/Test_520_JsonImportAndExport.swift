@@ -8,32 +8,56 @@
 import XCTest
 
 final class Test_520_JsonImportAndExport: XCTestCase {
+    let app = XCUIApplication()
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+     
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        // Clean up any help windows that might be open
+        app.terminate()
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
+    func test_000_jsonExportMenuBarEntryGreyedOut() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "0"]
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        /**
+         with no items select in the window there should be a menubar entry under File for JSON export, but it should be greyed.
+         */
+        XCTFail("Test not implemented")
+    
+    }
+    
+    func test_020_jsonExport() throws {
+        app.launchEnvironment = ["GOWI_TESTMODE": "1"]
+        app.launch()
+        
+        /**
+         0) If necessary setup a temporary directory where output  files can be written and ensure that there are no artefacts from previous runs of this test present (such as test_020.json )
+         1) Pick an Item to export
+            - Click All in sidebar
+            - Click row 3 in content rows
+            - Mark the item selected as completed
+         2) Capture the  Item's Title, Creation date, Completion Date, and Notes.
+         3) Open the File menu and their should be a JSON export entry.
+         4) Select the JSON entry, this should open a modal file save dialogue.
+         5) Modal dialogue should suggest a default filename that ends with the sufficx ".json"
+         6) Change the  filename to be test_020.json and update the save directory path  to be under the  temporary testing location.
+         7) Click the proceed button
+         8) After one second verify that the requested file has been created in the output directory.
+         9) Check the output format of the file is valid JSON
+         10) Verify that it  contains keys and values that correspond to those of the exported Item (captured in 2) )
+         
+            
+         */
+        XCTFail("Test not implemented")
+    
     }
 
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
-    }
 }
