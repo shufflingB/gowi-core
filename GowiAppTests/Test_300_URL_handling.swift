@@ -7,7 +7,7 @@
 
 import XCTest
 
-class Test_500_URL_handling: XCTestCase {
+class Test_300_URL_handling: XCTestCase {
     let app = XCUIApplication()
 
     override func setUpWithError() throws {

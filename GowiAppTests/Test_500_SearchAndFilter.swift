@@ -14,7 +14,7 @@ import XCTest
 /// - Search state restoration when switching between lists
 /// - URL routing with search parameters
 /// - Cross-list navigation with search state
-class Test_900_SearchAndFilter: XCTestCase {
+class Test_500_SearchAndFilter: XCTestCase {
     let app = XCUIApplication()
 
     var list_locators: Dictionary<String, (XCUIElement?) throws -> XCUIElement > = [:]

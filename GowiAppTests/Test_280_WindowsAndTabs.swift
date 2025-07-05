@@ -7,7 +7,7 @@
 
 import XCTest
 
-class Test_800_WindowsAndTabs: XCTestCase {
+class Test_280_WindowsAndTabs: XCTestCase {
     let app = XCUIApplication()
 
     override func setUpWithError() throws {

@@ -18,7 +18,7 @@ import XCTest
  - Help menu opens help documentation
  - Help content displays correctly
  */
-class Test_950_HelpDocumentation: XCTestCase {
+class Test_510_HelpDocumentation: XCTestCase {
     let app = XCUIApplication()
 
     override func setUpWithError() throws {

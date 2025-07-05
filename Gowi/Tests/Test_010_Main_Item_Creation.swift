@@ -50,6 +50,7 @@ class Test_010_Main_Item_Creation: XCTestCase {
         let afterUndoList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
         XCTAssertEqual(afterUndoList.count, originalSortedList.count,
                        "And the addition is undoable ")
+        
     }
 
     func test120_sidebars_an_item_can_be_inserted_between_items_of_waiting_list() {

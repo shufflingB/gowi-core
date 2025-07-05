@@ -7,7 +7,7 @@
 import Darwin
 import XCTest
 
-extension Test_500_URL_handling {
+extension Test_300_URL_handling {
     /// Tests whether URL routing correctly raises existing windows instead of creating new ones
     ///
     /// This is a comprehensive test helper that validates the core URL routing behavior: when a URL
