@@ -278,16 +278,62 @@ extension Test_520_JsonImportAndExport {
             XCTFail("JSON should contain 'title' field")
         }
         
-        // Validate creation date
-        if let creationDate = jsonDict["creationDate"] as? String {
-            XCTAssertEqual(creationDate, expectedData.creationDate, "JSON creation date should match captured date")
+        // Validate creation date - convert both formats to Date objects for comparison
+        if let jsonCreationDateString = jsonDict["creationDate"] as? String {
+            // Parse the JSON date (ISO8601 format)
+            let iso8601Formatter = ISO8601DateFormatter()
+            guard let jsonCreationDate = iso8601Formatter.date(from: jsonCreationDateString) else {
+                XCTFail("JSON creation date should be valid ISO8601 format: \(jsonCreationDateString)")
+                return
+            }
+            
+            // Parse the UI captured date (.short format) - UI uses local timezone
+            let uiDateFormatter = DateFormatter()
+            uiDateFormatter.dateStyle = .short
+            uiDateFormatter.timeStyle = .short
+            uiDateFormatter.timeZone = TimeZone.current // Explicit local timezone
+            guard let uiCreationDate = uiDateFormatter.date(from: expectedData.creationDate) else {
+                XCTFail("UI creation date should be valid .short format: \(expectedData.creationDate)")
+                return
+            }
+            
+            // Compare dates with tolerance for timing differences and timezone conversion
+            let timeDifference = abs(jsonCreationDate.timeIntervalSince(uiCreationDate))
+            XCTAssertLessThanOrEqual(timeDifference, 60.0, 
+                                   "JSON creation date (\(jsonCreationDateString)) should match UI date (\(expectedData.creationDate)) within 60 seconds (accounting for timezone and timing differences)")
         } else {
             XCTFail("JSON should contain 'creationDate' field")
         }
         
-        // Validate completion date
-        if let completionDate = jsonDict["completionDate"] as? String {
-            XCTAssertEqual(completionDate, expectedData.completionDate, "JSON completion date should match captured date")
+        // Validate completion date - handle both completed and incomplete items
+        if let jsonCompletionDateString = jsonDict["completionDate"] as? String {
+            if jsonCompletionDateString == "null" || jsonCompletionDateString.isEmpty {
+                // Item is incomplete - UI should show "Incomplete" or similar
+                XCTAssertTrue(expectedData.completionDate.contains("Incomplete") || expectedData.completionDate.isEmpty,
+                            "Incomplete item should show 'Incomplete' in UI, got: \(expectedData.completionDate)")
+            } else {
+                // Item is completed - parse and compare dates
+                let iso8601Formatter = ISO8601DateFormatter()
+                guard let jsonCompletionDate = iso8601Formatter.date(from: jsonCompletionDateString) else {
+                    XCTFail("JSON completion date should be valid ISO8601 format: \(jsonCompletionDateString)")
+                    return
+                }
+                
+                // Parse the UI captured date (.short format) - UI uses local timezone
+                let uiDateFormatter = DateFormatter()
+                uiDateFormatter.dateStyle = .short
+                uiDateFormatter.timeStyle = .short
+                uiDateFormatter.timeZone = TimeZone.current // Explicit local timezone
+                guard let uiCompletionDate = uiDateFormatter.date(from: expectedData.completionDate) else {
+                    XCTFail("UI completion date should be valid .short format: \(expectedData.completionDate)")
+                    return
+                }
+                
+                // Compare dates with tolerance for timing differences and timezone conversion
+                let timeDifference = abs(jsonCompletionDate.timeIntervalSince(uiCompletionDate))
+                XCTAssertLessThanOrEqual(timeDifference, 60.0, 
+                                       "JSON completion date (\(jsonCompletionDateString)) should match UI date (\(expectedData.completionDate)) within 60 seconds (accounting for timezone and timing differences)")
+            }
         } else {
             XCTFail("JSON should contain 'completionDate' field")
         }
