@@ -89,6 +89,7 @@ Compare different time periods:
 | <kbd>⌘Z</kbd> | Undo last action |
 | <kbd>⇧⌘Z</kbd> | Redo last undone action |
 | <kbd>⌘S</kbd> | Save pending changes |
+| <kbd>⌘E</kbd> | Export selected todo as JSON |
 
 ### Window Management
 | Shortcut | Action |
@@ -170,12 +171,32 @@ Use text expansion tools for common patterns:
 - `;proj` → "Project: [name] - [description]"
 - `;call` → "Call [person] regarding [topic]"
 
+### Data Export Workflows
+Export your todos for backup and integration:
+
+**JSON Export for Analysis**:
+1. Select any todo item in your list
+2. Use <kbd>⌘E</kbd> or File → Export JSON
+3. Choose a descriptive filename (e.g., `project-todos-2025.json`)
+4. Import into spreadsheets, databases, or analysis tools
+
+**Backup Important Projects**:
+- Export key project todos as JSON before major changes
+- Create periodic exports for project documentation
+- Use JSON exports to share specific todos with team members
+
+**Data Migration Workflow**:
+- Export completed todos before archiving
+- Create JSON backups before major app updates
+- Use structured JSON for importing into other task management systems
+
 ### Backup Strategies
 Protect your data:
 
 - CloudKit provides automatic backup
-- Export important data periodically
+- Export important todos as JSON periodically
 - Keep devices regularly synced with iCloud
+- Create manual JSON exports for critical projects
 
 ## Troubleshooting Tips
 

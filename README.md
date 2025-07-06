@@ -62,6 +62,7 @@ Share and bookmark specific views with custom URLs:
 ### Context-Aware Menus
 - **Right-Click Menus**: Context-sensitive options for quick actions
 - **Smart Menu Bar**: Menu commands adapt based on current selection and window state
+- **JSON Export**: Export selected items as structured data files (⌘E)
 - **Batch Operations**: Perform actions on multiple selected items
 - **Window Coordination**: Menu commands work intelligently across multiple windows
 
@@ -69,7 +70,7 @@ Share and bookmark specific views with custom URLs:
 - **Comprehensive Undo**: Undo/redo support for all operations with intelligent scope management
 - **Automatic Saving**: Changes are saved automatically with CloudKit integration
 - **Data Protection**: Built-in safeguards against accidental data loss
-- **Export Ready**: Copy item details, IDs, and URLs to share or archive
+- **Export Ready**: Copy item details, IDs, and URLs to share or archive, plus full JSON export for data portability
 
 ## How to Use
 
@@ -93,6 +94,7 @@ Share and bookmark specific views with custom URLs:
 - **Search Across Filters** to quickly find specific items regardless of status
 
 ### Advanced Features
+- **JSON Export**: Export individual todos as structured JSON files for backup, data analysis, or integration with other tools (⌘E)
 - **URL Sharing**: Copy item URLs from the detail view to share specific tasks
 - **Cross-Device Workflow**: Start work on one device, continue on another seamlessly  
 - **Window Management**: Arrange multiple windows to work on different aspects of your projects

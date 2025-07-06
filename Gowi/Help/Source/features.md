@@ -56,6 +56,7 @@ Comprehensive keyboard shortcuts for maximum productivity:
 | **Navigation** | <kbd>⌘3</kbd> | Done list |
 | **Editing** | <kbd>⌘⌫</kbd> | Delete selected |
 | **Files** | <kbd>⌘S</kbd> | Save changes |
+| **Files** | <kbd>⌘E</kbd> | Export JSON |
 | **Windows** | <kbd>⇧⌘N</kbd> | New window |
 | **Search** | <kbd>⌘F</kbd> | Focus search |
 
@@ -80,6 +81,7 @@ Your data is protected:
 ### Export and Sharing
 Share your todos and collaborate:
 
+- **JSON Export** - Export individual todos as structured JSON files for backup and integration
 - **Deep linking** - Share specific todos with custom URLs
 - **Multi-format support** - Copy data in various formats
 - **Cross-device access** - Open shared links on any device

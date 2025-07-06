@@ -81,7 +81,7 @@ The help build system runs as an Xcode build phase and:
   - `AppModel.swift` - Core business logic and data management
   - `AppModel#Item.swift` - Item-specific operations and CRUD
   - `AppModel#Testing.swift` - Test utilities and fixtures
-  - `Item#App.swift` - Item extensions for application use
+  - `Item#App.swift` - Item extensions for application use, including Encodable conformance for JSON export
   - `Gowi.xcdatamodeld/` - CoreData model definition
   - `CloudKitConfig.swift` - CloudKit configuration
   - `Tests/` - Framework-specific unit tests
@@ -337,6 +337,94 @@ AppModel.shared.debugPrintAllItems()
 AppModel.shared.hasUnPushedChanges
 ```
 
+## JSON Export Implementation
+
+### Overview
+Gowi provides individual item export functionality through the File menu, allowing users to save todo items as structured JSON files for backup, data analysis, or integration with external tools.
+
+### Implementation Architecture
+
+**Data Layer** (`Item#App.swift`):
+- **Encodable Conformance**: Item class implements Swift's `Encodable` protocol
+- **ISO8601 Date Format**: All dates exported in standardized ISO8601 format for universal compatibility
+- **Pretty Printing**: JSON output uses `.prettyPrinted` formatting for human readability
+- **Null Handling**: Incomplete items export completion date as "null" string
+
+```swift
+extension Item: Encodable {
+    enum CodingKeys: String, CodingKey {
+        case title, ourId, creationDate, completionDate, notes
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        // Encodes title, notes, dates, and unique ID
+        // Uses ISO8601DateFormatter for consistent date representation
+    }
+}
+```
+
+**UI Integration** (`Menubar#fileCommands.swift`):
+- **Selection-Based Availability**: Only enabled when exactly one item is selected
+- **File Save Dialog**: Uses `NSSavePanel` with JSON file type restrictions
+- **Error Handling**: Graceful failure with user-friendly `NSAlert` dialogs
+- **Keyboard Shortcut**: ⌘E for quick access
+
+**Menu State Management**:
+- **FocusedValue Integration**: Accesses selection state via SwiftUI's focused value system
+- **Dynamic Enable/Disable**: Menu item automatically enables/disables based on selection
+- **Accessibility Support**: Proper accessibility identifiers for UI automation
+
+### File Format Specification
+
+**JSON Structure**:
+```json
+{
+  "title": "Item title text",
+  "ourId": "UUID-string-format",
+  "creationDate": "2025-01-15T10:30:00Z",
+  "completionDate": "2025-01-16T14:45:00Z", // or "null" for incomplete
+  "notes": "Item notes content"
+}
+```
+
+**Date Handling**:
+- **Input Format**: UI displays dates using `.short` date/time style in local timezone
+- **Output Format**: JSON exports dates as ISO8601 UTC strings
+- **Timezone Conversion**: Automatic conversion preserves absolute time while changing representation
+
+### Testing Strategy
+
+**Unit Testing** (`Test_100_ItemExportJSON.swift`):
+- JSON structure validation
+- Date format verification
+- File I/O operations
+- Error handling scenarios
+
+**UI Testing** (`Test_520_JsonImportAndExport.swift`):
+- Complete export workflow validation
+- Menu integration testing
+- File save dialog interaction
+- Cross-timezone date validation with 60-second tolerance
+
+**Key Testing Challenges**:
+- **Date Format Mismatch**: UI shows local timezone `.short` format, JSON exports UTC ISO8601
+- **Save Panel Automation**: macOS save dialog requires specialized UI automation techniques
+- **Timezone Testing**: Robust comparison between different date representations
+
+### Usage Patterns
+
+**User Workflow**:
+1. Select exactly one item in the content list
+2. Use File → Export JSON (⌘E) or keyboard shortcut
+3. Choose save location in file dialog
+4. Confirm save operation
+
+**Common Use Cases**:
+- **Data Backup**: Personal archive of important todos
+- **External Integration**: Import into spreadsheets, databases, or other tools
+- **Data Analysis**: Processing completion patterns and task metrics
+- **Migration**: Moving data between different task management systems
+
 ## Focus Management & Menu Integration
 
 ### The macOS Focus Challenge
@@ -453,6 +541,10 @@ GOWI_TESTMODE=1  // Enables test fixtures
 - **Intent Testing**: Static methods enable isolated business logic testing
 - **Layout Testing**: Separated UI components support comprehensive previews
 - **URL Testing**: Predictable `ourId` values enable deep linking validation
+- **JSON Export Testing**: Comprehensive validation of data export functionality
+  - **Unit Tests**: `GowiAppModelTests/Test_100_ItemExportJSON.swift` - JSON structure validation
+  - **UI Tests**: `GowiAppTests/Test_520_JsonImportAndExport.swift` - End-to-end export workflow
+  - **Date Format Validation**: Timezone-aware comparison between UI formats and ISO8601 JSON output
 
 ## Key Implementation Files
 
@@ -477,9 +569,14 @@ GOWI_TESTMODE=1  // Enables test fixtures
 
 **Menu System**:
 - `Gowi/Menubars/Menubar.swift` - Menu coordination
-- `Gowi/Menubars/Menubar#fileCommands.swift` - File operations
+- `Gowi/Menubars/Menubar#fileCommands.swift` - File operations, including JSON export implementation
 - `Gowi/Menubars/Menubar#itemCommands.swift` - Item management
 - `Gowi/Menubars/Menubar#windowCommands.swift` - Window operations
+
+**Data Export**:
+- `GowiAppModel/Item#App.swift` - JSON export functionality with Encodable conformance
+- `Gowi/Defs/KbShortcuts.swift` - Keyboard shortcut definitions including JSON export (⌘E)
+- `Gowi/Defs/AccessibilityIdentifiers.swift` - Accessibility IDs for export UI elements
 
 ## Development Tips
 
