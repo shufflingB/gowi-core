@@ -63,6 +63,9 @@ Files use `#` delimiter for logical grouping:
 - `Main#ContentView.swift` - Main window content view
 - `Main#Model.swift` - Main window intents and state management
 - `AppModel#Item.swift` - Item-related AppModel extensions
+- `Item#App.swift` - Item extensions for app-specific functionality (JSON export, etc.)
+- `Menubar#fileCommands.swift` - File menu command implementations
+- `Test_520_JsonImportAndExport.swift` - End-to-end UI test workflows
 
 ## Testing Infrastructure
 
@@ -75,6 +78,10 @@ Set environment variable `GOWI_TESTMODE` to control test data:
 - **AppModel Framework Tests** (`GowiAppModel/Tests/`): Test business logic, data models, and core functionality
 - **App UI Tests** (`GowiAppTests/`): Test complete user workflows and UI interactions
 - **Test Utilities**: `AppModel#Testing.swift` provides consistent test fixtures
+- **JSON Export Tests**: 
+  - Unit tests: `Test_100_ItemExportJSON.swift` validates data structure and file operations
+  - UI tests: `Test_520_JsonImportAndExport.swift` covers complete user workflow including save dialog interaction
+  - **Date Testing Challenge**: Cross-timezone validation between UI (.short format) and JSON (ISO8601) representations
 
 ### Running Single Tests
 ```bash
@@ -83,7 +90,18 @@ xcodebuild -scheme AppModelScheme test -only-testing:GowiAppModelTests/Test_010_
 
 # Run specific app UI test
 xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests/Test_050_ItemCreation
+
+# Test JSON data structure validation
+xcodebuild -scheme AppModelScheme test -only-testing:GowiAppModelTests/Test_100_ItemExportJSON
+
+# Test complete export user workflow
+xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests/Test_520_JsonImportAndExport
 ```
+
+### UI Test Save Dialog Interaction
+- Use specialized XCUIApplication extensions for save panel automation
+- Access save panel elements via dedicated methods: `app.savePanelSaveButton`, `app.savePanelSaveAsTextField`
+- Handle keyboard shortcuts for navigation: `⌘⇧G` for "Go to Folder" dialog
 
 ## Development Notes
 
@@ -107,7 +125,17 @@ Deep linking via `gowi://` URLs:
 - **Shared Singleton**: `AppModel.shared` provides consistent instance across app and tests
 - **Intent Pattern**: Static methods in Model extensions provide testable business logic
 - **StateView Adapter**: High-level views inject dependencies into stateless child views
+- **Menu Command Pattern**: Menu items use `@FocusedValue` to access window state and selection context
+- **Selection-Based Availability**: Commands automatically enable/disable based on current selection state
+- **Error Boundary Pattern**: File operations include comprehensive error handling with user-friendly dialogs
 - **Comprehensive Undo**: All user actions are undoable through coordinated UndoManager usage
+
+### JSON Export Implementation
+- **Data Export Pattern**: Items implement `Encodable` protocol for structured data export
+- **Menu Integration**: File menu commands use `@FocusedValue` system for selection-aware availability
+- **File I/O**: Uses `NSSavePanel` for user-friendly file save dialogs with type restrictions
+- **Date Format Standards**: ISO8601 format for all exported dates to ensure universal compatibility
+- **Error Handling**: Graceful failure with `NSAlert` user notifications for export errors
 
 ## Debugging
 
@@ -116,6 +144,23 @@ Add launch argument in Xcode scheme: `-com.apple.CoreData.SQLDebug 1`
 
 ### Test Data Inspection
 Use `AppModel.debugPrintAllItems()` to inspect current data state during development.
+
+## Development Best Practices
+
+### Testing Date/Time Functionality
+- **Timezone Awareness**: When testing date functionality, account for timezone differences between UI display and data export
+- **Test Tolerance**: Use reasonable time tolerances (e.g., 60 seconds) for date comparisons to handle timing variations
+- **Format Consistency**: UI uses `.short` DateFormatter style, exports use ISO8601 for universal compatibility
+
+### Menu Command Implementation
+- **FocusedValue Integration**: Always use `@FocusedValue(\.mainStateView)` to access window state in menu commands
+- **Selection Validation**: Check for valid selection before enabling menu commands
+- **User Feedback**: Provide clear error messages via NSAlert for failed operations
+
+### File Operations
+- **Type Restrictions**: Use `allowedContentTypes` in NSSavePanel for proper file filtering
+- **Default Naming**: Provide sensible default filenames based on content (e.g., `item.titleS + ".json"`)
+- **Error Recovery**: Handle file I/O errors gracefully with user-actionable error messages
 
 ## Git Commit Guidelines
 - Must not add credit information to commit messages. Just state the changes.
