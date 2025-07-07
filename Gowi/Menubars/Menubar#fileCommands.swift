@@ -57,7 +57,7 @@ extension Menubar {
                 // Manual save command for CoreData changes
                 Button("Save Changes") {
                     withAnimation {
-                        appModel.saveToCoreData()
+                        appModel.saveToBackend()
                     }
                 }
                 .disabled(appModel.hasUnPushedChanges == false)

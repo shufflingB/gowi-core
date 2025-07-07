@@ -54,7 +54,7 @@ extension Main {
         ToolbarItem(id: "tbar.save") {
             Button(action: {
                 withAnimation {
-                    appModel.saveToCoreData()
+                    appModel.saveToBackend()
                 }
             }) {
                 Label("Save Changes", systemImage: appModel.hasUnPushedChanges ? "icloud.and.arrow.up.fill" : "checkmark.icloud")

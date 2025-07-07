@@ -15,7 +15,7 @@ fileprivate let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category:
 // AppModel public functionallity specifically associated with the handling of `Item`s
 extension AppModel {
     /// Persists changes made against `AppModel#viewContext`
-    public func saveToCoreData() {
+    public func saveToBackend() {
         Self.saveToCoreData(viewContext)
     }
     

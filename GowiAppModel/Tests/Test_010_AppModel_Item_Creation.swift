@@ -51,7 +51,7 @@ class Test_010_AppModel_Item_Creation: XCTestCase {
         let undoMgr = UndoManager()
 
         let newItem = appModel.itemAddNewTo(externalUM: undoMgr, parents: [rootItem], title: "Some title", priority: 0.0, complete: nil, notes: "Blah", children: [])
-        appModel.saveToCoreData()
+        appModel.saveToBackend()
 
         XCTAssertEqual(rootItem.childrenListAsSet.count, originalKidCount + 1,
                        "When a new Item is created the Root Item should now have one extra Child Item")

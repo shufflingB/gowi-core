@@ -63,7 +63,7 @@ class Test_015_AppModel_SwiftUI_FetchRequest: XCTestCase {
             children: []
         )
         
-        appModel.saveToCoreData()
+        appModel.saveToBackend()
         
         
         // Get the fetch configuration from the factory method

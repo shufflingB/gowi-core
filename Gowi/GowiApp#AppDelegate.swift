@@ -82,7 +82,7 @@ extension GowiApp {
 
                 switch modalResponse {
                 case .alertFirstButtonReturn:
-                    appModel.saveToCoreData()
+                    appModel.saveToBackend()
                     return .terminateNow
                 case .alertSecondButtonReturn:
 

@@ -54,6 +54,6 @@ extension AppModel {
             }
         }
 
-        saveToCoreData()
+        saveToBackend()
     }
 }
