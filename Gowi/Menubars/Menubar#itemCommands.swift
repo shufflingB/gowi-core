@@ -46,7 +46,8 @@ extension Menubar {
                         withAnimation {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: mainStateView?.windowUM,
-                                filterSelected: sideBarFilterSelected, parent: appModel.systemRootItem,
+                                parent: appModel.systemRootItem,
+                                filterSelected: sideBarFilterSelected,
                                 filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
                             )
 

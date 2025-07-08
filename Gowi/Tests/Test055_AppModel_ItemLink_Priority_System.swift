@@ -172,11 +172,11 @@ final class Test055_AppModel_ItemLink_Priority_System: XCTestCase {
         let targetIndex = 2 // Move to bottom
         
         appModel.itemLinkRearrangeUsingPriority(
+            externalUM: nil,
             parent: projectA,
             items: projectAItemsArray, 
             sourceIndices: sourceIndices, 
-            tgtEdgeIdx: targetIndex,
-            externalUM: nil
+            tgtEdgeIdx: targetIndex
         )
         
         appModel.saveToBackend()

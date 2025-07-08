@@ -174,7 +174,8 @@ extension Main {
                     withAnimation {
                         let route = Main.itemAddNew(
                             appModel: appModel, windowUM: windowUM,
-                            filterSelected: filter, parent: appModel.systemRootItem,
+                            parent: appModel.systemRootItem,
+                            filterSelected: filter,
                             filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
                         )
                         visibleItemIdsSelected = route.itemIdsSelected
@@ -217,7 +218,8 @@ extension Main {
                         withAnimation {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: windowUM,
-                                filterSelected: filter, parent: appModel.systemRootItem,
+                                parent: appModel.systemRootItem,
+                                filterSelected: filter,
                                 filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
                             )
                             visibleItemIdsSelected = route.itemIdsSelected

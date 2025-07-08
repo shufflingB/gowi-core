@@ -15,17 +15,17 @@ extension AppModel {
     
     /// Adds a child Item to a parent Item via ItemLink with specified priority in an undoable way
     /// - Parameters:
+    ///   - externalUM: UndoManager for undo support
     ///   - parent: The parent Item
     ///   - child: The child Item to add
     ///   - priority: The priority for this parent-child relationship
-    ///   - externalUM: UndoManager for undo support
     /// - Returns: The created ItemLink entity
     @discardableResult
     public func itemLinkAdd(
+        externalUM: UndoManager? = nil,
         parent: Item,
         child: Item,
-        priority: Double,
-        externalUM: UndoManager? = nil
+        priority: Double
     ) -> ItemLink {
         var createdLink: ItemLink?
         
@@ -80,13 +80,13 @@ extension AppModel {
     
     /// Removes the ItemLink between a parent and child Item in an undoable way
     /// - Parameters:
+    ///   - externalUM: UndoManager for undo support
     ///   - parent: The parent Item
     ///   - child: The child Item to remove
-    ///   - externalUM: UndoManager for undo support
     public func itemLinkRemove(
+        externalUM: UndoManager? = nil,
         parent: Item,
-        child: Item,
-        externalUM: UndoManager? = nil
+        child: Item
     ) {
         Self.registerPassThroughUndo(
             with: externalUM,
@@ -118,15 +118,15 @@ extension AppModel {
     
     /// Updates the priority of an existing ItemLink in an undoable way
     /// - Parameters:
+    ///   - externalUM: UndoManager for undo support
     ///   - parent: The parent Item
     ///   - child: The child Item
     ///   - newPriority: The new priority value
-    ///   - externalUM: UndoManager for undo support
     public func itemLinkUpdatePriority(
+        externalUM: UndoManager? = nil,
         parent: Item,
         child: Item,
-        newPriority: Double,
-        externalUM: UndoManager? = nil
+        newPriority: Double
     ) {
         Self.registerPassThroughUndo(
             with: externalUM,
@@ -187,17 +187,17 @@ extension AppModel {
     
     /// Rearranges items using ItemLink priorities for a specific parent in an undoable way
     /// - Parameters:
+    ///   - externalUM: UndoManager for undo support
     ///   - parent: The parent Item whose children are being reordered
     ///   - items: Current sorted list of child Items
     ///   - sourceIndices: The indices of items to move
     ///   - tgtEdgeIdx: The target edge index for insertion
-    ///   - externalUM: UndoManager for undo support
     public func itemLinkRearrangeUsingPriority(
+        externalUM: UndoManager? = nil,
         parent: Item,
         items: [Item],
         sourceIndices: IndexSet,
-        tgtEdgeIdx: Int,
-        externalUM: UndoManager? = nil
+        tgtEdgeIdx: Int
     ) {
         Self.registerPassThroughUndo(
             with: externalUM,
@@ -247,7 +247,7 @@ extension AppModel {
         let itemsSelected = sourceIndices.map { items[$0] }
         
         // Calculate priority range for insertion
-        let itemPriorities = itemLinkPriorityPair(forEdgeIdx: tgtEdgeIdx, items: items, parent: parent, moc: moc)
+        let itemPriorities = itemLinkPriorityPair(moc, parent: parent, forEdgeIdx: tgtEdgeIdx, items: items)
         let priorityStepSize = (itemPriorities.aboveEdge - itemPriorities.belowEdge) / Double(itemsSelected.count + 1)
         
         let movingUp = sourceIndicesFirstIdx > tgtEdgeIdx
@@ -287,16 +287,19 @@ extension AppModel {
     
     /// Computes priority values for above and below a desired edge index for ItemLink-based priorities
     /// - Parameters:
+    ///   - moc: The NSManagedObjectContext to use
+    ///   - parent: The parent Item
     ///   - tgtEdgeIdx: The target edge index
     ///   - items: Array of items in current order
-    ///   - parent: The parent Item
-    ///   - moc: The NSManagedObjectContext to use
+    
+    
     /// - Returns: Tuple with above and below edge priority values
     private static func itemLinkPriorityPair(
-        forEdgeIdx tgtEdgeIdx: Int,
-        items: [Item],
+        _ moc: NSManagedObjectContext,
         parent: Item,
-        moc: NSManagedObjectContext
+        forEdgeIdx tgtEdgeIdx: Int,
+        items: [Item]
+
     ) -> (aboveEdge: Double, belowEdge: Double) {
         guard items.count > 0 else {
             return (aboveEdge: DefaultOffset, belowEdge: -DefaultOffset)

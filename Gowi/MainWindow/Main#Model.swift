@@ -51,9 +51,9 @@ extension Main {
     /// - Returns: Tuple containing the new item, recommended filter, and selection state
     ///           for UI updates that ensure the new item is visible and selected
     static func itemAddNew(
-        appModel: AppModel, windowUM: UndoManager?,
+        appModel: AppModel, windowUM: UndoManager?, parent: Item,
         filterSelected: SidebarFilterOpt,
-        parent: Item, filteredChildren: Array<Item>
+        filteredChildren: Array<Item>
     ) -> (newItem: Item, filterSelected: SidebarFilterOpt, itemIdsSelected: Set<UUID>) {
         //
         // Create new item at top of list (priority 0) with empty content
