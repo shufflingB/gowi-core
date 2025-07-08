@@ -633,6 +633,10 @@ GOWI_TESTMODE=1  // Enables test fixtures
 
 ## Key Implementation Files
 
+**App Definitions**:
+- `Gowi/Defs/KbShortcuts.swift` - Keyboard shortcut definitions including JSON export (⌘E)
+- `Gowi/Defs/AccessibilityIdentifiers.swift` - Accessibility IDs for export UI elements
+
 **Core Architecture**:
 - `GowiAppModel/AppModel.swift` - Central business logic and data management
 - `GowiAppModel/AppModel#ItemLink.swift` - ItemLink relationship management system
@@ -660,10 +664,6 @@ GOWI_TESTMODE=1  // Enables test fixtures
 - `Gowi/Menubars/Menubar#itemCommands.swift` - Item management
 - `Gowi/Menubars/Menubar#windowCommands.swift` - Window operations
 
-**Data Export**:
-- `GowiAppModel/Item#App.swift` - JSON export functionality with Encodable conformance
-- `Gowi/Defs/KbShortcuts.swift` - Keyboard shortcut definitions including JSON export (⌘E)
-- `Gowi/Defs/AccessibilityIdentifiers.swift` - Accessibility IDs for export UI elements
 
 ## Development Tips
 
