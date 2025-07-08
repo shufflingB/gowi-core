@@ -48,35 +48,40 @@ Building and testing details:
 	* Directory:  `.../GowiAppTests`
 	* Build & run tests: `xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests`
 
-**Help System Architecture:**
-- **Source**: Markdown files in `Gowi/Help/Source/`
-- **Templates**: HTML templates and CSS in `Gowi/Help/Templates/`
-- **Build Script**: `Gowi/Help/build-help.sh` converts Markdown to Help Book format
-- **Integration**: Automatic build phase generates help during app compilation
-- **Output**: Apple Help Book deployed to app bundle at `Gowi/Help/Generated/`
+### Key Implementation Files
 
-**Help Content Structure:**
-- `index.md` - Main help page with overview and navigation
-- `getting-started.md` - Basic usage guide for new users
-- `features.md` - Comprehensive feature documentation
-- `tips-and-tricks.md` - Advanced workflows and power user techniques
+**App Definitions**:
+- `Gowi/Defs/KbShortcuts.swift` - Keyboard shortcut definitions.
+- `Gowi/Defs/AccessibilityIdentifiers.swift` - Accessibility IDs for export UI elements
 
-**Modifying Help Content:**
-1. Edit Markdown files in `Gowi/Help/Source/`
-2. Update templates in `Gowi/Help/Templates/` if needed
-3. Build app - help generation runs automatically
-4. Test help access via Help menu in running app
+**Core Architecture**:
+- `GowiAppModel/AppModel.swift` - Central business logic and data management
+- `GowiAppModel/AppModel#ItemLink.swift` - ItemLink relationship management system
+- `GowiAppModel/Item#App.swift` - Item extensions with ItemLink-aware accessors
+- `Gowi/MainWindow/Main.swift` - Primary StateView for main window
+- `Gowi/MainWindow/Main#Model.swift` - Business logic intents
 
-**Build Process:**
+**Routing System**:
+- `Gowi/MainWindow/Main#WindowGroupRouteView.swift` - URL routing and window coordination
+- `Gowi/MainWindow/Main#UrlHandlingModel.swift` - URL encoding/decoding logic
+- `Gowi/AppUrl.swift` - URL scheme definitions
 
-The help build system runs as an Xcode build phase and:
-1. Converts Markdown files to HTML using pandoc
-2. Applies custom styling and Apple Help Book structure
-3. Generates search index for help content
-4. Deploys complete help book to app bundle
+**Undo Management**:
+- `Gowi/MainWindow/Main#WindowGroupUndoView.swift` - UWFA implementation
+- `Gowi/FocusedValues#App.swift` - Focus chain definitions
 
-Alternatively, it can be run manually with
-`./Gowi/Help/build-help.sh`
+**UI Components**:
+- `Gowi/MainWindow/Main#ContentView.swift` - Item list with search
+- `Gowi/MainWindow/Main#DetailView.swift` - Multi-selection detail view
+- `Gowi/MainWindow/ItemView.swift` - Individual item editing
+
+**Menu System**:
+- `Gowi/Menubars/Menubar.swift` - Menu coordination
+- `Gowi/Menubars/Menubar#fileCommands.swift` - File operations, including JSON export implementation
+- `Gowi/Menubars/Menubar#itemCommands.swift` - Item management
+- `Gowi/Menubars/Menubar#windowCommands.swift` - Window operations
+
+
 
 ## Architecture Overview
 
@@ -209,7 +214,7 @@ While the MSV diagram above shows the **conceptual architecture**, the actual im
 
 ### Key Implementation Patterns
 
-**Wrapper Pattern**: Each layer wraps the one below it:
+** Each layer wraps the one below it: **
 ```swift
 // In GowiApp.swift
 WindowGroup(id: "Main", for: WindowGroupRoutingOpt.self) { $route in
@@ -295,72 +300,108 @@ enum UndoWorkFocusArea {
 - **Context Isolation**: No cross-contamination between work areas
 - **Professional Feel**: Matches behavior of established macOS apps
 
-## ItemLink Architecture System
+## CoreData Model Architecture
 
-### Overview
+### The Challenge: Flexible Task Hierarchies
 
-**ItemLink** is a junction table system that enables Items to have different priority values when they appear under different parent Items. This solves the fundamental challenge of hierarchical task management where the same item might need different ordering positions depending on the parent context.
+Many todo apps struggle with a fundamental limitation: tasks can only exist in one place at a time. Real-world task management often requires the same task to appear in multiple contexts with different priorities. For example, "Call the dentist" might be:
+- High priority in your "Health" project
+- Medium priority in your "This Week" list  
+- Low priority in your "Phone Calls" category
 
-### Key Benefits
+### The Solution: Item + ItemLink Junction Table
 
-- **Multi-Parent Support**: Same item can exist under multiple parents with independent priorities
-- **Flexible Hierarchies**: Items can be organized differently in different contexts
-- **Undo Integration**: All ItemLink operations are fully undoable
-- **CloudKit Sync**: ItemLink relationships synchronize across device.
+Gowi uses a CoreData architecture that separates **what** tasks are (Item entities) from the priority they have relative to other tasks (ItemLink relationships). This enables many to many hierarchies with context-specific priorities.
 
-### Core Components
+### Core Entities
 
-**ItemLink Entity** (`Gowi.xcdatamodeld`):
-- `priority` (Double): Priority value for this specific parent-child relationship
-- `parent` (Item): Parent item in the relationship
-- `child` (Item): Child item in the relationship
-- Marked as `syncable="YES"` for CloudKit integration
+#### Item Entity
+The **Item** entity represents the actual todo task with its core properties:
 
-**Key Methods** (`AppModel#ItemLink.swift`):
-- `itemLinkAdd(parent:child:priority:)`: Creates new ItemLink relationship
-- `itemLinkRemove(parent:child:)`: Removes specific parent-child relationship
-- `itemLinkUpdatePriority(parent:child:newPriority:)`: Updates priority for relationship
-- `itemLinkRearrangeUsingPriority(...)`: Reorders items using priority system
-
-**Item Extensions** (`Item#App.swift`):
-- `childrenOrderedByPriority`: Returns children sorted by ItemLink priority
-- `parentItemsViaLinks`: Returns all parent Items via ItemLink relationships
-- `priority(withRespectTo:)`: Gets priority value for specific parent
-- `setPriority(_:withRespectTo:)`: Sets priority for specific parent
-- `childrenListAsSet` & `parentListAsSet`: Backwards compatibility accessors
-
-### Usage Examples
-
-**Creating Relationships**:
 ```swift
-// Add item to parent with specific priority
-appModel.itemLinkAdd(parent: projectA, child: sharedItem, priority: 100.0)
-appModel.itemLinkAdd(parent: projectB, child: sharedItem, priority: 50.0)
+// Core task properties
+- title: String          // "Buy groceries"
+- notes: String          // "Don't forget milk and bread"
+- created: Date          // When the task was created
+- completed: Date?       // When completed (nil = incomplete)
+- ourId: UUID           // Unique identifier for deep linking
+- root: Bool            // Flag indicating ancestor to all, systemRootItem Item
+- parentList:           // List of parent ItemLinks
+- childrenList:         // List of child ItemLinks  
 ```
 
-**Accessing Ordered Children**:
+#### ItemLink Entity (Junction Table)
+The **ItemLink** entity creates the many-to-many relationships between Items:
+
 ```swift
-// Get children in priority order for specific parent
-let orderedChildren = parentItem.childrenOrderedByPriority
+// Relationship properties
+- parent: Item          // The parent item (e.g., "Weekend Tasks")
+- child: Item           // The child item (e.g., "Buy groceries")
+- priority: Double      // Priority within this specific parent context, e.g. "Weekend Tasks""
 ```
 
-**Priority Management**:
+### How It Works: Real-World Example
+
+Consider a task "Buy groceries" that appears in multiple contexts:
+
 ```swift
-// Update priority for specific relationship
-sharedItem.setPriority(75.0, withRespectTo: projectA)
+// 1. Create the core task
+let groceryTask = Item(title: "Buy groceries", notes: "Milk, bread, eggs")
+
+// 2. Add to "Weekend Tasks" with high priority
+ItemLink(parent: weekendTasks, child: groceryTask, priority: 100.0)
+
+// 3. Add to "Shopping List" with medium priority  
+ItemLink(parent: shoppingList, child: groceryTask, priority: 50.0)
+
+// 4. Add to "Quick Errands" with low priority
+ItemLink(parent: quickErrands, child: groceryTask, priority: 25.0)
 ```
 
-### Testing
+**Result**: The same grocery task appears in three different lists, each with its own priority ordering, but any edits to the task title or notes automatically appear everywhere.
 
-**Primary Test Suite**: `Test055_AppModel_ItemLink_Priority_System.swift`
-- Multi-parent relationship testing
-- Independent priority validation
-- ItemLink CRUD operations
-- Undo/redo functionality
+### The systemRootItem
 
-**SwiftUI Integration**: `Test_015_AppModel_SwiftUI_FetchRequest.swift`
-- FetchRequest configuration for ItemLink entities
-- SwiftUI binding validation
+Every task links back a hidden **systemRootItem**:
+
+```swift
+// Hidden root of all tasks
+systemRootItem (root: true, title: "System Root")
+├── "Weekend Tasks" (priority: 100.0)
+│   ├── "Buy groceries" (priority: 100.0)
+│   └── "Clean garage" (priority: 80.0)
+├── "Work Project" (priority: 90.0)
+│   ├── "Review code" (priority: 95.0)
+│   └── "Update documentation" (priority: 85.0)
+└── "Shopping List" (priority: 70.0)
+    ├── "Buy groceries" (priority: 50.0)  // Same task, different context
+    └── "Pick up dry cleaning" (priority: 40.0)
+```
+
+
+### Development Integration
+
+The architecture provides clean APIs for common operations:
+
+```swift
+// Creating parent-child relationships
+appModel.itemLinkAdd(parent: projectA, child: sharedTask, priority: 100.0)
+
+// Reordering within a parent
+appModel.itemLinkRearrangeUsingPriority(parent: parent, items: items, 
+                                      sourceIndices: [2], tgtEdgeIdx: 0)
+
+// Accessing relationships
+let parents = task.parentItemsViaLinks        // All parents of this task
+let children = parent.childrenOrderedByPriority // All children, priority-ordered
+```
+
+### Testing Architecture
+
+- **Unit Tests**: `Test055_AppModel_ItemLink_Priority_System.swift` validates relationship operations
+- **Priority Testing**: `Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift` tests drag-and-drop reordering  
+- **Integration Tests**: SwiftUI @FetchRequest validation ensures UI updates correctly
+- **Test Data**: Predictable test fixtures with known IDs enable reliable UI testing
 
 ## CloudKit Integration
 
@@ -418,94 +459,6 @@ AppModel.shared.debugPrintAllItems()
 // Monitor pending sync operations
 AppModel.shared.hasUnPushedChanges
 ```
-
-## JSON Export Implementation
-
-### Overview
-Gowi provides individual item export functionality through the File menu, allowing users to save todo items as structured JSON files for backup, data analysis, or integration with external tools.
-
-### Implementation Architecture
-
-**Data Layer** (`Item#App.swift`):
-- **Encodable Conformance**: Item class implements Swift's `Encodable` protocol
-- **ISO8601 Date Format**: All dates exported in standardized ISO8601 format for universal compatibility
-- **Pretty Printing**: JSON output uses `.prettyPrinted` formatting for human readability
-- **Null Handling**: Incomplete items export completion date as "null" string
-
-```swift
-extension Item: Encodable {
-    enum CodingKeys: String, CodingKey {
-        case title, ourId, creationDate, completionDate, notes
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        // Encodes title, notes, dates, and unique ID
-        // Uses ISO8601DateFormatter for consistent date representation
-    }
-}
-```
-
-**UI Integration** (`Menubar#fileCommands.swift`):
-- **Selection-Based Availability**: Only enabled when exactly one item is selected
-- **File Save Dialog**: Uses `NSSavePanel` with JSON file type restrictions
-- **Error Handling**: Graceful failure with user-friendly `NSAlert` dialogs
-- **Keyboard Shortcut**: ⌘E for quick access
-
-**Menu State Management**:
-- **FocusedValue Integration**: Accesses selection state via SwiftUI's focused value system
-- **Dynamic Enable/Disable**: Menu item automatically enables/disables based on selection
-- **Accessibility Support**: Proper accessibility identifiers for UI automation
-
-### File Format Specification
-
-**JSON Structure**:
-```json
-{
-  "title": "Item title text",
-  "ourId": "UUID-string-format",
-  "creationDate": "2025-01-15T10:30:00Z",
-  "completionDate": "2025-01-16T14:45:00Z", // or "null" for incomplete
-  "notes": "Item notes content"
-}
-```
-
-**Date Handling**:
-- **Input Format**: UI displays dates using `.short` date/time style in local timezone
-- **Output Format**: JSON exports dates as ISO8601 UTC strings
-- **Timezone Conversion**: Automatic conversion preserves absolute time while changing representation
-
-### Testing Strategy
-
-**Unit Testing** (`Test_100_ItemExportJSON.swift`):
-- JSON structure validation
-- Date format verification
-- File I/O operations
-- Error handling scenarios
-
-**UI Testing** (`Test_520_JsonImportAndExport.swift`):
-- Complete export workflow validation
-- Menu integration testing
-- File save dialog interaction
-- Cross-timezone date validation with 60-second tolerance
-
-**Key Testing Challenges**:
-- **Date Format Mismatch**: UI shows local timezone `.short` format, JSON exports UTC ISO8601
-- **Save Panel Automation**: macOS save dialog requires specialized UI automation techniques
-- **Timezone Testing**: Robust comparison between different date representations
-
-### Usage Patterns
-
-**User Workflow**:
-1. Select exactly one item in the content list
-2. Use File → Export JSON (⌘E) or keyboard shortcut
-3. Choose save location in file dialog
-4. Confirm save operation
-
-**Common Use Cases**:
-- **Data Backup**: Personal archive of important todos
-- **External Integration**: Import into spreadsheets, databases, or other tools
-- **Data Analysis**: Processing completion patterns and task metrics
-- **Migration**: Moving data between different task management systems
 
 ## Focus Management & Menu Integration
 
@@ -631,39 +584,36 @@ GOWI_TESTMODE=1  // Enables test fixtures
   - **UI Tests**: `GowiAppTests/Test_520_JsonImportAndExport.swift` - End-to-end export workflow
   - **Date Format Validation**: Timezone-aware comparison between UI formats and ISO8601 JSON output
 
-## Key Implementation Files
 
-**App Definitions**:
-- `Gowi/Defs/KbShortcuts.swift` - Keyboard shortcut definitions including JSON export (⌘E)
-- `Gowi/Defs/AccessibilityIdentifiers.swift` - Accessibility IDs for export UI elements
+## Updating Help Docs
+- **Source**: Markdown files in `Gowi/Help/Source/`
+- **Templates**: HTML templates and CSS in `Gowi/Help/Templates/`
+- **Build Script**: `Gowi/Help/build-help.sh` converts Markdown to Help Book format
+- **Integration**: Automatic build phase generates help during app compilation
+- **Output**: Apple Help Book deployed to app bundle at `Gowi/Help/Generated/`
 
-**Core Architecture**:
-- `GowiAppModel/AppModel.swift` - Central business logic and data management
-- `GowiAppModel/AppModel#ItemLink.swift` - ItemLink relationship management system
-- `GowiAppModel/Item#App.swift` - Item extensions with ItemLink-aware accessors
-- `Gowi/MainWindow/Main.swift` - Primary StateView for main window
-- `Gowi/MainWindow/Main#Model.swift` - Business logic intents
+**Help Content Structure:**
+- `index.md` - Main help page with overview and navigation
+- `getting-started.md` - Basic usage guide for new users
+- `features.md` - Comprehensive feature documentation
+- `tips-and-tricks.md` - Advanced workflows and power user techniques
 
-**Routing System**:
-- `Gowi/MainWindow/Main#WindowGroupRouteView.swift` - URL routing and window coordination
-- `Gowi/MainWindow/Main#UrlHandlingModel.swift` - URL encoding/decoding logic
-- `Gowi/AppUrl.swift` - URL scheme definitions
+**Modifying Help Content:**
+1. Edit Markdown files in `Gowi/Help/Source/`
+2. Update templates in `Gowi/Help/Templates/` if needed
+3. Build app - help generation runs automatically
+4. Test help access via Help menu in running app
 
-**Undo Management**:
-- `Gowi/MainWindow/Main#WindowGroupUndoView.swift` - UWFA implementation
-- `Gowi/FocusedValues#App.swift` - Focus chain definitions
+**Build Process:**
 
-**UI Components**:
-- `Gowi/MainWindow/Main#ContentView.swift` - Item list with search
-- `Gowi/MainWindow/Main#DetailView.swift` - Multi-selection detail view
-- `Gowi/MainWindow/ItemView.swift` - Individual item editing
+The help build system runs as an Xcode build phase and:
+1. Converts Markdown files to HTML using pandoc
+2. Applies custom styling and Apple Help Book structure
+3. Generates search index for help content
+4. Deploys complete help book to app bundle
 
-**Menu System**:
-- `Gowi/Menubars/Menubar.swift` - Menu coordination
-- `Gowi/Menubars/Menubar#fileCommands.swift` - File operations, including JSON export implementation
-- `Gowi/Menubars/Menubar#itemCommands.swift` - Item management
-- `Gowi/Menubars/Menubar#windowCommands.swift` - Window operations
-
+Alternatively, it can be run manually with
+`./Gowi/Help/build-help.sh`
 
 ## Development Tips
 
