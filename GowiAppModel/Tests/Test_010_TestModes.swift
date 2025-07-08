@@ -9,7 +9,7 @@
 import XCTest
 
 
-final class Test_000_System_Init: XCTestCase {
+final class Test_010_TestModes: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         continueAfterFailure = false

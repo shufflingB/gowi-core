@@ -69,8 +69,8 @@ extension Main {
     internal var contentOnMovePerform: (IndexSet, Int) -> Void {
         switch sideBarFilterSelected {
         case .waiting:
-            return withAnimation {
-                contentOnMoveOfWaitingItems
+            return { idxSet, tgtIdxEdge  in
+                contentOnMoveOfWaitingItems(parent: appModel.systemRootItem, idxSet, tgtIdxEdge)
             }
         case .done:
             /// Could use movement to adjust completion date but currently just do nothing
@@ -83,12 +83,12 @@ extension Main {
 
     /// content list filtered for waiting `Item`s
     internal var contentItemsListWaiting: Array<Item> {
-        Self.contentItemsListWaiting(itemsAll)
+        Self.contentItemsListWaiting(itemsAll, parent: appModel.systemRootItem )
     }
 
-    static func contentItemsListWaiting(_ items: Set<Item>) -> Array<Item> {
+    static func contentItemsListWaiting(_ items: Set<Item>, parent: Item) -> Array<Item> {
         // Want  [0] to have largest priority value, [end] to have lowest
-        items.filter({ $0.completed == nil }).sorted { $0.priority > $1.priority }
+        items.filter({ $0.completed == nil }).sorted { $0.priority(withRespectTo: parent )! > $1.priority(withRespectTo: parent )! }
     }
 
     /// content list filtered for done `Item`s
@@ -110,18 +110,18 @@ extension Main {
     /// content list filtered for all `Item`s
     internal var contentItemsListAll: Array<Item> {
         // Want  [0] to have largest priority value, [end] to have lowest
-        Self.contentItemsListAll(itemsAll)
+        Self.contentItemsListAll(itemsAll, parent: appModel.systemRootItem)
     }
 
-    static func contentItemsListAll(_ items: Set<Item>) -> Array<Item> {
+    static func contentItemsListAll(_ items: Set<Item>, parent: Item) -> Array<Item> {
         // Same as for Waiting, Want  [0] to have largest priority value, [end] to have lowest
-        items.sorted { $0.priority > $1.priority }
+        items.sorted { $0.priority(withRespectTo: parent)! > $1.priority(withRespectTo: parent)! }
     }
 
     /// `onMove` function to use for rearranging the waiting items list
-    private func contentOnMoveOfWaitingItems(_ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
+    private func contentOnMoveOfWaitingItems(parent: Item, _ sourceIndices: IndexSet, _ tgtIdxsEdge: Int) {
         withAnimation {
-            appModel.rearrangeUsingPriority(externalUM: windowUM, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
+            appModel.rearrangeUsingPriority(externalUM: windowUM, parent: parent, items: contentItemsListWaiting, sourceIndices: sourceIndices, tgtEdgeIdx: tgtIdxsEdge)
         }
     }
     

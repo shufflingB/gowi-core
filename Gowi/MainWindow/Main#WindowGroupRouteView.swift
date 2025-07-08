@@ -175,7 +175,7 @@ extension Main {
                         let route = Main.itemAddNew(
                             appModel: appModel, windowUM: windowUM,
                             filterSelected: filter, parent: appModel.systemRootItem,
-                            filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                            filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
                         )
                         visibleItemIdsSelected = route.itemIdsSelected
                         sideBarFilterSelected = filter
@@ -218,7 +218,7 @@ extension Main {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: windowUM,
                                 filterSelected: filter, parent: appModel.systemRootItem,
-                                filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                                filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
                             )
                             visibleItemIdsSelected = route.itemIdsSelected
                             sideBarFilterSelected = filter

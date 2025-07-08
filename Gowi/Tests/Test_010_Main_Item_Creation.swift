@@ -32,14 +32,14 @@ class Test_010_Main_Item_Creation: XCTestCase {
         appModel.addTestData(.one)
 
         let undoManager = UndoManager()
-        let originalSortedList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalSortedList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
 
         let newItem = appModel.itemNewInsertInPriority(
             externalUM: undoManager, parent: appModel.systemRootItem, list: originalSortedList, where: originalSortedList.count,
             title: "New item", complete: nil, notes: "", children: []
         )
 
-        let afterInsertList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterInsertList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
         XCTAssertEqual(afterInsertList.count, originalSortedList.count + 1,
                        "After insert a new Item the list will have grown in length by one Item ")
 
@@ -47,7 +47,7 @@ class Test_010_Main_Item_Creation: XCTestCase {
                        "And that the new Item is at the tail of the list organised by priority")
 
         undoManager.undo()
-        let afterUndoList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterUndoList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
         XCTAssertEqual(afterUndoList.count, originalSortedList.count,
                        "And the addition is undoable ")
         
@@ -66,7 +66,7 @@ class Test_010_Main_Item_Creation: XCTestCase {
         appModel.addTestData(.one)
 
         let undoManager = UndoManager()
-        let originalSortedList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let originalSortedList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
 
         // insert between the items at idx 5 and 6 in the waiting  list i.e. tgt Idx edge 6
 
@@ -76,7 +76,7 @@ class Test_010_Main_Item_Creation: XCTestCase {
             title: "New item", complete: nil, notes: "", children: []
         )
 
-        let afterInsertList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterInsertList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
 
         XCTAssertEqual(afterInsertList.count, originalSortedList.count + 1,
                        "After insert a new Item the list will have grown in length by one Item ")
@@ -95,7 +95,7 @@ class Test_010_Main_Item_Creation: XCTestCase {
         }
 
         undoManager.undo()
-        let afterUndoList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet)
+        let afterUndoList = Main.contentItemsListWaiting(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
         XCTAssertEqual(afterUndoList.count, originalSortedList.count,
                        "And the addition is undoable ")
     }

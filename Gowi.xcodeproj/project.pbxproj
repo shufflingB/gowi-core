@@ -212,10 +212,10 @@
 		FF7E21C02E16BB04006E9F46 /* Exceptions for "GowiAppModel" folder in "GowiAppModel" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Tests/Test_000_System_Init.swift,
-				Tests/Test_010_AppModel_Item_Creation.swift,
+				Tests/Test_000_Items.swift,
+				Tests/Test_010_TestModes.swift,
 				Tests/Test_015_AppModel_SwiftUI_FetchRequest.swift,
-				Tests/Test_020_AppModel_Item_Deletion.swift,
+				Tests/Test_020_Item_Deletions.swift,
 				Tests/Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift,
 				Tests/Test_100_ItemExportJSON.swift,
 			);
@@ -224,10 +224,10 @@
 		FF7E21C12E16BB04006E9F46 /* Exceptions for "GowiAppModel" folder in "GowiAppModelTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Tests/Test_000_System_Init.swift,
-				Tests/Test_010_AppModel_Item_Creation.swift,
+				Tests/Test_000_Items.swift,
+				Tests/Test_010_TestModes.swift,
 				Tests/Test_015_AppModel_SwiftUI_FetchRequest.swift,
-				Tests/Test_020_AppModel_Item_Deletion.swift,
+				Tests/Test_020_Item_Deletions.swift,
 				Tests/Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift,
 				Tests/Test_100_ItemExportJSON.swift,
 			);
@@ -729,6 +729,7 @@
 			shellScript = (
 				"# Build Help Documentation from Markdown",
 				"$SRCROOT/Gowi/Help/build-help.sh",
+				"",
 				"",
 				"",
 				"",

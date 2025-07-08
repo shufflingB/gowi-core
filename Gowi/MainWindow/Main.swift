@@ -51,7 +51,7 @@ struct Main: View {
     ///   - root: Item from which all `Item`s rendered in this view are descendants of.
     ///   - route: binding to the route assigned to  the view  by `WindowGroup(id:for:content)`
     init(with root: Item, route: Binding<Main.WindowGroupRoutingOpt?>) {
-        _itemsAllFromFetchRequest = AppModel.fetchRequestForChildrenOf(root)
+        _itemsAllRelationsFromFetchRequest = AppModel.fetchRequestForChildLinks(of: root)
         _windowGroupRoute = route
 
         _winId = State(initialValue: Self.instantiationCount)
@@ -105,11 +105,11 @@ struct Main: View {
     }
 
     /// Top-level CoreData request.
-    @FetchRequest private var itemsAllFromFetchRequest: FetchedResults<Item>
+    @FetchRequest private var itemsAllRelationsFromFetchRequest: FetchedResults<ItemLink>
 
     /// All of the first generation children of the `systemRoot` item
     internal var itemsAll: Set<Item> {
-        Set(itemsAllFromFetchRequest)
+        Set(itemsAllRelationsFromFetchRequest.compactMap { $0.child })
     }
 
     /// Indicates to `NavigationSplitView` whether to display the Sidebar (and it's list of selectable filters)

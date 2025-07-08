@@ -36,7 +36,7 @@ extension AppModel {
         log.debug("\(#function) adding test data")
 
         let numItemsToDo = 10
-        (1 ... numItemsToDo).forEach { idx in
+        for idx in (1...10) { 
 
             let item = self.itemAddNewTo(
                 externalUM: nil,

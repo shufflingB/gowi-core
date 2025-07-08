@@ -141,6 +141,16 @@ extension Main {
         appModel.itemsDelete(externalUM: windoUM, list: deleteItems)
         return newSelection
     }
+    
+//    static func rearrangeItems(
+//        appModel: AppModel, windoUM: UndoManager?, currentlyShowing: Array<Item>, sourceIndices: IndexSet,tgtEdgesIdx: Int)
+//     {
+//        appModel.rearrangeUsingPriority(
+//            externalUM: windoUM, parent: appModel.systemRootItem,
+//            items: currentlyShowing,
+//            sourceIndices: sourceIndices,
+//            tgtEdgeIdx: tgtEdgesIdx)
+//    }
 
     // MARK: Window control
 

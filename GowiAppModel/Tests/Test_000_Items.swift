@@ -10,10 +10,9 @@
 
 import XCTest
 
-class Test_010_AppModel_Item_Creation: XCTestCase {
-//    ProcessInfo.processInfo.environment["GOWI_TESTMODE"]
+class Test_000_Items: XCTestCase {
 
-    var appModel = AppModel(inMemory: true)
+    var appModel = AppModel.sharedInMemoryNoTestData
     var rootItem: Item { appModel.systemRootItem }
 
     override func setUpWithError() throws {
@@ -24,8 +23,9 @@ class Test_010_AppModel_Item_Creation: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
 
-    func test010_add_a_new_item_root() throws {
+    func test_010_addChildItemToParent() throws {
         let rootKidCount: Int = rootItem.childrenListAsSet.count
 
         let newItem = appModel.itemAddNewTo(externalUM: nil, parents: [rootItem], title: "Some title", priority: 0.0, complete: nil, notes: "Blah", children: [])
@@ -36,17 +36,39 @@ class Test_010_AppModel_Item_Creation: XCTestCase {
         XCTAssertEqual(rootItem.childrenList?.count, rootKidCount + 1,
                        "And the Root Item should now have one extra Child Item")
 
-        let rootChildItems: Set<Item> = rootItem.childrenList as? Set<Item> ?? []
-//        let d: Array<Item> = c.sorted(by: {$0.sortOrder! < $1.sortOrder!})
+        let rootChildItems: Set<Item> = rootItem.childrenListAsSet
         XCTAssertEqual(rootChildItems.first, newItem,
                        "And that Child Item should be the Item just created")
 
-        let childParentItems: Set<Item> = newItem.parentList as? Set<Item> ?? []
+        let childParentItems: Set<Item> = newItem.parentListAsSet
         XCTAssertEqual(childParentItems.first, rootItem,
                        "And that Child Item should correspondingly also have the Root Item as its Parent")
     }
+    
+    func test_020_addingDuplicateParentForChildArePrevented() throws {
 
-    func test020_adding_a_new_item_is_undoable() {
+        // NB: Deliberately trying to add rootItem as a parent twice
+        let newItem = appModel.itemAddNewTo(externalUM: nil, parents: [rootItem, rootItem], title: "Some title", priority: 0.0, complete: nil, notes: "Blah", children: [])
+        
+
+        XCTAssertEqual(newItem.parentListAsSet.count, 1,
+                       "When an Item is added it should prevent duplicate parent items being added")
+        
+        
+    }
+
+    func test_030_addingDuplicateChildrenForParentsArePrevented() throws {
+
+        // NB: Deliberately trying to add rootItem as a parent twice
+        let newItem = appModel.itemAddNewTo(externalUM: nil, parents: [], title: "Some title", priority: 0.0, complete: nil, notes: "Blah", children: [rootItem, rootItem])
+
+        XCTAssertEqual(newItem.childrenListAsSet.count, 1,
+                       "When an Item is added it should prevent duplicate child items being added")
+        
+    }
+
+
+    func test_040_addingNewItemUndoable() {
         let originalKidCount: Int = rootItem.childrenListAsSet.count
         let undoMgr = UndoManager()
 
@@ -68,4 +90,14 @@ class Test_010_AppModel_Item_Creation: XCTestCase {
         XCTAssertEqual(rootItem.childrenListAsSet.count, originalKidCount,
                        "And afther the change is undone the number of children is as it was originally")
     }
+    
+    
+    // TODO: Can delete
+    
+    // TODO: Check ast delete doesn't leave orphas
+    
+    
+    
+    
+    
 }

@@ -10,36 +10,23 @@ import XCTest
 @testable import GowiAppModel
 
 final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
-    var appModel: AppModel!
-
-    var rootItem: Item {
-        appModel.systemRootItem
-    }
-
+    var appModel = AppModel.sharedInMemoryWithTestData
+    var rootItem: Item { appModel.systemRootItem }
+    
     override func setUpWithError() throws {
-        appModel = AppModel(inMemory: true)
-        // Create 10 test items for priority reordering tests
-        for i in 1...10 {
-            let _ = appModel.itemAddNewTo(
-                externalUM: nil,
-                parents: [appModel.systemRootItem],
-                title: "Test Item \(i)",
-                priority: Double(i),
-                complete: nil,
-                notes: "",
-                children: []
-            )
-        }
+        appModel = AppModel.sharedInMemoryWithTestData
+        continueAfterFailure = false
     }
+
 
     override func tearDownWithError() throws {
        /// appModel = nil
     }
     
     /// Helper function to get sorted list of children (equivalent to UI layer sorting)
+    ///
     private func getSortedChildrenList(_ childrenSet: Set<Item>) -> Array<Item> {
-        // Sort by priority (descending) to match UI layer - highest priority first
-        return Array(childrenSet).sorted { $0.priority > $1.priority }
+        return Array(childrenSet).sorted { $0.priority(withRespectTo: rootItem) ?? 0.0 > $1.priority(withRespectTo: rootItem) ?? 0.0 }
     }
 
     func test130_itemsMoveSecondItemUpToHead() throws {
@@ -48,13 +35,18 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([1])
         let tgtIdx = 0
 
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
+        
+        updatedList.forEach { i in
+            print("Item \(i.ourIdS), priority \(String(describing: i.priority(withRespectTo: rootItem))) \n")
+        }
 
         XCTAssertEqual(originalList.count, updatedList.count,
                        "When the second Item is moved to the head of the list then the original and updated lists should remain the same size")
 
+        
         XCTAssertEqual(updatedList[0].ourIdS, originalList[1].ourIdS,
                        "And the updated list ends up with the second Item at its head")
 
@@ -72,7 +64,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         let srcIndices = IndexSet([0])
         let tgtIdx = 2 // <- When dragging down, Apple expects to add +1 to expected final location
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -96,7 +88,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
 
         let srcIndices = IndexSet([numTestItems - 1])
         let tgtIdx = numTestItems - 2
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -121,7 +113,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([numTestItems - 2])
         let tgtIdx = numTestItems // <- When dragging down, Apple expects to add +1 to expected final location
 
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -145,7 +137,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 1
 
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -171,7 +163,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([2])
         let tgtIdx = 4 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -197,7 +189,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([2, 4])
         let tgtIdx = 0
 
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -225,7 +217,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([1, 3])
         let tgtIdx = 5 // <- When dragging down, Apple expects to add +1 to expected final location
 
-        appModel.rearrangeUsingPriority(externalUM: nil, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
+        appModel.rearrangeUsingPriority(externalUM: nil, parent: rootItem, items: originalList, sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx)
 
         let updatedList: Array<Item> = getSortedChildrenList(appModel.systemRootItem.childrenListAsSet)
 
@@ -256,7 +248,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let tgtIdx = 3
 
         appModel.rearrangeUsingPriority(
-            externalUM: undoMgr,
+            externalUM: undoMgr, parent: rootItem,
             items: getSortedChildrenList(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
@@ -300,7 +292,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         var tgtIdx = 2
 
         appModel.rearrangeUsingPriority(
-            externalUM: undoMgr,
+            externalUM: undoMgr, parent: rootItem,
             items: getSortedChildrenList(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
@@ -312,7 +304,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         tgtIdx = 3
 
         appModel.rearrangeUsingPriority(
-            externalUM: undoMgr,
+            externalUM: undoMgr, parent: rootItem,
             items: getSortedChildrenList(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
@@ -324,7 +316,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         srcIndices = IndexSet([2])
         tgtIdx = 4
         appModel.rearrangeUsingPriority(
-            externalUM: undoMgr,
+            externalUM: undoMgr, parent: rootItem,
             items: getSortedChildrenList(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )
@@ -356,7 +348,7 @@ final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
         let srcIndices = IndexSet([0, 1])
         let tgtIdx = 3
         appModel.rearrangeUsingPriority(
-            externalUM: undoMgr,
+            externalUM: undoMgr, parent: rootItem,
             items: getSortedChildrenList(appModel.systemRootItem.childrenListAsSet),
             sourceIndices: srcIndices, tgtEdgeIdx: tgtIdx
         )

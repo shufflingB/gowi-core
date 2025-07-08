@@ -10,6 +10,7 @@
 @testable import GowiAppModel
 import XCTest
 import SwiftUI
+import CoreData
 
 class Test_015_AppModel_SwiftUI_FetchRequest: XCTestCase {
     
@@ -66,24 +67,19 @@ class Test_015_AppModel_SwiftUI_FetchRequest: XCTestCase {
         appModel.saveToBackend()
         
         
-        // Get the fetch configuration from the factory method
-        let fetchConfig = AppModel.makeFetchRequestConfigForChildrenOf(rootItem)
-        
-        let coreDataFetchRequest = NSFetchRequest<Item>(entityName: "Item")
-        coreDataFetchRequest.predicate = fetchConfig.predicate
-        
-        let fetchedItems = try appModel.viewContext.fetch(coreDataFetchRequest)
+        let rq: NSFetchRequest<ItemLink> = AppModel.nsFetchRequestForChildLinks(of:rootItem)
+        let fetchedRelations = try appModel.viewContext.fetch(rq)
         
         // Should only contain children of the specified root
-        XCTAssertEqual(fetchedItems.count, 1, "Should fetch only children of specified root")
-        XCTAssertEqual(fetchedItems[0].ourIdS, firstRootChild.ourIdS, "Should fetch the correct child item")
+        XCTAssertEqual(fetchedRelations.count, 1, "Should fetch only children of specified root")
+        XCTAssertEqual(fetchedRelations[0].child!.ourIdS, firstRootChild.ourIdS, "Should fetch the correct child item")
         
         // Verify it doesn't contain children of other roots
-        let fetchedIds = Set(fetchedItems.map { $0.ourIdS })
+        let fetchedIds = Set(fetchedRelations.map { $0.parent!.ourIdS })
         XCTAssertFalse(fetchedIds.contains(secondRootChild.ourIdS), "Should not contain children of other roots")
         
         /// Do nothing with result, just need it to have on, as this is implicity built on the
-        let _: FetchRequest<Item> = AppModel.fetchRequestForChildrenOf(rootItem)
+        let _ = AppModel.fetchRequestForChildLinks(of: rootItem)
 
     }
 }

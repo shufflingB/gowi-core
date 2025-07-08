@@ -41,12 +41,100 @@ extension Item {
     }
 
     public var parentListAsSet: Set<Item> {
-        parentList as? Set<Item> ?? []
+        // parentList now contains ItemLink objects, not Items directly
+        // Use the new ItemLink-based accessor
+        return Set(parentItemsViaLinks)
     }
 
     public var childrenListAsSet: Set<Item> {
-        childrenList as? Set<Item> ?? []
+        // childrenList now contains ItemLink objects, not Items directly
+        // Use the new ItemLink-based accessor
+        return Set(childrenOrderedByPriority)
     }
+    
+    /// Gets children ordered by ItemLink priority (highest first)
+    /// - Returns: Array of child Items ordered by ItemLink priority
+    public var childrenOrderedByPriority: [Item] {
+        let itemTitle = titleS
+        guard let moc = managedObjectContext else {
+            log.warning("No managed object context available for \(itemTitle)")
+            return []
+        }
+        
+        let request: NSFetchRequest<ItemLink> = ItemLink.fetchRequest()
+        request.predicate = NSPredicate(format: "parent == %@", self)
+        request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
+        
+        do {
+            let itemLinks = try moc.fetch(request)
+            return itemLinks.compactMap { $0.child }
+        } catch {
+            log.error("Failed to fetch ordered children for \(itemTitle): \(error)")
+            return []
+        }
+    }
+    
+    /// Gets ItemLink entities where this item is the parent
+    /// - Returns: Array of ItemLink entities
+    public var childrenLinks: [ItemLink] {
+        let itemTitle = titleS
+        guard let moc = managedObjectContext else {
+            log.warning("No managed object context available for \(itemTitle)")
+            return []
+        }
+        
+        let request: NSFetchRequest<ItemLink> = ItemLink.fetchRequest()
+        request.predicate = NSPredicate(format: "parent == %@", self)
+        request.sortDescriptors = [NSSortDescriptor(key: "priority", ascending: false)]
+        
+        do {
+            return try moc.fetch(request)
+        } catch {
+            log.error("Failed to fetch children links for \(itemTitle): \(error)")
+            return []
+        }
+    }
+    
+    /// Gets ItemLink entities where this item is the child
+    /// - Returns: Array of ItemLink entities
+    public var parentLinks: [ItemLink] {
+        let itemTitle = titleS
+        guard let moc = managedObjectContext else {
+            log.warning("No managed object context available for \(itemTitle)")
+            return []
+        }
+        
+        let request: NSFetchRequest<ItemLink> = ItemLink.fetchRequest()
+        request.predicate = NSPredicate(format: "child == %@", self)
+        
+        do {
+            return try moc.fetch(request)
+        } catch {
+            log.error("Failed to fetch parent links for \(itemTitle): \(error)")
+            return []
+        }
+    }
+    
+    /// Gets all parent Items via ItemLink relationships
+    /// - Returns: Array of parent Items
+    public var parentItemsViaLinks: [Item] {
+        return parentLinks.compactMap { $0.parent }
+    }
+    
+    public func priority(withRespectTo parent: Item) -> Double? {
+        self.parentLinks.first { iLink in
+            iLink.parent == parent
+        }?.priority ?? 0.0
+    }
+    
+    public func setPriority(_ newPriority: Double, withRespectTo parent: Item) {
+        if let link = self.parentLinks.first(where: { $0.parent == parent }) {
+            link.priority = newPriority
+        } else {
+            assertionFailure("No ItemLink exists between \(String(describing: parent.title)) and \(String(describing: self.title))")
+        }
+    }
+
 }
 
 // MARK: - Codable Conformance

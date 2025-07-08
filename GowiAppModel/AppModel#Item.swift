@@ -64,17 +64,24 @@ extension AppModel {
         _ moc: NSManagedObjectContext,
         parents: Set<Item>, title: String, priority: Double, complete: Date?, children: Set<Item>, notes: String?
     ) -> Item {
-        /// Used to instantiate the bare minimum for iit
+        /// Used to instantiate the bare minimum for item
         let newItem = Item(context: moc)
         newItem.ourId = UUID()
         newItem.created = Date()
         newItem.title = title
-        newItem.priority = priority
         newItem.completed = complete
         newItem.notes = notes
         
-        newItem.parentList = parents as NSSet
-        newItem.childrenList = children as NSSet
+        for parent in parents {
+            /// No need to check for duplicats as the use of Sets removes them.
+            let _ = itemLinkAdd(moc, parent: parent, child: newItem, priority: priority)
+        }
+
+
+        for child in children {
+            /// No need to check for duplicats as the use of Sets removes them.
+            let _ = itemLinkAdd(moc, parent: newItem, child: child, priority: priority)
+        }
         
         return newItem
     }
@@ -104,7 +111,7 @@ extension AppModel {
         // -------------- tgtIdxEdge = 3
         // ...
         
-        let priorities = AppModel.itemPriorityPair(forEdgeIdx: tgtIdxsEdge, items: items)
+        let priorities = AppModel.itemPriorityPair(parent: parent, forEdgeIdx: tgtIdxsEdge, items: items)
         
         let priorityStep: Double = (priorities.aboveEdge - priorities.belowEdge) / 2
         
@@ -164,21 +171,39 @@ extension AppModel {
     }
     
     /// Computes priority values for above and below a desired `tgtEdgeIdx`.
-    private static func itemPriorityPair(forEdgeIdx tgtEdgeIdx: Int, items: Array<Item>) -> (aboveEdge: Double, belowEdge: Double) {
-        guard items.count > 0 else {
+    private static func itemPriorityPair(
+        parent: Item,
+        forEdgeIdx tgtEdgeIdx: Int,
+        items: [Item]
+    ) -> (aboveEdge: Double, belowEdge: Double) {
+        
+        guard !items.isEmpty else {
             return (aboveEdge: DefaultOffset, belowEdge: -DefaultOffset)
         }
         
+        let itemAbove = tgtEdgeIdx == 0
+            ? items[0]
+            : items[tgtEdgeIdx - 1]
+        
+        let itemBelow = tgtEdgeIdx == items.count
+            ? items[items.count - 1]
+            : items[tgtEdgeIdx]
+        
+        // Use the computed method with the parent
+        let above = itemAbove.priority(withRespectTo: parent) ?? 0.0
+        let below = itemBelow.priority(withRespectTo: parent) ?? 0.0
+        
         let itemPriorityAboveTgtEdge = tgtEdgeIdx == 0
-        ? items[0].priority + DefaultOffset ///  Then dragging to head of List, no Item above so have to special cars
-        : items[tgtEdgeIdx - 1].priority
+            ? above + DefaultOffset
+            : above
         
         let itemPriorityBelowTgtEdge = tgtEdgeIdx == items.count
-        ? items[items.count - 1].priority - DefaultOffset /// Dragging to tail, no Item below so have to special case
-        : items[tgtEdgeIdx].priority
+            ? below - DefaultOffset
+            : below
         
         return (aboveEdge: itemPriorityAboveTgtEdge, belowEdge: itemPriorityBelowTgtEdge)
     }
+
     
     /**
      Rearranges a priortiy list on `AppModel#viewContext` in an undoable way
@@ -208,17 +233,17 @@ extension AppModel {
      
      */
     public func rearrangeUsingPriority(
-        externalUM: UndoManager?,
+        externalUM: UndoManager?, parent: Item,
         items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int
     ) {
         //
         Self.registerPassThroughUndo(with: externalUM, passingTo: viewContext.undoManager, withTarget: self, setActionName: "Move") {
-            AppModel.rearrangeUsingPriority(items: items, sourceIndices: sourceIndices, tgtEdgeIdx: tgtEdgeIdx)
+            AppModel.rearrangeUsingPriority(parent: parent, items: items, sourceIndices: sourceIndices, tgtEdgeIdx: tgtEdgeIdx)
         }
     }
     
     ///  Re-arrange an arbitray list of `Item`s according to the their priortiy.
-    static func rearrangeUsingPriority(items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int) {
+    static func rearrangeUsingPriority(parent: Item, items: Array<Item>, sourceIndices: IndexSet, tgtEdgeIdx: Int) {
         guard let sourceIndicesFirstIdx = sourceIndices.first, let sourceIndicesLastIdx = sourceIndices.last else {
             return
         }
@@ -239,7 +264,7 @@ extension AppModel {
         let movingUp: Bool = sourceIndicesFirstIdx > tgtEdgeIdx ? true : false
         // print("sourceIndixe.first =\(sourceIndicesFirstIdx),  last = \(sourceIndices.last!) tgtEdge = \(tgtIdxsEdge), Moving up \(movingUp)")
         
-        let itemPriorities = itemPriorityPair(forEdgeIdx: tgtEdgeIdx, items: items)
+        let itemPriorities = itemPriorityPair( parent: parent , forEdgeIdx: tgtEdgeIdx, items: items)
         
         let priorityStepSize = (itemPriorities.aboveEdge - itemPriorities.belowEdge) / Double(itemsSelected.count + 1)
         
@@ -247,7 +272,7 @@ extension AppModel {
             _ = itemsSelected
                 .enumerated()
                 .map { (idx: Int, item: Item) in /// map is preferred over forEach as it runs more quickly and produces a nicer animation
-                    item.priority = itemPriorities.belowEdge + priorityStepSize * Double(itemsSelected.count - idx)
+                    item.setPriority(itemPriorities.belowEdge + priorityStepSize * Double(itemsSelected.count - idx), withRespectTo: parent)
                     // print("Down Setting item \(item.id), idx = \(idx), to priority = \(item.priority) ")
                 }
         } else {
@@ -255,7 +280,7 @@ extension AppModel {
                 .reversed()
                 .enumerated()
                 .map { (idx: Int, item: Item) in /// map is preferred over forEach as it runs more quickly and produces a nicer animation
-                    item.priority = itemPriorities.aboveEdge - priorityStepSize * Double(itemsSelected.count - idx)
+                    item.setPriority(itemPriorities.aboveEdge - priorityStepSize * Double(itemsSelected.count - idx), withRespectTo: parent)
                     // print("Down Setting item \(item.id), idx = \(idx), to priority = \(item.priority) ")
                 }
         }

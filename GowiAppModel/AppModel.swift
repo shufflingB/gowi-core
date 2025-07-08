@@ -82,7 +82,8 @@ public final class AppModel: ObservableObject, Identifiable {
             print("  ourId: \(item.ourId?.uuidString ?? "NIL")")
             print("  completed: \(item.completed?.description ?? "NIL")")
             print("  created: \(item.created?.description ?? "NIL")")
-            print("  priority: \(item.priority)")
+            print("  parent links: \(item.parentLinks.count)")
+            print("  children links: \(item.childrenLinks.count)")
             print("  ---")
         }
         print("=== End Debug ===")

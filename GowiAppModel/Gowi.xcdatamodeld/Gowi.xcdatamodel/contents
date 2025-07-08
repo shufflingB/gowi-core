@@ -5,10 +5,14 @@
         <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="ourId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="priority" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="root" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="childrenList" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="parentList" inverseEntity="Item"/>
-        <relationship name="parentList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="childrenList" inverseEntity="Item"/>
+        <relationship name="childrenList" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ItemLink" inverseName="parent" inverseEntity="ItemLink"/>
+        <relationship name="parentList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ItemLink" inverseName="child" inverseEntity="ItemLink"/>
+    </entity>
+    <entity name="ItemLink" representedClassName="ItemLink" syncable="YES" codeGenerationType="class">
+        <attribute name="priority" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="child" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="parentList" inverseEntity="Item"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="childrenList" inverseEntity="Item"/>
     </entity>
 </model>

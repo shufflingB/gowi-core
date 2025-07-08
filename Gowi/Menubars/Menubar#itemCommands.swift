@@ -47,7 +47,7 @@ extension Menubar {
                             let route = Main.itemAddNew(
                                 appModel: appModel, windowUM: mainStateView?.windowUM,
                                 filterSelected: sideBarFilterSelected, parent: appModel.systemRootItem,
-                                filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet)
+                                filteredChildren: Main.contentItemsListAll(appModel.systemRootItem.childrenListAsSet, parent: appModel.systemRootItem)
                             )
 
                             mainStateView?.sideBarFilterSelected = route.filterSelected
@@ -136,12 +136,13 @@ extension Menubar {
                                 return
                             }
                             // Target edge is the position above the item to nudge above
-                            var tgtIdxsEdge: Int { idxInWaitingListNudgeAbove }
+                            let tgtIdxsEdge: Int = idxInWaitingListNudgeAbove
 
                             withAnimation {
                                 appModel.rearrangeUsingPriority(
-                                    externalUM: mainStateView?.windowUM, 
-                                    items: contentWaitingItems, 
+                                    externalUM: mainStateView?.windowUM,
+                                    parent: appModel.systemRootItem, 
+                                    items: contentWaitingItems,
                                     sourceIndices: sourceIndices, 
                                     tgtEdgeIdx: tgtIdxsEdge)
                             }
@@ -164,12 +165,12 @@ extension Menubar {
                                 return
                             }
                             // Target edge is one position below the item to nudge below
-                            var tgtIdxsEdge: Int { idxInWaitingListNudgeBelow + 1 }
+                            let  tgtIdxsEdge: Int = idxInWaitingListNudgeBelow + 1 
 
                             withAnimation {
                                 appModel.rearrangeUsingPriority(
-                                    externalUM: mainStateView?.windowUM, 
-                                    items: contentWaitingItems, 
+                                    externalUM: mainStateView?.windowUM, parent: appModel.systemRootItem,
+                                    items: contentWaitingItems,
                                     sourceIndices: sourceIndices, 
                                     tgtEdgeIdx: tgtIdxsEdge)
                             }
