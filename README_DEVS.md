@@ -88,9 +88,10 @@ Alternatively, it can be run manually with
 - **Components**:
   - `AppModel.swift` - Core business logic and data management
   - `AppModel#Item.swift` - Item-specific operations and CRUD
+  - `AppModel#ItemLink.swift` - ItemLink relationship management with priority system
   - `AppModel#Testing.swift` - Test utilities and fixtures
   - `Item#App.swift` - Item extensions for application use, including Encodable conformance for JSON export
-  - `Gowi.xcdatamodeld/` - CoreData model definition
+  - `Gowi.xcdatamodeld/` - CoreData model definition with ItemLink entity
   - `CloudKitConfig.swift` - CloudKit configuration
   - `Tests/` - Framework-specific unit tests
 
@@ -122,8 +123,9 @@ Gowi uses an empirically derived **Model StateView View (MSV)** architecture tha
 
 - **Model**: Business logic and data (`AppModel` in GowiAppModel framework)
   - Singleton pattern for shared state
-  - CoreData + CloudKit integration
-  - Comprehensive undo support
+  - CoreData + CloudKit integration with ItemLink junction table system
+  - Comprehensive undo support with ItemLink-aware operations
+  - Per-parent priority management via ItemLink entities
 
 - **StateView**: High-level SwiftUI View (e.g., `Main`)
   - Minimal UI layout
@@ -293,6 +295,73 @@ enum UndoWorkFocusArea {
 - **Context Isolation**: No cross-contamination between work areas
 - **Professional Feel**: Matches behavior of established macOS apps
 
+## ItemLink Architecture System
+
+### Overview
+
+**ItemLink** is a sophisticated junction table system that enables Items to have different priority values when they appear under different parent Items. This solves the fundamental challenge of hierarchical task management where the same item might need different ordering positions depending on the parent context.
+
+### Key Benefits
+
+- **Multi-Parent Support**: Same item can exist under multiple parents with independent priorities
+- **Flexible Hierarchies**: Items can be organized differently in different contexts
+- **Undo Integration**: All ItemLink operations are fully undoable
+- **CloudKit Sync**: ItemLink relationships synchronize across device.
+
+### Core Components
+
+**ItemLink Entity** (`Gowi.xcdatamodeld`):
+- `priority` (Double): Priority value for this specific parent-child relationship
+- `parent` (Item): Parent item in the relationship
+- `child` (Item): Child item in the relationship
+- Marked as `syncable="YES"` for CloudKit integration
+
+**Key Methods** (`AppModel#ItemLink.swift`):
+- `itemLinkAdd(parent:child:priority:)`: Creates new ItemLink relationship
+- `itemLinkRemove(parent:child:)`: Removes specific parent-child relationship
+- `itemLinkUpdatePriority(parent:child:newPriority:)`: Updates priority for relationship
+- `itemLinkRearrangeUsingPriority(...)`: Reorders items using priority system
+
+**Item Extensions** (`Item#App.swift`):
+- `childrenOrderedByPriority`: Returns children sorted by ItemLink priority
+- `parentItemsViaLinks`: Returns all parent Items via ItemLink relationships
+- `priority(withRespectTo:)`: Gets priority value for specific parent
+- `setPriority(_:withRespectTo:)`: Sets priority for specific parent
+- `childrenListAsSet` & `parentListAsSet`: Backwards compatibility accessors
+
+### Usage Examples
+
+**Creating Relationships**:
+```swift
+// Add item to parent with specific priority
+appModel.itemLinkAdd(parent: projectA, child: sharedItem, priority: 100.0)
+appModel.itemLinkAdd(parent: projectB, child: sharedItem, priority: 50.0)
+```
+
+**Accessing Ordered Children**:
+```swift
+// Get children in priority order for specific parent
+let orderedChildren = parentItem.childrenOrderedByPriority
+```
+
+**Priority Management**:
+```swift
+// Update priority for specific relationship
+sharedItem.setPriority(75.0, withRespectTo: projectA)
+```
+
+### Testing
+
+**Primary Test Suite**: `Test055_AppModel_ItemLink_Priority_System.swift`
+- Multi-parent relationship testing
+- Independent priority validation
+- ItemLink CRUD operations
+- Undo/redo functionality
+
+**SwiftUI Integration**: `Test_015_AppModel_SwiftUI_FetchRequest.swift`
+- FetchRequest configuration for ItemLink entities
+- SwiftUI binding validation
+
 ## CloudKit Integration
 
 ### Configuration
@@ -317,6 +386,11 @@ enum UndoWorkFocusArea {
 - **CloudKit Record ID**: System-generated for sync operations
   - Handles conflicts and merging automatically
   - Managed by `NSPersistentCloudKitContainer`
+
+**ItemLink Integration**:
+- ItemLink entities are marked `syncable="YES"` for CloudKit sync
+- Priority values synchronize across devices
+- Relationship consistency maintained through CloudKit's conflict resolution
 
 **Best Practices Demonstrated**:
 ```swift
@@ -549,6 +623,9 @@ GOWI_TESTMODE=1  // Enables test fixtures
 - **Intent Testing**: Static methods enable isolated business logic testing
 - **Layout Testing**: Separated UI components support comprehensive previews
 - **URL Testing**: Predictable `ourId` values enable deep linking validation
+- **ItemLink Testing**: Comprehensive validation of relationship and priority management
+  - **Unit Tests**: `GowiAppModelTests/Test055_AppModel_ItemLink_Priority_System.swift` - ItemLink operations
+  - **SwiftUI Integration**: `GowiAppModelTests/Test_015_AppModel_SwiftUI_FetchRequest.swift` - FetchRequest validation
 - **JSON Export Testing**: Comprehensive validation of data export functionality
   - **Unit Tests**: `GowiAppModelTests/Test_100_ItemExportJSON.swift` - JSON structure validation
   - **UI Tests**: `GowiAppTests/Test_520_JsonImportAndExport.swift` - End-to-end export workflow
@@ -558,6 +635,8 @@ GOWI_TESTMODE=1  // Enables test fixtures
 
 **Core Architecture**:
 - `GowiAppModel/AppModel.swift` - Central business logic and data management
+- `GowiAppModel/AppModel#ItemLink.swift` - ItemLink relationship management system
+- `GowiAppModel/Item#App.swift` - Item extensions with ItemLink-aware accessors
 - `Gowi/MainWindow/Main.swift` - Primary StateView for main window
 - `Gowi/MainWindow/Main#Model.swift` - Business logic intents
 
@@ -610,21 +689,24 @@ GOWI_TESTMODE=1  // Enables test fixtures
 
 ### Code Style
 - Follow existing MSV architecture patterns
-- Document complex algorithms (especially UWFA logic)
+- Document complex algorithms (especially UWFA logic and ItemLink operations)
 - Provide SwiftUI previews for UI components
 - Include inline comments for non-obvious code
 
 ### Testing Requirements
-- Unit tests for all business logic
+- Unit tests for all business logic, including ItemLink operations
 - UI tests for user-facing workflows
 - Preview tests for layout components
 - URL routing validation tests
+- ItemLink relationship and priority testing
 
 ### Architecture Compliance
 - Use StateView pattern for new windows/scenes
 - Implement appropriate UWFA declarations
 - Follow URL routing conventions
 - Maintain separation between Model, StateView, and View layers
+- Use ItemLink system for all parent-child Item relationships
+- Ensure backwards compatibility through computed properties
 
 ---
 
