@@ -230,7 +230,7 @@ WindowGroup(id: "Main", for: WindowGroupRoutingOpt.self) { $route in
 
 ### Why This Architecture Matters
 
-This layered approach enables Gowi's sophisticated features:
+This layered approach enables Gowi's behaviour:
 - **Deep Linking**: URL routing layer handles `gowi://` URLs intelligently
 - **Smart Undo**: UWFA system prevents cross-contamination between work areas
 - **Multi-Window**: Routing coordinates multiple windows sharing the same data
@@ -299,7 +299,7 @@ enum UndoWorkFocusArea {
 
 ### Overview
 
-**ItemLink** is a sophisticated junction table system that enables Items to have different priority values when they appear under different parent Items. This solves the fundamental challenge of hierarchical task management where the same item might need different ordering positions depending on the parent context.
+**ItemLink** is a junction table system that enables Items to have different priority values when they appear under different parent Items. This solves the fundamental challenge of hierarchical task management where the same item might need different ordering positions depending on the parent context.
 
 ### Key Benefits
 
