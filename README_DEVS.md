@@ -1,48 +1,52 @@
 # Developer Documentation
-
 This document contains technical information for developers working on or contributing to the Gowi codebase.
 
 ## Quick Start for Developers
-
 ### Build Requirements
 - **Target Platform**: macOS Sequoia 15.0+
 - **Development**: Xcode 16.0+ recommended
 - **CloudKit**: Requires paid Apple Developer Account for sync functionality
+- **Pandoc**: For building help documentation
 
-### Test Targets
-- **AppModel Framework Tests**: `GowiAppModelTests` - Business logic and model testing
-- **App UI Tests**: `GowiAppTests` - Complete user workflow validation
+### Building and Testing
+The app consists of an AppModel framework and a SwiftUI (mostly) GUI implementation that uses that framework.
 
-### Key Commands
-```bash
-# Build the main application
-xcodebuild -scheme GowiAppScheme -configuration Debug build
+There is no dependency linkage between either the AppModel and the App, or between any of the tests that run against them (in order to reduce overwhelming during refactoring operations). 
 
-# Build the AppModel framework
+**TL;DR; builds and the tests of AppModel and the App, can be broken without the main appModel or app target builds failing.**   
+
+#### Overview complete building and testing cycle from clean for Debug (with Pandoc installed), 
+```
+# 1) Build AppModel
 xcodebuild -scheme AppModelScheme -configuration Debug build
 
-# Run all tests
-xcodebuild -scheme GowiAppScheme -destination 'platform=macOS' test
-
-# Run only AppModel framework tests
+# 2) Build (app + tests) and run AppModel tests
 xcodebuild -scheme AppModelScheme test -only-testing:GowiAppModelTests
 
-# Run only app UI tests  
-xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests
+# 3) Build App (pick up changes from AppModel)
+xcodebuild -scheme GowiAppScheme -configuration Debug build
 
-# Build help documentation manually
-./Gowi/Help/build-help.sh
+# 4) Build (app + integration tests) and run quick App to AppModel integration tests 
+xcodebuild -scheme GowiAppScheme test -only-testing:GowiTests
+
+# 5) Build (app + e2e tests) and run very slow **(1hr+)** e2e App tests
+xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests
 ```
 
-### Help Documentation System
-
-Gowi includes a comprehensive help system that generates Apple Help Books from Markdown source files.
-
-**Build Dependencies:**
-- **pandoc**: Required for Markdown to HTML conversion
-  ```bash
-  brew install pandoc
-  ```
+Building and testing details:
+* AppModel:
+	* Source root directory: `.../GowiAppModel`
+	* Build: `xcodebuild -scheme AppModelScheme -configuration Debug build`
+	* Test's directory: `.../GowiAppModel/Tests`
+	* Build and run tests: `xcodebuild -scheme AppModelScheme test -only-testing:GowiAppModelTests`
+* App:
+	* Source root directory: '.../Gowi'
+	* Build: `xcodebuild -scheme GowiAppScheme -configuration Debug build`
+	* Integration tests directory: '.../Gowi/Tests'
+	* Build and run integration tests: `xcodebuild -scheme GowiAppScheme test -only-testing:GowiTests`
+* End to End Application tests:
+	* Directory:  `.../GowiAppTests`
+	* Build & run tests: `xcodebuild -scheme GowiAppScheme test -only-testing:GowiAppTests`
 
 **Help System Architecture:**
 - **Source**: Markdown files in `Gowi/Help/Source/`
@@ -64,11 +68,15 @@ Gowi includes a comprehensive help system that generates Apple Help Books from M
 4. Test help access via Help menu in running app
 
 **Build Process:**
+
 The help build system runs as an Xcode build phase and:
 1. Converts Markdown files to HTML using pandoc
 2. Applies custom styling and Apple Help Book structure
 3. Generates search index for help content
 4. Deploys complete help book to app bundle
+
+Alternatively, it can be run manually with
+`./Gowi/Help/build-help.sh`
 
 ## Architecture Overview
 
