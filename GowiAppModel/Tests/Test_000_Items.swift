@@ -10,6 +10,28 @@
 
 import XCTest
 
+/**
+ ## Basic Item Operations Testing
+ 
+ This test class validates core AppModel functionality for Item creation, relationship management,
+ and basic CRUD operations. These are fundamental unit tests that ensure the data layer works
+ correctly before more complex UI and integration testing.
+ 
+ ### Testing Strategy:
+ - **In-Memory Only**: Uses `AppModel(inMemory: true)` to avoid affecting persistent data
+ - **Fresh Context**: Each test gets a clean AppModel instance via `setUpWithError`
+ - **ItemLink Integration**: Tests validate both legacy and new ItemLink-based relationships
+ - **Undo Coverage**: Verifies that data operations are properly undoable
+ 
+ ### Test Categories:
+ - **Item Creation**: Basic item creation with parent-child relationships
+ - **Duplicate Prevention**: Ensures relationship uniqueness
+ - **Undo Operations**: Validates undo/redo functionality for Item operations
+ 
+ ### Data Model Context:
+ All tests work with the `systemRootItem` as the hierarchical parent, which mirrors
+ the production app's data structure where all user items are children of this root.
+ */
 class Test_000_Items: XCTestCase {
 
     var appModel = AppModel.sharedInMemoryNoTestData

@@ -83,20 +83,20 @@ extension Main {
         previousListSelectionsGoingDown: Bool, // 👈 Use this to determine where to shift the List highlighted selection to after deletion
         deleteItems: Array<Item>
     ) -> Set<UUID> {
-        /*
-         Most of the code in this intent about working out where to place the selection after the requested Items have been deleted.
-
-         It's a bit involved bc we're attempting copy A's approach in their apps such as Mail. In those the new item selected post
-         deletion depends on the direction the user was previously moving their item selections in. e.g. if they were to:
-         1) Select the 1st row.
-         2) Then the 2nd
-         3) And then delete Item in the 2nd row.
-
-         Then after the deletion the row that will normally be selected will be what was originally the 3rd row.
-
-         While if they went in the opposit direction, say from 3rd to 2nd. And then deleted.  The 2nd, the 1st row would be selected.
-
-         */
+        /// **Post-Deletion Selection Algorithm**
+        ///
+        /// Implements Apple's Mail.app-style selection behavior: the new selection depends on
+        /// the direction of the user's previous selection movement.
+        ///
+        /// **Algorithm:**
+        /// 1. **Moving Down** (increasing row indices): Select the item that follows the deleted range
+        /// 2. **Moving Up** (decreasing row indices): Select the item that precedes the deleted range
+        /// 3. **Fallback**: If preferred direction unavailable, try the opposite direction
+        /// 4. **Empty**: If no adjacent items exist, clear selection
+        ///
+        /// **Example scenarios:**
+        /// - Select row 1 → 2 → delete 2 → selects row 3 (direction: down)
+        /// - Select row 3 → 2 → delete 2 → selects row 1 (direction: up)
         guard let firstToDelete = deleteItems.first, let lastToDelete = deleteItems.last else {
             log.warning("\(#function) not deleting bc nothing passed to delete")
             return []

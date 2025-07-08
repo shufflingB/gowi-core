@@ -246,8 +246,11 @@ extension AppModel {
         
         let itemsSelected = sourceIndices.map { items[$0] }
         
-        // Calculate priority range for insertion
+        // Calculate priority range for insertion using boundary priorities
         let itemPriorities = itemLinkPriorityPair(moc, parent: parent, forEdgeIdx: tgtEdgeIdx, items: items)
+        
+        // Distribute priorities evenly in available range: (above - below) / (count + 1)
+        // +1 ensures spacing between existing items and moved items
         let priorityStepSize = (itemPriorities.aboveEdge - itemPriorities.belowEdge) / Double(itemsSelected.count + 1)
         
         let movingUp = sourceIndicesFirstIdx > tgtEdgeIdx
@@ -286,14 +289,16 @@ extension AppModel {
     }
     
     /// Computes priority values for above and below a desired edge index for ItemLink-based priorities
+    ///
+    /// Calculates priority bounds for inserting items at a specific edge position. Uses DefaultOffset
+    /// for head/tail insertions to provide adequate spacing for future insertions.
+    ///
     /// - Parameters:
-    ///   - moc: The NSManagedObjectContext to use
-    ///   - parent: The parent Item
-    ///   - tgtEdgeIdx: The target edge index
-    ///   - items: Array of items in current order
-    
-    
-    /// - Returns: Tuple with above and below edge priority values
+    ///   - moc: The NSManagedObjectContext to use for ItemLink queries
+    ///   - parent: The parent Item whose children are being reordered
+    ///   - tgtEdgeIdx: The target edge index where insertion will occur (0 = top, items.count = bottom)
+    ///   - items: Array of items in current priority order
+    /// - Returns: Tuple with above and below edge priority values for calculating insertion priorities
     private static func itemLinkPriorityPair(
         _ moc: NSManagedObjectContext,
         parent: Item,

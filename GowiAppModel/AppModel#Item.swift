@@ -139,7 +139,9 @@ extension AppModel {
     /// As `AppModel#itemsDelete`, except not undoable and works with arbitrary moc
     public static func itemsDelete(_ moc: NSManagedObjectContext, items: Array<Item>) {
         items.forEach { item in
-            item.parentList = nil /// Just deleting the item is not enough as it doesn't get removed  from  the parent's children lists until after the moc is saved
+            // Clear ItemLink relationships before deletion to ensure immediate relationship cleanup
+            // Without this, parent-child relationships remain until the context is saved
+            item.parentList = nil
             moc.delete(item)
         }
     }

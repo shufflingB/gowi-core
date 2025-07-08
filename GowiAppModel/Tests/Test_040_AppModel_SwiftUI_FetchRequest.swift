@@ -12,7 +12,7 @@ import XCTest
 import SwiftUI
 import CoreData
 
-class Test_015_AppModel_SwiftUI_FetchRequest: XCTestCase {
+class Test_040_AppModel_SwiftUI_FetchRequest: XCTestCase {
     
     var appModel: AppModel!
     var rootItem: Item!

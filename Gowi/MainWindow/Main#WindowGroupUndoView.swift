@@ -80,12 +80,17 @@ extension Main {
         @Environment(\.undoManager) internal var windowUM: UndoManager?
         @FocusedValue(\.undoWfa) var wfa: UndoWorkFocusArea?
 
-        // Have to use the hack 🤮 bc we're using FocusedValue to indicate the area of the UI
-        // that the user is working with. The problem is that with the DatePicker (and possibly
-        // others), it triggers a pop-up. And it's not possible to assign the same WFA focused value
-        // recursively to the pop-up content. So without the hack, everytime we get the pop-up appear
-        // or dissaper, the undo stack gets cleared, which given it gets triggered very easily, would
-        // negate most of the the point of having undoable date changes.
+        /// **DatePicker Popover Workaround**
+        ///
+        /// Issue: DatePicker controls show popovers that break SwiftUI's FocusedValue chain.
+        /// When the popover appears/disappears, `wfa` becomes nil, triggering unwanted undo stack clears.
+        ///
+        /// Solution: Track the previous WFA state independently to detect popover transitions
+        /// and skip undo clearing during normal DatePicker popover cycles.
+        ///
+        /// Alternative approaches considered but rejected:
+        /// - Recursive FocusedValue assignment: Not supported by SwiftUI for popovers
+        /// - Custom DatePicker: Too much implementation overhead for this edge case
         @State private var hackedWFA: UndoWorkFocusArea? = nil
 
         var body: some View {

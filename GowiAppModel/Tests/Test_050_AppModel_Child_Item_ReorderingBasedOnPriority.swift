@@ -9,6 +9,33 @@ import XCTest
 
 @testable import GowiAppModel
 
+/**
+ ## Priority-Based Item Reordering Testing
+ 
+ This test class validates the current priority system that has been adapted to work with ItemLinks.
+ The priority system remains the core ordering mechanism, now integrated with the ItemLink architecture
+ to support multi-parent hierarchies while maintaining per-parent priority values.
+ 
+ ### Testing Focus:
+ - **Current Priority System**: Tests the active Item.priority-based ordering with ItemLink integration
+ - **Reordering Algorithms**: Validates drag-and-drop style reordering operations
+ - **Priority Calculation**: Tests priority value distribution and spacing algorithms
+ - **UI Layer Compatibility**: Ensures sorting matches what UI layer expects
+ 
+ ### Test Data Strategy:
+ - **Pre-populated Data**: Uses `AppModel.sharedInMemoryWithTestData` for realistic test scenarios
+ - **10 Test Items**: Provides sufficient data for complex reordering operations
+ - **Known Priorities**: Test data has predictable priority values for deterministic testing
+ 
+ ### Priority Algorithm Context:
+ The current system uses ItemLink-mediated priority values with the systemRootItem as parent context.
+ Priority ordering: higher values appear first (descending sort). The reordering algorithm
+ distributes items in available priority space to maintain order while allowing future insertions.
+ 
+ ### ItemLink Integration:
+ These tests validate that the priority system works correctly with ItemLinks, ensuring that
+ priority-based ordering functions properly in the modern multi-parent architecture.
+ */
 final class Test_050_AppModel_Child_Item_ReorderingBasedOnPriority: XCTestCase {
     var appModel = AppModel.sharedInMemoryWithTestData
     var rootItem: Item { appModel.systemRootItem }

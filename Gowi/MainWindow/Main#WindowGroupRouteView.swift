@@ -251,6 +251,19 @@ extension Main {
                             return defaultWinGrpRoute
                         }()
 
+                    /// **URL Routing Decision Tree:**
+                    ///
+                    /// 1. **Fresh Window** (windowGroupRoute == nil):
+                    ///    - Route directly to this window
+                    ///    - Used for: Restored sessions, first-time URLs
+                    ///
+                    /// 2. **Initialized Window** (windowGroupRoute exists):
+                    ///    - Delegate to WindowGroup system
+                    ///    - WindowGroup will either:
+                    ///      a) Raise existing window with matching route
+                    ///      b) Create new window if no match found
+                    ///    - Used for: Deep links from running app
+                    
                     if windowGroupRoute == nil {
                         // No existing route: configure this window directly
                         log.debug("onOpenURL: Existing route not set for winId \(winId), updating the window contents directly")

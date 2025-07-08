@@ -8,6 +8,42 @@
 import XCTest
 import SwiftUI
 
+/**
+ ## JSON Export Functionality UI Testing
+ 
+ This test class validates the complete end-to-end JSON export workflow from user interaction
+ through file creation and content validation. JSON export is a key data portability feature
+ that allows users to extract their todo items in a standardized format.
+ 
+ ### Testing Strategy:
+ - **Complete UI Workflow**: Tests from menu interaction through save dialog automation
+ - **File System Operations**: Validates actual file creation with proper content
+ - **Cross-Format Validation**: Compares UI display formats with JSON export formats
+ - **Menu State Management**: Ensures export commands are properly enabled/disabled
+ 
+ ### Key Test Scenarios:
+ - **Disabled State**: Export menu is grayed out when no items selected
+ - **Export Workflow**: Complete item selection → menu command → save dialog → file creation
+ - **Content Validation**: JSON structure matches expected item data
+ - **Date Format Handling**: UI (.short) vs JSON (ISO8601) date format consistency
+ 
+ ### Technical Challenges:
+ - **Save Dialog Automation**: Complex modal dialog interaction using specialized XCUIApplication extensions
+ - **Timezone Handling**: Date comparisons account for timezone differences between UI and export
+ - **File System Testing**: Temporary directories and cleanup for isolated test execution
+ - **Format Validation**: Parsing and validating JSON structure and content
+ 
+ ### Integration Points:
+ - **Menu System**: Tests @FocusedValue-based menu command availability
+ - **NSSavePanel**: Tests save dialog automation and file path specification
+ - **Item Export**: Tests Encodable protocol implementation for Item data
+ - **Date Formatting**: Tests consistent date handling across UI and export systems
+ 
+ ### Test Data Context:
+ Uses `GOWI_TESTMODE` environment variable to control test data:
+ - Mode 0: Clean slate for testing disabled states
+ - Mode 1: Pre-populated items for export testing
+ */
 final class Test_520_JsonImportAndExport: XCTestCase {
     let app = XCUIApplication()
     

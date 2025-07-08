@@ -214,8 +214,8 @@
 			membershipExceptions = (
 				Tests/Test_000_Items.swift,
 				Tests/Test_010_TestModes.swift,
-				Tests/Test_015_AppModel_SwiftUI_FetchRequest.swift,
 				Tests/Test_020_Item_Deletions.swift,
+				Tests/Test_040_AppModel_SwiftUI_FetchRequest.swift,
 				Tests/Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift,
 				Tests/Test_100_ItemExportJSON.swift,
 			);
@@ -226,8 +226,8 @@
 			membershipExceptions = (
 				Tests/Test_000_Items.swift,
 				Tests/Test_010_TestModes.swift,
-				Tests/Test_015_AppModel_SwiftUI_FetchRequest.swift,
 				Tests/Test_020_Item_Deletions.swift,
+				Tests/Test_040_AppModel_SwiftUI_FetchRequest.swift,
 				Tests/Test_050_AppModel_Child_Item_ReorderingBasedOnPriority.swift,
 				Tests/Test_100_ItemExportJSON.swift,
 			);
@@ -729,6 +729,7 @@
 			shellScript = (
 				"# Build Help Documentation from Markdown",
 				"$SRCROOT/Gowi/Help/build-help.sh",
+				"",
 				"",
 				"",
 				"",
